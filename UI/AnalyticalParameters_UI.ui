@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>30</y>
+      <width>113</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Return</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>50</y>
+      <width>331</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string>Equilibration time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Equilibration cleanup time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Transfer time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Transfer cleanup time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Extraction line pumpout time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Tube pumpout time</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Number of cycles</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Option to pumpout before analysis</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Option to auto start analysis</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Option to skip post-run param menu</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Option to skip pre-run param menu</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Auto start furnae after transfer</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Automatically run split if run bad</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Automatically run split if to much gas</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Value</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <addaction name="actionEdit_saving_folder"/>
+    <addaction name="actionEdit_HTbasics_path"/>
+    <addaction name="actionExit"/>
+    <addaction name="actionMore"/>
+   </widget>
+   <addaction name="menuSetting"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionEdit_saving_folder">
+   <property name="text">
+    <string>Edit saving folder</string>
+   </property>
+  </action>
+  <action name="actionEdit_HTbasics_path">
+   <property name="text">
+    <string>Edit HTbasics path</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionMore">
+   <property name="text">
+    <string>More</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
