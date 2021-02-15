@@ -4,8 +4,7 @@ import UI.Homepage_UI
 from PyQt5 import QtCore, QtGui, QtWidgets
 import random
 import logging
-from pywinauto import application
-from pywinauto import keyboard
+import pywinauto
 
 """
 all the corss class methods must write in App() class 
@@ -36,9 +35,9 @@ class App():
         self.analyticalparam.TableContent = []
         self.analyticalparam_table_initialized = 0
 
-        app = application.Application(backend="uia").start(r"C:\Program Files (x86)\HTBwin10\HTBwin.exe")
+        app = pywinauto.application.Application(backend="uia").start(r"C:\Program Files (x86)\HTBwin10\HTBwin.exe")
         main_dlg = app["TransEra - HTBasic - [Untitled]"]
-        keyboard.send_keys("^o")
+        pywinauto.keyboard.send_keys("^o")
         LoadBasic = main_dlg['Open File']
         HTBasic_filepath = "D:\ARARSTAR\BLP3600\COLLECT\ARAUTO-3600m2020C"
         LoadBasic.child_window(title="File name:", auto_id="1148", control_type="ComboBox").child_window(title="File name:", auto_id="1148", control_type="Edit").type_keys(HTBasic_filepath+"{ENTER}")
