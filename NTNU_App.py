@@ -5,6 +5,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import random
 import logging
 import pywinauto
+import warnings
+warnings.simplefilter("ignore", UserWarning)
+sys.coinit_flags = 2
 
 """
 all the corss class methods must write in App() class 
