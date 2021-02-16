@@ -4,6 +4,10 @@ import os
 import imagehash
 import pytesseract
 
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+DEBUG = 1
+
 
 # build reference pictures library
 reference_folder = "./Figures/ReferencePictures/"
@@ -27,8 +31,10 @@ for x in range(max_x):
         else: 
             img[y, x] = 0 # set to black
 
-print("Before preprocessed")
-print(pytesseract.image_to_string(Image.fromarray(img)))
+if DEBUG:
+    print("----------------------------------------------------------------")
+    print("Before preprocessed:\n")
+    print(pytesseract.image_to_string(Image.fromarray(img)))
 
 
 # L = left, R = right, T = top, B = bottom
@@ -150,6 +156,7 @@ while True:
 #Image.fromarray(img).show()
 
 # Extract the text from screenshot
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-print("After preprocessed")
+if DEBUG:
+    print("----------------------------------------------------------------")
+    print("After preprocessed:\n")
 print(pytesseract.image_to_string(Image.fromarray(img)))
