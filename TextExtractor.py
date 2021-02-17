@@ -5,6 +5,11 @@ import pickle
 
 
 def TextExtractor(filename):
+    """
+    Input: the path of the picture to be extracted text from
+
+    Output: a string of the extracted text (need to be paresed by the main program)
+    """
     # load the reference pictures library
     with open("reference_dict.pickle", 'rb') as handle:
         reference_pic_lib = pickle.load(handle)
@@ -118,4 +123,4 @@ def TextExtractor(filename):
 
 
 if __name__ == "__main__":
-    print(TextExtractor("TestText.png"))
+    print(TextExtractor("TestText.png").split('\n')[:-1])

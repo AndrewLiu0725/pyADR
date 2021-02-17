@@ -77,7 +77,7 @@ class App():
             # take screentshot from console if first enter
             time.sleep(0.5)
             Image.fromarray((np.asarray(self.HTBasic_dlg.capture_as_image()).copy())[135:360, 480:520]).save("./Figures/screenshot.png")
-            status = TextExtractor("./Figures/screenshot.png")
+            status = TextExtractor("./Figures/screenshot.png").split('\n')[:-1]
             if DEBUG: print("The status in AP is:\n",status)
             self.analyticalparam_tableSetup(status)
             self.analyticalparam_table_initialized = 1
