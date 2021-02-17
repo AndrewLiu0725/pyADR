@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ValveActuatorControl.ui'
+# Form implementation generated from reading ui file 'ValveActuatorControl_UI.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -15,13 +15,13 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(210, 20, 391, 91))
+        self.label.setGeometry(QtCore.QRect(150, 10, 521, 121))
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(30, 20, 113, 32))
         self.pushButton.setObjectName("pushButton")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(220, 160, 351, 231))
+        self.tableWidget.setGeometry(QtCore.QRect(170, 140, 481, 331))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(1)
         self.tableWidget.setRowCount(6)
@@ -56,6 +56,7 @@ class Ui_MainWindow(object):
         item.setFont(font)
         self.tableWidget.setVerticalHeaderItem(5, item)
         item = QtWidgets.QTableWidgetItem()
+        item.setTextAlignment(QtCore.Qt.AlignCenter)
         font = QtGui.QFont()
         font.setPointSize(18)
         item.setFont(font)
@@ -75,7 +76,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:36pt; font-weight:600;\">Valve Actuator Control</span></p></body></html>"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:36pt; font-weight:600;\">Valve Actuator Control</span></p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "Return"))
         item = self.tableWidget.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "Inlet Valve"))

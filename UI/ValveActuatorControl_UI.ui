@@ -17,14 +17,14 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>20</y>
-      <width>391</width>
-      <height>91</height>
+      <x>150</x>
+      <y>10</y>
+      <width>521</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;&gt;Valve Actuator Control&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;&gt;Valve Actuator Control&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
@@ -43,10 +43,10 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>160</y>
-      <width>351</width>
-      <height>231</height>
+      <x>170</x>
+      <y>140</y>
+      <width>481</width>
+      <height>331</height>
      </rect>
     </property>
     <row>
@@ -117,6 +117,9 @@
       <font>
        <pointsize>18</pointsize>
       </font>
+     </property>
+     <property name="textAlignment">
+      <set>AlignCenter</set>
      </property>
     </column>
    </widget>
