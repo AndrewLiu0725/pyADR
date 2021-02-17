@@ -131,8 +131,10 @@ class App():
                 if content != self.analyticalparam.TableContent[i]: # parameter changed
                     self.analyticalparam.TableContent[i] = content # change the table content in GUI class
                     # send signal to HTBasic
+                    if DEBUG: print("will type:", str(i+1)+"{ENTER}", content+"{ENTER}")
                     self.HTBasic_dlg.type_keys(str(i+1)+"{ENTER}") # which parameter
-                    self.HTBasic_dlg.type_keys(content+"{ENTER}") # assign value
+                    time.sleep(0.1)
+                    self.HTBasic_dlg.type_keys(content[0]+"{ENTER}") # assign value
 
 
     # warning message box
