@@ -1,16 +1,22 @@
+# import python module
 import sys
-import UI.AnalyticalParameters_UI
-import UI.Homepage_UI
 from PyQt5 import QtCore, QtGui, QtWidgets
 import logging
 import pywinauto
 import time
 import numpy as np 
 from PIL import Image
-from TextExtractor import TextExtractor
 import warnings
 warnings.simplefilter("ignore", UserWarning)
 sys.coinit_flags = 2
+
+# import utility
+from TextExtractor import TextExtractor
+
+# import UI
+import UI.AnalyticalParameters_UI
+import UI.Homepage_UI
+import UI.ValveActuatorControl_UI
 
 DEBUG = 1
 
@@ -30,6 +36,11 @@ class AnalyticalParameters(QtWidgets.QMainWindow, UI.AnalyticalParameters_UI.Ui_
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
+class ValveActuatorControl(QtWidgets.QMainWindow, UI.ValveActuatorControl_UI.Ui_MainWindow):
+    def __init__(self, parent=None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+
 
 
 # main class
@@ -39,9 +50,12 @@ class App():
         # initilization for GUI
         self.app = QtWidgets.QApplication(sys.argv)
         self.homepage = HomePage()
-        self.analyticalparam = AnalyticalParameters()
-        self.analyticalparam.TableContent = []
-        self.analyticalparam_table_initialized = 0
+        self.AnalyticalParam = AnalyticalParameters()
+        self.AnalyticalParam.TableContent = []
+        self.AnalyticalParam_table_initialized = 0
+        self.ValveActuatorControl = ValveActuatorControl()
+        self.ValveActuatorControl_status = []
+        self.ValveActuatorControl_status_initialized = 0
 
         # initialization for HTBasic
         app = pywinauto.application.Application(backend="uia").start(r"C:\Program Files (x86)\HTBwin10\HTBwin.exe")
@@ -59,8 +73,11 @@ class App():
 
     def run(self):
         # deal with click or keyin events
-        self.homepage.pushButton.clicked.connect(self.enter_analyticalparam)
-        self.analyticalparam.pushButton.clicked.connect(self.exit_analyticalparam)
+        self.homepage.pushButton.clicked.connect(self.enter_AnalyticalParam)
+        self.homepage.pushButton_3.clicked.connect(self.enter_ValveActuatorControl)
+        self.AnalyticalParam.pushButton.clicked.connect(self.exit_AnalyticalParam)
+        self.ValveActuatorControl.pushButton.clicked.connect(self.exit_ValveActuatorControl)
+
 
         # start from main page
         self.homepage.show()
@@ -70,41 +87,51 @@ class App():
 
     # event solver
     # ===============================================================================
-    def enter_analyticalparam(self):
-        self.HTBasic_dlg.type_keys("77{ENTER}")
+    def enter_ValveActuatorControl(self):
+        self.ValveActuatorControl.show()
+        self.homepage.hide()
+
+    def exit_ValveActuatorControl(self):
+        self.homepage.show()
+        self.ValveActuatorControl.hide()
+
+    def enter_AnalyticalParam(self):
+        self.HTBasic_dlg.type_keys("77")
+        self.HTBasic_dlg.type_keys("{ENTER}")
         
-        if not self.analyticalparam_table_initialized:
+        if not self.AnalyticalParam_table_initialized:
             # take screentshot from console if first enter
             time.sleep(0.5)
             Image.fromarray((np.asarray(self.HTBasic_dlg.capture_as_image()).copy())[135:360, 480:520]).save("./Figures/screenshot.png")
             status = TextExtractor("./Figures/screenshot.png").split('\n')[:-1]
             if DEBUG: print("The status in AP is:\n",status)
-            self.analyticalparam_tableSetup(status)
-            self.analyticalparam_table_initialized = 1
-        self.analyticalparam.show()
+            self.AnalyticalParam_tableSetup(status)
+            self.AnalyticalParam_table_initialized = 1
+        self.AnalyticalParam.show()
         self.homepage.hide()
-        self.analyticalparam.tableWidget.itemChanged.connect(self.analyticalparam_parameter_change) # detect cell change
+        self.AnalyticalParam.tableWidget.itemChanged.connect(self.AnalyticalParam_parameter_change) # detect cell change
 
-    def exit_analyticalparam(self):
-        self.HTBasic_dlg.type_keys("0{ENTER}")
+    def exit_AnalyticalParam(self):
+        self.HTBasic_dlg.type_keys("0")
+        self.HTBasic_dlg.type_keys("{ENTER}")
         self.homepage.show()
-        self.analyticalparam.hide()
+        self.AnalyticalParam.hide()
         
 
-    def analyticalparam_tableSetup(self, dafault_value):
+    def AnalyticalParam_tableSetup(self, dafault_value):
         # initialize the table (read the output from HTBasic)
-        self.analyticalparam.TableContent = [] # a list of string
-        for i in range(self.analyticalparam.tableWidget.rowCount()):
+        self.AnalyticalParam.TableContent = [] # a list of string
+        for i in range(self.AnalyticalParam.tableWidget.rowCount()):
             val =  dafault_value[i]
             item = QtWidgets.QTableWidgetItem(val)
-            self.analyticalparam.TableContent.append(val)
-            self.analyticalparam.tableWidget.setItem(i, 0, item)
+            self.AnalyticalParam.TableContent.append(val)
+            self.AnalyticalParam.tableWidget.setItem(i, 0, item)
 
 
-    def analyticalparam_parameter_change(self):
-        for i in range(self.analyticalparam.tableWidget.rowCount()):
+    def AnalyticalParam_parameter_change(self):
+        for i in range(self.AnalyticalParam.tableWidget.rowCount()):
             show_warning = 0
-            content = self.analyticalparam.tableWidget.item(i, 0).text()
+            content = self.AnalyticalParam.tableWidget.item(i, 0).text()
 
             # check if the typed parameter is invalid
             if i < 7: # typed parameter must be number
@@ -124,17 +151,23 @@ class App():
             
             if show_warning:
                 self.warningPopup(warning_msg)
-                item = QtWidgets.QTableWidgetItem(str(self.analyticalparam.TableContent[i]))
-                self.analyticalparam.tableWidget.setItem(i, 0, item)
+                item = QtWidgets.QTableWidgetItem(str(self.AnalyticalParam.TableContent[i]))
+                self.AnalyticalParam.tableWidget.setItem(i, 0, item)
 
             else:
-                if content != self.analyticalparam.TableContent[i]: # parameter changed
-                    self.analyticalparam.TableContent[i] = content # change the table content in GUI class
+                if content != self.AnalyticalParam.TableContent[i]: # parameter changed
+                    self.AnalyticalParam.TableContent[i] = content # change the table content in GUI class
                     # send signal to HTBasic
                     if DEBUG: print("will type:", str(i+1)+"{ENTER}", content+"{ENTER}")
-                    self.HTBasic_dlg.type_keys(str(i+1)+"{ENTER}") # which parameter
+                    self.HTBasic_dlg.type_keys(str(i+1)) # which parameter
+                    self.HTBasic_dlg.type_keys("{ENTER}")
                     time.sleep(0.1)
-                    self.HTBasic_dlg.type_keys(content[0]+"{ENTER}") # assign value
+                    if (content == "no") or (content == "yes"):
+                        self.HTBasic_dlg.type_keys(content[0]) # send y/n only (not yes/no)
+                        self.HTBasic_dlg.type_keys("{ENTER}")
+                    else:
+                        self.HTBasic_dlg.type_keys(content)
+                        self.HTBasic_dlg.type_keys("{ENTER}")
 
 
     # warning message box
