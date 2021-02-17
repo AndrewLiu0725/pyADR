@@ -1,24 +1,15 @@
 from PIL import Image
 import numpy as np 
-import os
 import imagehash
-import pytesseract
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-DEBUG = 1
+import pickle
 
 
-# build reference pictures library
-reference_folder = "./Figures/ReferencePictures/"
 
-reference_pic_lib = {} # (char: hash value)
-for fn in os.listdir(reference_folder):
-    reference_pic_lib[fn[-5]] = imagehash.average_hash(Image.open(reference_folder+fn))
+# load the reference pictures library
+with open("reference_dict.pickle", 'rb') as handle:
+    reference_pic_lib = pickle.load(handle)
 
-# preprocess the image by comparing each char with the reference library
-char_count = 0
-
+# load the screenshot
 img = np.asarray((Image.open("TestText.png")).convert("L")).copy()
 (max_y, max_x) = img.shape
 
@@ -31,14 +22,11 @@ for x in range(max_x):
         else: 
             img[y, x] = 0 # set to black
 
-if DEBUG:
-    print("----------------------------------------------------------------")
-    print("Before preprocessed:\n")
-    print(pytesseract.image_to_string(Image.fromarray(img)))
 
-
-# L = left, R = right, T = top, B = bottom
+# extract the text from the screenshot
+text = ""
 Bottom = -1
+
 while True:
     FoundTop = 0
     Top = Bottom + 1
@@ -67,6 +55,7 @@ while True:
 
     # parse the current line
     Right = -1
+
     while True:
         FoundLeft = 0
         Left = Right + 1
@@ -118,45 +107,10 @@ while True:
 
         min_hash_diff = 100
         for char in reference_pic_lib.keys():
-            if abs(hash_value - reference_pic_lib[char]) < min_hash_diff:
-                min_hash_diff = abs(hash_value - reference_pic_lib[char])
-                most_like_char = char
-
-        # preprocessed the image
-        if most_like_char == '1':
-            img[Top_refined:Bottom_refined, Left:int((Left+Right)/2)] = 0
-        
-        elif most_like_char == '0' or most_like_char == 'o' or most_like_char == 'O':
-            FoundZeroTop = 0
-
-            # find inner top and bottom
-            for y in range(Top_refined, Bottom_refined+1):
-                if img[y, int((Left+Right)/2)] == 0:
-                    if FoundZeroTop:
-                        ZeroBottom = y
-                    else:
-                        ZeroTop = y
-                        FoundZeroTop = 1
-
-            # find inner left
-            for x in range(Left, Right+1):
-                if img[int((Top_refined+Bottom_refined)/2-(Bottom_refined-Top_refined)/5), x] == 0:
-                    ZeroLeft = x
-                    break
-
-            # find inner right
-            for x in reversed(range(Left, Right+1)):
-                if img[int((Top_refined+Bottom_refined)/2+(Bottom_refined-Top_refined)/5), x] == 0:
-                    ZeroRight = x
-                    break
-
-            # fill the center with black pixels
-            img[ZeroTop: ZeroBottom+1, ZeroLeft:ZeroRight+1] = 0     
-
-#Image.fromarray(img).show()
-
-# Extract the text from screenshot
-if DEBUG:
-    print("----------------------------------------------------------------")
-    print("After preprocessed:\n")
-print(pytesseract.image_to_string(Image.fromarray(img)))
+            for i in range(len(reference_pic_lib[char])):
+                if abs(hash_value - reference_pic_lib[char][i]) < min_hash_diff:
+                    min_hash_diff = abs(hash_value - reference_pic_lib[char][i])
+                    most_like_char = char
+        text += most_like_char
+    text += "\n"
+print(text)

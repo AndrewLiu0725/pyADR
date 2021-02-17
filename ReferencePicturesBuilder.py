@@ -1,7 +1,9 @@
 from PIL import Image
 import numpy as np 
+import imagehash
+import pickle
  
-img = np.asarray((Image.open("./Figures/CharReference.png")).convert("L")).copy()
+img = np.asarray((Image.open("./Figures/CharReference_stronger.png")).convert("L")).copy()
 (max_y, max_x) = img.shape
 
 # covert the reference image to pure black and white (all non-black pixel set to white)
@@ -13,12 +15,13 @@ for x in range(max_x):
         else:
             img[y, x] = 0
 
-#Image.fromarray(img).show()
+Image.fromarray(img).show()
 
 # L = left, R = right, T = top, B = bottom
-count = 0
-pic_count = 0
+row_count = 0
+reference_pic_hash_lib = {}
 Bottom = -1
+
 while True:
     FoundTop = 0
     Top = Bottom + 1
@@ -46,7 +49,9 @@ while True:
     Bottom -= 1 # last row which is not all black
 
     # parse the current line
+    char_count_this_line = 0
     Right = -1
+
     while True:
         FoundLeft = 0
         Left = Right + 1
@@ -93,15 +98,31 @@ while True:
 
         Bottom_refined -= 1 # last row which is not all black
 
-        #print(img[Top_refined:Bottom_refined, Left:Right], "\n\n\n")
-        im = Image.fromarray(img[Top_refined:Bottom_refined, Left:Right])
-        if pic_count > 9:
-            if pic_count % 2 == 0:
-                filename = "uppercase_"+chr(int(65+(pic_count-10)/2))
+        # build reference
+        hash0 = imagehash.average_hash(Image.fromarray(img[Top_refined:Bottom_refined, Left:Right]))
+
+        if row_count >= 0 and row_count < 10: # digit
+            this_char = str(char_count_this_line)
+
+        elif row_count >= 10 and row_count < 20: # english alphabet
+            if char_count_this_line % 2 == 0:
+                this_char = chr(int(65 + char_count_this_line/2))
             else:
-                filename = "lowercase_"+chr(int(97+(pic_count-10)/2))
-        else:
-            filename = pic_count
-        im.save("./Figures/ReferencePictures/{}.png".format(filename))
-        pic_count += 1
+                this_char = chr(int(97 + char_count_this_line/2))
         
+        else: # dot
+            this_char = '.'
+
+        if this_char in reference_pic_hash_lib.keys():
+                if not (hash0 in reference_pic_hash_lib[this_char]):
+                    reference_pic_hash_lib[this_char].append(hash0)
+        else:
+            reference_pic_hash_lib[this_char] = [hash0]
+
+        char_count_this_line += 1
+    row_count += 1
+
+
+# store the reference dict
+with open("reference_dict.pickle", 'wb') as handle:
+    pickle.dump(reference_pic_hash_lib, handle, protocol=pickle.HIGHEST_PROTOCOL)
