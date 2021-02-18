@@ -82,7 +82,7 @@ while True:
         # refine the top and bottom row for this char
         Top_refined = Top
 
-        while (Top_refined < Bottom): # Top_refined must exist in this rectangle, so Top_refined = [Top, Bottom-1]
+        while (Top_refined <= Bottom): # Top_refined must exist in this rectangle, so Top_refined = [Top, Bottom]
             if np.any(img[Top_refined, Left:Right+1]):
                 break
             else:
@@ -90,7 +90,7 @@ while True:
 
         Bottom_refined = Top_refined + 1
 
-        while (Bottom_refined < Bottom):
+        while (Bottom_refined <= Bottom):
             if np.any(img[Bottom_refined, Left:Right+1]):
                 Bottom_refined += 1
             else:
