@@ -17,6 +17,7 @@ from TextExtractor import TextExtractor
 import UI.AnalyticalParameters_UI
 import UI.Homepage_UI
 import UI.ValveActuatorControl_UI
+from UI.OnOffSwitch import ToggleSwitch
 
 DEBUG = 1
 
@@ -62,7 +63,7 @@ class App():
         main_dlg = app["TransEra - HTBasic - [Untitled]"]
         main = main_dlg.wrapper_object()
         main.iface_transform.Move(0, 0) # move the window to top-left corner
-        main.iface_transform.Resize(600, 600) # change width and height
+        main.iface_transform.Resize(900, 600) # change width and height
         pywinauto.keyboard.send_keys("^o")
         LoadBasic = main_dlg['Open File']
         HTBasic_filepath = "D:\ARARSTAR\BLP3600\COLLECT\ARAUTO-3600m2020C"
@@ -88,12 +89,46 @@ class App():
     # event solver
     # ===============================================================================
     def enter_ValveActuatorControl(self):
+        self.HTBasic_dlg.type_keys("99")
+        self.HTBasic_dlg.type_keys("{ENTER}")
+
+        if not self.ValveActuatorControl_status_initialized:
+            # take screentshot from console if first enter
+            read_status = False
+            while not read_status:
+                time.sleep(0.5)
+                Image.fromarray((np.asarray(self.HTBasic_dlg.capture_as_image()).copy())[200:300, 580:650]).save("./Figures/screenshot.png")
+                status = TextExtractor("./Figures/screenshot.png").split('\n')[:-1]
+                if len(status) == 6: read_status = True
+            if DEBUG: print("The status in ValveActuatorControl is:\n",status)
+            self.ValveActuatorControl_StatusSetup(status)
+            self.ValveActuatorControl_status_initialized = 1
+
         self.ValveActuatorControl.show()
         self.homepage.hide()
+        self.ValveActuatorControl.tableWidget.itemChanged.connect(self.ValveActuatorControl_StatusChange) # detect cell change
 
     def exit_ValveActuatorControl(self):
+        self.HTBasic_dlg.type_keys("0")
+        self.HTBasic_dlg.type_keys("{ENTER}")
         self.homepage.show()
         self.ValveActuatorControl.hide()
+
+    def ValveActuatorControl_StatusSetup(self, status):
+        for i in range(self.ValveActuatorControl.tableWidget.rowCount()):
+            self.ValveActuatorControl_status.append(status[i])
+            item = ToggleSwitch() # use switch.isChecked() to find its label
+            if status[i] == "OPEN": item.setChecked(True)
+            item.clicked.connect(self.ValveActuatorControl_StatusChange)
+            self.ValveActuatorControl.tableWidget.setCellWidget(i, 0, item)
+
+    def ValveActuatorControl_StatusChange(self):
+        for i in range(self.ValveActuatorControl.tableWidget.rowCount()):
+            current_status = "OPEN" if self.ValveActuatorControl.tableWidget.cellWidget(i, 0).isChecked() else "CLOSED"
+            if current_status != self.ValveActuatorControl_status[i]:
+                if DEBUG: print("row {} is switch from {} to {}".format(i+1, self.ValveActuatorControl_status[i], current_status))
+                self.ValveActuatorControl_status[i] = current_status
+                
 
     def enter_AnalyticalParam(self):
         self.HTBasic_dlg.type_keys("77")
@@ -101,11 +136,14 @@ class App():
         
         if not self.AnalyticalParam_table_initialized:
             # take screentshot from console if first enter
-            time.sleep(0.5)
-            Image.fromarray((np.asarray(self.HTBasic_dlg.capture_as_image()).copy())[135:360, 480:520]).save("./Figures/screenshot.png")
-            status = TextExtractor("./Figures/screenshot.png").split('\n')[:-1]
-            if DEBUG: print("The status in AP is:\n",status)
-            self.AnalyticalParam_tableSetup(status)
+            read_status = False
+            while not read_status:
+                time.sleep(0.5)
+                Image.fromarray((np.asarray(self.HTBasic_dlg.capture_as_image()).copy())[135:360, 480:520]).save("./Figures/screenshot.png")
+                status = TextExtractor("./Figures/screenshot.png").split('\n')[:-1]
+                if len(status) == 14: read_status = True
+            if DEBUG: print("The status in AnalyticalParam is:\n",status)
+            self.AnalyticalParam_TableSetup(status)
             self.AnalyticalParam_table_initialized = 1
         self.AnalyticalParam.show()
         self.homepage.hide()
@@ -118,7 +156,7 @@ class App():
         self.AnalyticalParam.hide()
         
 
-    def AnalyticalParam_tableSetup(self, dafault_value):
+    def AnalyticalParam_TableSetup(self, dafault_value):
         # initialize the table (read the output from HTBasic)
         self.AnalyticalParam.TableContent = [] # a list of string
         for i in range(self.AnalyticalParam.tableWidget.rowCount()):
