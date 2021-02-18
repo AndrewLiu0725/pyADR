@@ -27,7 +27,6 @@ def TextExtractor(filename):
             else: 
                 img[y, x] = 0 # set to black
 
-
     # extract the text from the screenshot
     text = ""
     Bottom = -1
@@ -67,7 +66,7 @@ def TextExtractor(filename):
 
             # find left column for current character
             while (Left < max_x):
-                if np.any(img[Top:Bottom, Left]):
+                if np.any(img[Top:Bottom+1, Left]):
                     FoundLeft = 1
                     break
                 else:
@@ -81,7 +80,7 @@ def TextExtractor(filename):
 
             # find right column for current character
             while (Right < max_x):
-                if np.any(img[Top:Bottom, Right]):
+                if np.any(img[Top:Bottom+1, Right]):
                     Right += 1
                 else:
                     break
@@ -92,7 +91,7 @@ def TextExtractor(filename):
             Top_refined = Top
 
             while (Top_refined <= Bottom):
-                if np.any(img[Top_refined, Left:Right]):
+                if np.any(img[Top_refined, Left:Right+1]):
                     break
                 else:
                     Top_refined += 1
@@ -100,7 +99,7 @@ def TextExtractor(filename):
             Bottom_refined = Top_refined + 1
 
             while (Bottom_refined <= Bottom):
-                if np.any(img[Bottom_refined, Left:Right]):
+                if np.any(img[Bottom_refined, Left:Right+1]):
                     Bottom_refined += 1
                 else:
                     break
@@ -108,7 +107,7 @@ def TextExtractor(filename):
             Bottom_refined -= 1 # last row which is not all black
 
             # recongnize the current char
-            hash_value = imagehash.average_hash(Image.fromarray(img[Top_refined:Bottom_refined, Left:Right]))
+            hash_value = imagehash.average_hash(Image.fromarray(img[Top_refined:Bottom_refined+1, Left:Right+1]))
 
             min_hash_diff = 100
             for char in reference_pic_lib.keys():

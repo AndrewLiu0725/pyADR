@@ -15,7 +15,7 @@ for x in range(max_x):
         else:
             img[y, x] = 0
 
-Image.fromarray(img).show()
+#Image.fromarray(img).show()
 
 # L = left, R = right, T = top, B = bottom
 row_count = 0
@@ -58,7 +58,7 @@ while True:
 
         # find left column for current character
         while (Left < max_x):
-            if np.any(img[Top:Bottom, Left]):
+            if np.any(img[Top:Bottom+1, Left]):
                 FoundLeft = 1
                 break
             else:
@@ -72,7 +72,7 @@ while True:
 
         # find right column for current character
         while (Right < max_x):
-            if np.any(img[Top:Bottom, Right]):
+            if np.any(img[Top:Bottom+1, Right]):
                 Right += 1
             else:
                 break
@@ -82,16 +82,16 @@ while True:
         # refine the top and bottom row for this char
         Top_refined = Top
 
-        while (Top_refined <= Bottom):
-            if np.any(img[Top_refined, Left:Right]):
+        while (Top_refined < Bottom): # Top_refined must exist in this rectangle, so Top_refined = [Top, Bottom-1]
+            if np.any(img[Top_refined, Left:Right+1]):
                 break
             else:
                 Top_refined += 1
 
         Bottom_refined = Top_refined + 1
 
-        while (Bottom_refined <= Bottom):
-            if np.any(img[Bottom_refined, Left:Right]):
+        while (Bottom_refined < Bottom):
+            if np.any(img[Bottom_refined, Left:Right+1]):
                 Bottom_refined += 1
             else:
                 break
@@ -99,7 +99,7 @@ while True:
         Bottom_refined -= 1 # last row which is not all black
 
         # build reference
-        hash0 = imagehash.average_hash(Image.fromarray(img[Top_refined:Bottom_refined, Left:Right]))
+        hash0 = imagehash.average_hash(Image.fromarray(img[Top_refined:Bottom_refined+1, Left:Right+1]))
 
         if row_count >= 0 and row_count < 10: # digit
             this_char = str(char_count_this_line)
