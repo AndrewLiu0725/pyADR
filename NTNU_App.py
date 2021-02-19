@@ -7,8 +7,7 @@ import time
 import numpy as np 
 from PIL import Image
 import warnings
-warnings.simplefilter("ignore", UserWarning)
-sys.coinit_flags = 2
+
 
 # import utility
 from TextExtractor import TextExtractor
@@ -48,6 +47,8 @@ class ValveActuatorControl(QtWidgets.QMainWindow, UI.ValveActuatorControl_UI.Ui_
 # ===============================================================================
 class App():
     def __init__(self):
+        warnings.simplefilter("ignore", UserWarning)
+        sys.coinit_flags = 2
         # initilization for GUI
         self.app = QtWidgets.QApplication(sys.argv)
         self.homepage = HomePage()
@@ -89,8 +90,9 @@ class App():
     # event solver
     # ===============================================================================
     def enter_ValveActuatorControl(self):
-        self.HTBasic_dlg.type_keys("99")
-        self.HTBasic_dlg.type_keys("{ENTER}")
+        self.HTBasic_dlg.type_keys("99"+"{ENTER}")
+        #self.HTBasic_dlg.type_keys("99")
+        #self.HTBasic_dlg.type_keys("{ENTER}")
 
         if not self.ValveActuatorControl_status_initialized:
             # take screentshot from console if first enter
@@ -109,8 +111,9 @@ class App():
         self.ValveActuatorControl.tableWidget.itemChanged.connect(self.ValveActuatorControl_StatusChange) # detect cell change
 
     def exit_ValveActuatorControl(self):
-        self.HTBasic_dlg.type_keys("0")
-        self.HTBasic_dlg.type_keys("{ENTER}")
+        self.HTBasic_dlg.type_keys("0"+"{ENTER}")
+        #self.HTBasic_dlg.type_keys("0")
+        #self.HTBasic_dlg.type_keys("{ENTER}")
         self.homepage.show()
         self.ValveActuatorControl.hide()
 
@@ -131,8 +134,9 @@ class App():
                 
 
     def enter_AnalyticalParam(self):
-        self.HTBasic_dlg.type_keys("77")
-        self.HTBasic_dlg.type_keys("{ENTER}")
+        self.HTBasic_dlg.type_keys("77"+"{ENTER}")
+        #self.HTBasic_dlg.type_keys("77")
+        #self.HTBasic_dlg.type_keys("{ENTER}")
         
         if not self.AnalyticalParam_table_initialized:
             # take screentshot from console if first enter
@@ -150,8 +154,9 @@ class App():
         self.AnalyticalParam.tableWidget.itemChanged.connect(self.AnalyticalParam_parameter_change) # detect cell change
 
     def exit_AnalyticalParam(self):
-        self.HTBasic_dlg.type_keys("0")
-        self.HTBasic_dlg.type_keys("{ENTER}")
+        self.HTBasic_dlg.type_keys("0"+"{ENTER}")
+        #self.HTBasic_dlg.type_keys("0")
+        #self.HTBasic_dlg.type_keys("{ENTER}")
         self.homepage.show()
         self.AnalyticalParam.hide()
         
@@ -197,15 +202,18 @@ class App():
                     self.AnalyticalParam.TableContent[i] = content # change the table content in GUI class
                     # send signal to HTBasic
                     if DEBUG: print("will type:", str(i+1)+"{ENTER}", content+"{ENTER}")
-                    self.HTBasic_dlg.type_keys(str(i+1)) # which parameter
-                    self.HTBasic_dlg.type_keys("{ENTER}")
+                    self.HTBasic_dlg.type_keys(str(i+1)+"{ENTER}") # which parameter
+                    #self.HTBasic_dlg.type_keys(str(i+1)) # which parameter
+                    #self.HTBasic_dlg.type_keys("{ENTER}")
                     time.sleep(0.1)
                     if (content == "no") or (content == "yes"):
-                        self.HTBasic_dlg.type_keys(content[0]) # send y/n only (not yes/no)
-                        self.HTBasic_dlg.type_keys("{ENTER}")
+                        self.HTBasic_dlg.type_keys(content[0]+"{ENTER}")
+                        #self.HTBasic_dlg.type_keys(content[0]) # send y/n only (not yes/no)
+                        #self.HTBasic_dlg.type_keys("{ENTER}")
                     else:
-                        self.HTBasic_dlg.type_keys(content)
-                        self.HTBasic_dlg.type_keys("{ENTER}")
+                        self.HTBasic_dlg.type_keys(content+"{ENTER}")
+                        #self.HTBasic_dlg.type_keys(content)
+                        #self.HTBasic_dlg.type_keys("{ENTER}")
 
 
     # warning message box
