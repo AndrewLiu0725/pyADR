@@ -13,7 +13,7 @@ import UI.MassRatio
 # import utilities
 import Utilities
 
-TEST = 1
+TEST = 0
 
 # load UI
 # ===============================================================================
@@ -75,46 +75,55 @@ class App():
     # methods for switching pages
     def toRatio(self):
         # select mass and preline
-        if TEST:
-            mass = "Data/AS20210429a"
-            bg = "Data/pb20210429a"
+        mass, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select mass file" , "./", "")
+        bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select bg file" , "./", "")
 
-        ratio_result = Utilities.calculateMassRatio(mass, bg)
+        if len(mass) > 0 and len(bg) > 0:
+            ratio_result = Utilities.calculateMassRatio(mass, bg)
 
-        for i in range(5):
-            item = QtWidgets.QTableWidgetItem(str(ratio_result[i])[:11])
-            self.MassRatio.List.setItem(i, 0, item)
+            for i in range(5):
+                item = QtWidgets.QTableWidgetItem(str(ratio_result[i])[:11])
+                self.MassRatio.List.setItem(i, 0, item)
 
-        self.widget.setCurrentIndex(3)
+            self.widget.setCurrentIndex(3)
+        else:
+            self.warningPopup("Please select one mass file and one preline file")
 
     def toT0S(self):
-        # select list of files
-        if TEST:
-            filelist = ["Data/AS20210429a", "Data/AS20210429b", "Data/AS20210429c"]
+        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files to get T0 statistics" , "./", "") # select list of files
 
-        # set the cell of the table of the T0 statistics
-        T0_statistics = Utilities.getT0Statistics(filelist)
-        for i in range(5):
-            for j in range(2):
-                item = QtWidgets.QTableWidgetItem(str(T0_statistics[i, j])[:11])
-                self.T0Statistics.List.setItem(i, j, item)
+        if len(filelist) > 0:
+            # set the cell of the table of the T0 statistics
+            T0_statistics = Utilities.getT0Statistics(filelist)
+            for i in range(5):
+                for j in range(2):
+                    item = QtWidgets.QTableWidgetItem(str(T0_statistics[i, j])[:11])
+                    self.T0Statistics.List.setItem(i, j, item)
 
-        # show the page
-        self.widget.setCurrentIndex(2) 
+            # show the page
+            self.widget.setCurrentIndex(2) 
 
     def toLRP(self):
-        # show up scroll down to choose file to male LRP
-        if TEST:
-            filename = "Data/pb20210429a"
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
         
-        Utilities.calculateT0(filename, 1) # make LRP
-        self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+        if len(filename) > 0:
+            Utilities.calculateT0(filename, 1) # make LRP
+            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
 
-        # show the page
-        self.widget.setCurrentIndex(1)
+            # show the page
+            self.widget.setCurrentIndex(1)
 
     def toMain(self):
         self.widget.setCurrentIndex(0)
+
+    # warning message box
+    def warningPopup(self, waring_msg):
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
+        msg.setText("Warning")
+        msg.setInformativeText(waring_msg)
+        msg.setWindowTitle("")
+        msg.exec_()
 
 # main program
 # ===============================================================================
