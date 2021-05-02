@@ -17,16 +17,16 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>50</y>
-      <width>519</width>
-      <height>43</height>
+      <x>8</x>
+      <y>32</y>
+      <width>791</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>401</width>
-      <height>0</height>
+      <width>519</width>
+      <height>43</height>
      </size>
     </property>
     <property name="text">

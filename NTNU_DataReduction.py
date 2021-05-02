@@ -43,6 +43,7 @@ class MassRatio(QtWidgets.QMainWindow, UI.MassRatio.Ui_MainWindow):
 class App():
     def __init__(self):
         # initilization for GUI
+        QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
         self.LinearRegressionPage = LinearRegressionPage()
@@ -76,13 +77,14 @@ class App():
     def toRatio(self):
         # select mass and preline
         mass, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select mass file" , "./", "")
-        bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select bg file" , "./", "")
+        bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select preline file" , "./", "")
 
         if len(mass) > 0 and len(bg) > 0:
             ratio_result = Utilities.calculateMassRatio(mass, bg)
 
             for i in range(5):
                 item = QtWidgets.QTableWidgetItem(str(ratio_result[i])[:11])
+                item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                 self.MassRatio.List.setItem(i, 0, item)
 
             self.widget.setCurrentIndex(3)
@@ -98,6 +100,7 @@ class App():
             for i in range(5):
                 for j in range(2):
                     item = QtWidgets.QTableWidgetItem(str(T0_statistics[i, j])[:11])
+                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     self.T0Statistics.List.setItem(i, j, item)
 
             # show the page
