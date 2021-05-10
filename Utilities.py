@@ -1,8 +1,13 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
+DEBUG = 1
 
-def calculateT0(filepath, plot):
+def calculateT0(filepath, action_type, mask):
+    """
+    action_type: 0 for reference, 1 for reselect
+    """
+
     # collect data
     f = open(filepath)
     data = f.readlines()
@@ -16,85 +21,113 @@ def calculateT0(filepath, plot):
             v_t[j, i, 0] = (data[2 + 6*i + j].split())[2]
             v_t[j, i, 1] = (data[2 + 6*i + j].split())[3]
 
-    if plot:
-        fig, axs = plt.subplots(2, 3, figsize = (12,8))
+    fig, axs = plt.subplots(2, 3, figsize = (12,8))
 
-    outlier_count = np.zeros(numCycle)
+    # if is reference, recognize the outlier first (use Ar 40)
+    if not action_type:
+        t = v_t[4, :, 1]
+        v = v_t[4, :, 0]
+        mask = np.zeros(numCycle)
+        linear_model = np.polyfit(t, v, 1)
+        linear_model_fn = np.poly1d(linear_model)
+        baseline = 2.5*np.std(np.abs(v - linear_model_fn(t))) # std of the error
+        for j in range(numCycle):
+            if np.abs(v[j] - linear_model_fn(t[j])) > baseline:
+                mask[j] = 1 # mark this point as outlier
 
     # go over Ar 36 to 40
     for i in range(5):
         t = v_t[i, :, 1]
         v = v_t[i, :, 0]
         
-        # linear regression 
+        # first linear regression 
         linear_model = np.polyfit(t, v, 1)
         linear_model_fn = np.poly1d(linear_model)
+        T0[i] = linear_model[1]
+ 
+        axs[i//3, i%3].plot(t, v, marker = 'o', label = "experiment data")
+        axs[i//3, i%3].plot(t, linear_model_fn(t), linestyle = '--', label = "fitted line")
+        axs[i//3, i%3].set(xlabel = "t (sec)", ylabel = "mV")
 
-        # recognize the outliers
-        baseline = np.std(np.abs(v - linear_model_fn(t))) # std of the error
-        for j in range(numCycle):
-            if np.abs(v[j] - linear_model_fn(t[j])) > baseline:
-                outlier_count[j] += 1
+        # remove the outliers
+        if action_type:
+            valid_indices = np.where(mask[i, :] == 0)[0]
+            outlier_indices = np.where(mask[i, :] > 0)[0]
+        else:
+            valid_indices = np.where(mask == 0)[0]
+            outlier_indices = np.where(mask > 0)[0]
 
-        if plot:
-            axs[i//3, i%3].plot(t, v, marker = 'o', label = "experiment data")
-            axs[i//3, i%3].plot(t, linear_model_fn(t), linestyle = '--', label = "fitted line")
-            axs[i//3, i%3].set(xlabel = "t (sec)", ylabel = "mV")
-            
-    # remove outlier
-    valid_indices = np.where(outlier_count < 2.5)[0]
-    outlier_indices = np.where(outlier_count > 2.5)[0]
-
-    for i in range(5):
         t = v_t[i, valid_indices, 1]
         v = v_t[i, valid_indices, 0]
-        
+
         if len(valid_indices) > 1:
-            # linear regression 
+            # second linear regression 
             linear_model = np.polyfit(t, v, 1)
             linear_model_fn = np.poly1d(linear_model)
             T0[i] = linear_model[1]
 
-            if plot:
-                axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
-                axs[i//3, i%3].plot(t, linear_model_fn(t), linestyle = '--', label = "fitted line\n(exclude outliers)")
-                axs[i//3, i%3].legend()
-                axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', linear_model[1]))
+            axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
+            axs[i//3, i%3].plot(t, linear_model_fn(t), linestyle = '--', label = "fitted line\n(exclude outliers)")
+            axs[i//3, i%3].legend()
+            axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', T0[i]))
 
         else:
-            if plot:
-                axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
-                axs[i//3, i%3].legend()
-                axs[i//3, i%3].set_title("Ar {}".format(i+36))
-
-
-
-    if plot:
-        axs[1,2].axis('off')
-        plt.tight_layout()
-        #plt.show()
-        plt.savefig(".work/LR.png", dpi = 200)
+            axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
+            axs[i//3, i%3].legend()
+            axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', T0[i]))
+    
+    axs[1,2].axis('off')
+    plt.tight_layout()
+    #plt.show()
+    plt.savefig(".work/LR.png", dpi = 200)
 
     return T0
+
 
 
 def getT0Statistics(filelist):
     result = np.zeros((len(filelist), 5))
 
     for i, filename in enumerate(filelist):
-        result[i, :] = calculateT0(filename, 0)
+        f = open(filename, 'r')
+        data = f.readlines()
+        for j in range(5):
+            result[i, j] = float(data[j+1].split(',')[1])
+        f.close()
 
+    # calculate statistics
     statistics = np.zeros((5, 2))
 
     for i in range(5):
         statistics[i, 0] = np.mean(result[:, i])
         statistics[i, 1] = np.std(result[:, i])
 
-    return statistics
+    # plot T0 distribution
+    fig, axs = plt.subplots(1, 5, figsize = (12,4))
+    for i in range(5):
+        axs[i].scatter(np.zeros(len(filelist)), result[:, i])
+        axs[i].set_aspect(7//axs[i].get_data_ratio())
+        axs[i].axes.get_xaxis().set_visible(False)  # remove the x-axis and its ticks
+        axs[i].set_title("Ar {}".format(36+i))
+
+    #plt.show()
+    plt.savefig(".work/T0S.png", dpi = 200)
+
+    return [statistics, result]
 
 
-def calculateMassRatio(mass, background):
-    result = calculateT0(mass, 0) - calculateT0(background, 0) # 36 37 38 39 40
+
+def calculateMassRatio(mass_filename, background_filename):
+    T0 = np.zeros((2, 5))
+
+    for i in range(2):
+        f = open(mass_filename if i == 0 else background_filename, 'r')
+        data = f.readlines()
+        for j in range(5):
+            T0[i, j] = float(data[j+1].split(',')[1])
+        f.close()
+
+    result = T0[0, :] - T0[1, :] # 36 37 38 39 40
 
     ratio = np.zeros(5)
     ratio[0] = result[4]/result[0] # 40/36
@@ -103,9 +136,9 @@ def calculateMassRatio(mass, background):
     ratio[3] = result[4]/result[2] # 40/38
     ratio[4] = result[4]/result[3] # 40/39
 
-    return ratio
+    return [result, ratio]
 
 
 if __name__ == "__main__":
-    print(calculateT0("./Data/AS20210429a", 1))
+    getT0Statistics(["./Data/AS20210429a.csv", "./Data/AS20210429b.csv", "./Data/AS20210429c.csv"])
     #print(calculateMassRatio("./Data/AS20210429a", "./Data/pb20210429a"))
