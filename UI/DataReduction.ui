@@ -52,7 +52,7 @@
      <string notr="true">font: 20pt &quot;.AppleSystemUIFont&quot;;</string>
     </property>
     <property name="text">
-     <string>Make Linear Regression Plot</string>
+     <string>Calculate T0</string>
     </property>
    </widget>
    <widget class="QPushButton" name="T0S">
@@ -77,7 +77,7 @@
      <string>T0 Statistics</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="Ratio">
+   <widget class="QPushButton" name="MR">
     <property name="geometry">
      <rect>
       <x>210</x>
@@ -97,6 +97,28 @@
     </property>
     <property name="text">
      <string>Mass Ratio</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ARS">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>360</y>
+      <width>421</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;.AppleSystemUIFont&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Air Ratio Statistics</string>
     </property>
    </widget>
   </widget>
