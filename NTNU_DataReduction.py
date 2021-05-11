@@ -167,6 +167,9 @@ class App():
 
     def T0S_save(self):
         # save screenshot
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        if len(filename) > 0:
+            self.widget.grab().save(filename)
 
         # save statistics
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Statistics" , "./", "(*.csv)")
@@ -180,7 +183,6 @@ class App():
     # methods for Linear Regression Page
     def toLRP(self):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
-        
         if len(filename) > 0:
             self.tmp_T0 = Utilities.calculateT0(filename, 0, None) # make LRP
             self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
@@ -192,9 +194,9 @@ class App():
 
     def LRP_save(self):
         # save screenshot
-        #filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.xpm *.jpg)")
-        #QtGui.QScreen.grabWindow(self.app.primaryScreen()).save('./test.jpg', 'jpg')
-        #self.app.primaryScreen().grabWindow(self.widget.winId(), 0, 0, 800, 600).save('test.jpg', 'jpg')
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        if len(filename) > 0:
+            self.widget.grab().save(filename)
 
         # save T0
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0" , "./", "(*.csv)")

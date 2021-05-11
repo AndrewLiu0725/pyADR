@@ -105,13 +105,15 @@ def getT0Statistics(filelist):
     # plot T0 distribution
     fig, axs = plt.subplots(1, 5, figsize = (12,4))
     for i in range(5):
-        axs[i].scatter(np.zeros(len(filelist)), result[:, i])
+        axs[i].plot(np.zeros(len(filelist)), result[:, i], marker = 'x', markersize = 10, linestyle = 'None')
+        #axs[i].scatter(np.zeros(len(filelist)), result[:, i], )
+        axs[i].errorbar(0, statistics[i, 0], yerr = statistics[i, 1], color = 'k', capthick = 2, capsize = 3, marker = '_', markersize = 15)
         axs[i].set_aspect(7//axs[i].get_data_ratio())
         axs[i].axes.get_xaxis().set_visible(False)  # remove the x-axis and its ticks
         axs[i].set_title("Ar {}".format(36+i))
 
-    #plt.show()
-    plt.savefig(".work/T0S.png", dpi = 200)
+    plt.show()
+    #plt.savefig(".work/T0S.png", dpi = 200)
 
     return [statistics, result]
 
