@@ -106,16 +106,15 @@ def getT0Statistics(filelist):
     fig, axs = plt.subplots(1, 5, figsize = (12,4))
     for i in range(5):
         axs[i].plot(np.zeros(len(filelist)), result[:, i], marker = 'x', markersize = 10, linestyle = 'None')
-        #axs[i].scatter(np.zeros(len(filelist)), result[:, i], )
         axs[i].errorbar(0, statistics[i, 0], yerr = statistics[i, 1], color = 'k', capthick = 2, capsize = 3, marker = '_', markersize = 15)
-        axs[i].set_aspect(7//axs[i].get_data_ratio())
+        axs[i].set_aspect(7/axs[i].get_data_ratio())
         axs[i].axes.get_xaxis().set_visible(False)  # remove the x-axis and its ticks
         axs[i].set_title("Ar {}".format(36+i))
 
-    plt.show()
-    #plt.savefig(".work/T0S.png", dpi = 200)
+    #plt.show()
+    plt.savefig(".work/T0S.png", dpi = 200)
 
-    return [statistics, result]
+    return statistics
 
 
 
@@ -140,7 +139,33 @@ def calculateMassRatio(mass_filename, background_filename):
 
     return [result, ratio]
 
+def getAirRatioStatistics(filelist):
+    ratios = np.zeros(len(filelist))
+
+    for i, filename in enumerate(filelist):
+        f = open(filename, 'r')
+        data = f.readlines()
+        ratios[i] = float(data[5].split(',')[3])
+        f.close()
+
+    mean, std = np.mean(ratios), np.std(ratios)
+
+    # plot
+    fig, ax = plt.subplots(1, 1, figsize = (3,4))
+    ax.plot(np.zeros(len(filelist)), ratios, marker = 'x', markersize = 10, linestyle = 'None')
+    ax.errorbar(0, mean, yerr = std, color = 'k', capthick = 2, capsize = 3, marker = '_', markersize = 15)
+    #print(ax.get_data_ratio())
+    ax.set_aspect(7/ax.get_data_ratio())
+    ax.axes.get_xaxis().set_visible(False)  # remove the x-axis and its ticks
+    ax.set_title("Air Ratio Statistics")
+
+    #plt.show()
+    plt.savefig(".work/ARS.png", dpi = 200)
+
+    return [mean, std]
+
 
 if __name__ == "__main__":
-    getT0Statistics(["./Data/AS20210429a.csv", "./Data/AS20210429b.csv", "./Data/AS20210429c.csv"])
+    #getT0Statistics(["./Data/AS20210429a.csv", "./Data/AS20210429b.csv", "./Data/AS20210429c.csv"])
+    print(getAirRatioStatistics(["./Data/ratio_a.csv", "./Data/ratio_b.csv", "./Data/ratio_c.csv"]))
     #print(calculateMassRatio("./Data/AS20210429a", "./Data/pb20210429a"))

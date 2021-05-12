@@ -94,6 +94,7 @@ class App():
 
         # click button on Air Ratio Statistics page
         self.AirRatioStatistics.return_2.clicked.connect(self.toMain)
+        self.AirRatioStatistics.save.clicked.connect(self.ARS_save)
 
         self.widget.show()
 
@@ -108,7 +109,39 @@ class App():
 
     # methods for Air Ratio Statistics
     def toARS(self):
-        self.widget.setCurrentIndex(4)
+        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , "./", "(*.csv)") # select list of files
+
+        if len(filelist) > 0:
+            # set the cell of the table of the T0 statistics
+            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist)
+            for i in range(2):
+                item = QtWidgets.QTableWidgetItem('{}'.format(round(self.AirRatio_statistics_result[i],2)))
+                item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                self.AirRatioStatistics.RatioTable.setItem(i, 0, item)
+
+            # set # of selected files
+            self.AirRatioStatistics.numSelectedFiles.setText("n = {}".format(len(filelist)))
+            self.AirRatioStatistics.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
+
+            # set image
+            self.AirRatioStatistics.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
+
+            # show the page
+            self.widget.setCurrentIndex(4)
+
+    def ARS_save(self):
+        # save screenshot
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        if len(filename) > 0:
+            self.widget.grab().save(filename)
+
+        # save statistics
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Air Ratio Statistics" , "./", "(*.csv)")
+        if len(filename) > 0:
+            f = open(filename, 'w')
+            f.write("Air Ratio,Mean,STD\n")
+            f.write("Ar 40/39,{},{}\n".format(self.AirRatio_statistics_result[0], self.AirRatio_statistics_result[1]))
+            f.close()
 
     # methods for Mass Ratio
     def toMR(self):
@@ -151,7 +184,7 @@ class App():
             self.T0_statistics_result = Utilities.getT0Statistics(filelist)
             for i in range(5):
                 for j in range(2):
-                    item = QtWidgets.QTableWidgetItem('{:0.4e}'.format(self.T0_statistics_result[0][i, j]))
+                    item = QtWidgets.QTableWidgetItem('{:0.4e}'.format(self.T0_statistics_result[i, j]))
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     self.T0Statistics.tableWidget.setItem(j, i, item)
 
@@ -176,7 +209,7 @@ class App():
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,Mean,STD\n")
-            f.writelines(["Ar{},{},{}\n".format(i+36, self.T0_statistics_result[0][i,0], self.T0_statistics_result[0][i,1]) for i in range(5)])
+            f.writelines(["Ar{},{},{}\n".format(i+36, self.T0_statistics_result[i,0], self.T0_statistics_result[i,1]) for i in range(5)])
             f.close()
 
     
