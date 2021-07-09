@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
+from scipy.optimize.zeros import results_c
+
 # import UI
 import UI.DataReduction
 import UI.LinearRegression
@@ -58,9 +60,12 @@ class App():
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
         self.LinearRegressionPage = LinearRegressionPage()
+        self.insertPhoto(self.LinearRegressionPage, [150, 150, 600, 450])
         self.T0Statistics = T0Statistics()
+        self.insertPhoto(self.T0Statistics, [150, 75, 600, 250])
         self.MassRatio = MassRatio()
         self.AirRatioStatistics = AirRatioStatistics()
+        self.insertPhoto(self.AirRatioStatistics, [200, 75, 350, 275])
         self.ReselectDialog = ReselectTable()
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
@@ -70,6 +75,18 @@ class App():
         self.widget.addWidget(self.AirRatioStatistics)
         self.widget.setFixedHeight(600)
         self.widget.setFixedWidth(800)
+
+        # others
+        self.fitting_function_list = ["Linear", "Asymptotic"]
+
+    def insertPhoto(self, page, coordinate):
+        # coordinate = [x, y, w, h]
+        page.photo = QtWidgets.QLabel(page.centralwidget)
+        page.photo.setGeometry(QtCore.QRect(coordinate[0], coordinate[1], coordinate[2], coordinate[3]))
+        page.photo.setText("")
+        page.photo.setPixmap(QtGui.QPixmap(".work/cat.png"))
+        page.photo.setScaledContents(True)
+        page.photo.setObjectName("photo")
 
     def run(self):
         # deal with click or keyin events
@@ -83,6 +100,8 @@ class App():
         self.LinearRegressionPage.return_2.clicked.connect(self.toMain)
         self.LinearRegressionPage.save.clicked.connect(self.LRP_save)
         self.LinearRegressionPage.reselect.clicked.connect(self.LRP_reselect)
+        self.LinearRegressionPage.linear.clicked.connect(self.LRP_useLinear)
+        self.LinearRegressionPage.asymptotic.clicked.connect(self.LRP_useAsymptotic)
 
         # click button on T0 statistics page
         self.T0Statistics.return_2.clicked.connect(self.toMain)
@@ -115,9 +134,11 @@ class App():
             # set the cell of the table of the T0 statistics
             self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist)
             for i in range(2):
-                item = QtWidgets.QTableWidgetItem('{}'.format(round(self.AirRatio_statistics_result[i],2)))
-                item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                self.AirRatioStatistics.RatioTable.setItem(i, 0, item)
+                for j in range(2):
+                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
+                    #item = QtWidgets.QTableWidgetItem('{}'.format(round(self.AirRatio_statistics_result[i, j],2)))
+                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                    self.AirRatioStatistics.RatioTable.setItem(j, i, item)
 
             # set # of selected files
             self.AirRatioStatistics.numSelectedFiles.setText("n = {}".format(len(filelist)))
@@ -140,7 +161,8 @@ class App():
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Air Ratio,Mean,STD\n")
-            f.write("Ar 40/39,{},{}\n".format(self.AirRatio_statistics_result[0], self.AirRatio_statistics_result[1]))
+            f.write("Ar 40/36,{},{}\n".format(self.AirRatio_statistics_result[0, 0], self.AirRatio_statistics_result[0, 1]))
+            f.write("Ar 38/36,{},{}\n".format(self.AirRatio_statistics_result[1, 0], self.AirRatio_statistics_result[1, 1]))
             f.close()
 
     # methods for Mass Ratio
@@ -152,12 +174,14 @@ class App():
         if len(mass) > 0 and len(bg) > 0:
             self.ratio_result = Utilities.calculateMassRatio(mass, bg)
 
-            for i in range(2):
+            for i in range(4):
                 for j in range(5):
-                    item = QtWidgets.QTableWidgetItem(str(self.ratio_result[i][j])[:11])
+                    #item = QtWidgets.QTableWidgetItem(str(self.ratio_result[i][j])[:11])
+                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.ratio_result[i][j]))
+                    
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    if i == 0:
-                        self.MassRatio.ValueTable.setItem(j, 0, item)
+                    if i < 3:
+                        self.MassRatio.ValueTable.setItem(j, i, item)
                     else:
                         self.MassRatio.RatioTable.setItem(j, 0, item)
 
@@ -166,12 +190,12 @@ class App():
             self.Popup("Warning!", "Please select one mass file and one preline file")
 
     def MR_save(self):
-        mass_pair = ['Ar40/36', 'Ar37/39', 'Ar36/38', 'Ar40/38', 'Ar40/39']
+        mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Mass Ratio" , "./", "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
-            f.write("Mass,Mass - Sample blank,Mass Pair,Ratio\n")
-            f.writelines(["Ar{},{},{},{}\n".format(i+36, self.ratio_result[0][i], mass_pair[i], self.ratio_result[1][i]) for i in range(5)])
+            f.write("Mass,Raw,Measurment,Sigma,Mass Pair,Ratio\n")
+            f.writelines(["Ar{},{},{},{},{},{}\n".format(i+36, self.ratio_result[0][i], self.ratio_result[1][i], self.ratio_result[2][i], mass_pair[i], self.ratio_result[3][i]) for i in range(5)])
             f.close()
 
 
@@ -217,8 +241,10 @@ class App():
     def toLRP(self):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
         if len(filename) > 0:
-            self.tmp_T0 = Utilities.calculateT0(filename, 0, None) # make LRP
+            self.T0_fitting_function = 0 # default fitting function is linear
+            [self.tmp_T0, self.tmp_T0_SIGMA] = Utilities.calculateT0(filename, 0, None, self.T0_fitting_function) # make LRP
             self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.LinearRegressionPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
             # show the page
             self.widget.setCurrentIndex(1)
@@ -235,8 +261,8 @@ class App():
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0" , "./", "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
-            f.write("Mass,T0\n")
-            f.writelines(["Ar{},{}\n".format(i+36, self.tmp_T0[i]) for i in range(5)])
+            f.write("Mass,T0,T0_SIGMA\n")
+            f.writelines(["Ar{},{},{}\n".format(i+36, self.tmp_T0[i], self.tmp_T0_SIGMA[i]) for i in range(5)])
             f.close()
 
     def LRP_reselect(self):
@@ -250,9 +276,35 @@ class App():
                 item = self.ReselectDialog.tableWidget.item(i, j)
                 if item.checkState() == QtCore.Qt.Unchecked:
                     mask[i, j] = 1
-        Utilities.calculateT0(self.filename, 1, mask)
-        self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
-        self.ReselectDialog.close()
+
+        result = Utilities.calculateT0(self.filename, 1, mask, self.T0_fitting_function)
+
+        if result is None:
+            self.ReselectDialog.close()
+            self.Popup("Warning!", "Unable to fit the selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
+        else:
+            [self.tmp_T0, self.tmp_T0_SIGMA] = result
+            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.ReselectDialog.close()
+
+    def LRP_useLinear(self):
+        self.LRP_switch_fitting_func(0)
+    
+    def LRP_useAsymptotic(self):
+        self.LRP_switch_fitting_func(1)
+
+    def LRP_switch_fitting_func(self, fit_func_type):
+        result = Utilities.calculateT0(self.filename, 0, None, fit_func_type) # make LRP
+        if result is None:
+            self.Popup("Warning!", "Unable to fit the raw data with {} fucntion!".format(self.fitting_function_list[fit_func_type]))
+        
+        else:
+            [self.tmp_T0, self.tmp_T0_SIGMA] = result
+            self.T0_fitting_function = fit_func_type
+            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.LinearRegressionPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
+
+
     
 
     # warning message box
