@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>150</y>
+      <y>130</y>
       <width>113</width>
       <height>51</height>
      </rect>
@@ -56,9 +56,9 @@
    <widget class="QTableWidget" name="RatioTable">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>180</y>
-      <width>191</width>
+      <x>210</x>
+      <y>380</y>
+      <width>341</width>
       <height>121</height>
      </rect>
     </property>
@@ -84,7 +84,17 @@
     </row>
     <column>
      <property name="text">
-      <string>Air Ratio</string>
+      <string>Ar 40/36</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ar 38/36</string>
      </property>
      <property name="font">
       <font>
@@ -93,6 +103,16 @@
      </property>
     </column>
     <item row="0" column="0">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+    </item>
+    <item row="0" column="1">
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -100,6 +120,16 @@
      </property>
     </item>
     <item row="1" column="0">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+    </item>
+    <item row="1" column="1">
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -110,8 +140,8 @@
    <widget class="QLabel" name="numSelectedFiles">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>330</y>
+      <x>210</x>
+      <y>510</y>
       <width>121</width>
       <height>31</height>
      </rect>

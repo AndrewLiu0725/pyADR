@@ -7,7 +7,7 @@ import sys
 from scipy.optimize.zeros import results_c
 
 # import UI
-import UI.DataReduction
+import UI.HomePage
 import UI.LinearRegression
 import UI.T0Statistics
 import UI.MassRatio
@@ -21,7 +21,7 @@ TEST = 0
 
 # load UI
 # ===============================================================================
-class HomePage(QtWidgets.QMainWindow, UI.DataReduction.Ui_MainWindow):
+class HomePage(QtWidgets.QMainWindow, UI.HomePage.Ui_MainWindow):
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
@@ -59,20 +59,20 @@ class App():
         QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
-        self.LinearRegressionPage = LinearRegressionPage()
-        self.insertPhoto(self.LinearRegressionPage, [150, 150, 600, 450])
-        self.T0Statistics = T0Statistics()
-        self.insertPhoto(self.T0Statistics, [150, 75, 600, 250])
-        self.MassRatio = MassRatio()
-        self.AirRatioStatistics = AirRatioStatistics()
-        self.insertPhoto(self.AirRatioStatistics, [200, 75, 350, 275])
+        self.T0CalculationPage = LinearRegressionPage()
+        self.insertPhoto(self.T0CalculationPage, [150, 150, 600, 450])
+        self.T0StatisticsPage = T0Statistics()
+        self.insertPhoto(self.T0StatisticsPage, [150, 75, 600, 250])
+        self.MassRatioPage = MassRatio()
+        self.AirRatioStatisticsPage = AirRatioStatistics()
+        self.insertPhoto(self.AirRatioStatisticsPage, [200, 75, 350, 275])
         self.ReselectDialog = ReselectTable()
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
-        self.widget.addWidget(self.LinearRegressionPage)
-        self.widget.addWidget(self.T0Statistics)
-        self.widget.addWidget(self.MassRatio)
-        self.widget.addWidget(self.AirRatioStatistics)
+        self.widget.addWidget(self.T0CalculationPage)
+        self.widget.addWidget(self.T0StatisticsPage)
+        self.widget.addWidget(self.MassRatioPage)
+        self.widget.addWidget(self.AirRatioStatisticsPage)
         self.widget.setFixedHeight(600)
         self.widget.setFixedWidth(800)
 
@@ -97,23 +97,23 @@ class App():
         self.HomePage.ARS.clicked.connect(self.toARS)
 
         # click button on Linear Regression Page
-        self.LinearRegressionPage.return_2.clicked.connect(self.toMain)
-        self.LinearRegressionPage.save.clicked.connect(self.LRP_save)
-        self.LinearRegressionPage.reselect.clicked.connect(self.LRP_reselect)
-        self.LinearRegressionPage.linear.clicked.connect(self.LRP_useLinear)
-        self.LinearRegressionPage.asymptotic.clicked.connect(self.LRP_useAsymptotic)
+        self.T0CalculationPage.return_2.clicked.connect(self.toMain)
+        self.T0CalculationPage.save.clicked.connect(self.LRP_save)
+        self.T0CalculationPage.reselect.clicked.connect(self.LRP_reselect)
+        self.T0CalculationPage.linear.clicked.connect(self.LRP_useLinear)
+        self.T0CalculationPage.asymptotic.clicked.connect(self.LRP_useAsymptotic)
 
         # click button on T0 statistics page
-        self.T0Statistics.return_2.clicked.connect(self.toMain)
-        self.T0Statistics.save.clicked.connect(self.T0S_save)
+        self.T0StatisticsPage.return_2.clicked.connect(self.toMain)
+        self.T0StatisticsPage.save.clicked.connect(self.T0S_save)
 
         # click button on Mass Ratio page
-        self.MassRatio.return_2.clicked.connect(self.toMain)
-        self.MassRatio.save.clicked.connect(self.MR_save)
+        self.MassRatioPage.return_2.clicked.connect(self.toMain)
+        self.MassRatioPage.save.clicked.connect(self.MR_save)
 
         # click button on Air Ratio Statistics page
-        self.AirRatioStatistics.return_2.clicked.connect(self.toMain)
-        self.AirRatioStatistics.save.clicked.connect(self.ARS_save)
+        self.AirRatioStatisticsPage.return_2.clicked.connect(self.toMain)
+        self.AirRatioStatisticsPage.save.clicked.connect(self.ARS_save)
 
         self.widget.show()
 
@@ -138,14 +138,14 @@ class App():
                     item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
                     #item = QtWidgets.QTableWidgetItem('{}'.format(round(self.AirRatio_statistics_result[i, j],2)))
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    self.AirRatioStatistics.RatioTable.setItem(j, i, item)
+                    self.AirRatioStatisticsPage.RatioTable.setItem(j, i, item)
 
             # set # of selected files
-            self.AirRatioStatistics.numSelectedFiles.setText("n = {}".format(len(filelist)))
-            self.AirRatioStatistics.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
+            self.AirRatioStatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
+            self.AirRatioStatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
             # set image
-            self.AirRatioStatistics.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
+            self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
 
             # show the page
             self.widget.setCurrentIndex(4)
@@ -181,9 +181,9 @@ class App():
                     
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     if i < 3:
-                        self.MassRatio.ValueTable.setItem(j, i, item)
+                        self.MassRatioPage.ValueTable.setItem(j, i, item)
                     else:
-                        self.MassRatio.RatioTable.setItem(j, 0, item)
+                        self.MassRatioPage.RatioTable.setItem(j, 0, item)
 
             self.widget.setCurrentIndex(3)
         else:
@@ -210,14 +210,14 @@ class App():
                 for j in range(2):
                     item = QtWidgets.QTableWidgetItem('{:0.4e}'.format(self.T0_statistics_result[i, j]))
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    self.T0Statistics.tableWidget.setItem(j, i, item)
+                    self.T0StatisticsPage.tableWidget.setItem(j, i, item)
 
             # set # of selected files
-            self.T0Statistics.numSelectedFiles.setText("n = {}".format(len(filelist)))
-            self.T0Statistics.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
+            self.T0StatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
+            self.T0StatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
             # set image
-            self.T0Statistics.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
+            self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
 
             # show the page
             self.widget.setCurrentIndex(2) 
@@ -243,8 +243,8 @@ class App():
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
             [self.tmp_T0, self.tmp_T0_SIGMA] = Utilities.calculateT0(filename, 0, None, self.T0_fitting_function) # make LRP
-            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
-            self.LinearRegressionPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
+            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
             # show the page
             self.widget.setCurrentIndex(1)
@@ -284,7 +284,7 @@ class App():
             self.Popup("Warning!", "Unable to fit the selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
         else:
             [self.tmp_T0, self.tmp_T0_SIGMA] = result
-            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.ReselectDialog.close()
 
     def LRP_useLinear(self):
@@ -301,8 +301,8 @@ class App():
         else:
             [self.tmp_T0, self.tmp_T0_SIGMA] = result
             self.T0_fitting_function = fit_func_type
-            self.LinearRegressionPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
-            self.LinearRegressionPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
+            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
 
     

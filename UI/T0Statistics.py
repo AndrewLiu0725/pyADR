@@ -125,14 +125,6 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        # insert photo
-        self.photo = QtWidgets.QLabel(self.centralwidget)
-        self.photo.setGeometry(QtCore.QRect(150, 75, 600, 250))
-        self.photo.setText("")
-        self.photo.setPixmap(QtGui.QPixmap("../Figures/cat.png"))
-        self.photo.setScaledContents(True)
-        self.photo.setObjectName("photo")
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

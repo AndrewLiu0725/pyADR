@@ -29,6 +29,18 @@ class Ui_MainWindow(object):
         self.reselect = QtWidgets.QPushButton(self.centralwidget)
         self.reselect.setGeometry(QtCore.QRect(30, 120, 91, 51))
         self.reselect.setObjectName("reselect")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(30, 240, 101, 51))
+        self.label_2.setObjectName("label_2")
+        self.linear = QtWidgets.QPushButton(self.centralwidget)
+        self.linear.setGeometry(QtCore.QRect(30, 290, 101, 51))
+        self.linear.setObjectName("linear")
+        self.asymptotic = QtWidgets.QPushButton(self.centralwidget)
+        self.asymptotic.setGeometry(QtCore.QRect(30, 350, 101, 51))
+        self.asymptotic.setObjectName("asymptotic")
+        self.current_fit_func = QtWidgets.QLabel(self.centralwidget)
+        self.current_fit_func.setGeometry(QtCore.QRect(180, 130, 511, 16))
+        self.current_fit_func.setObjectName("current_fit_func")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -38,13 +50,6 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        # insert photo
-        self.photo = QtWidgets.QLabel(self.centralwidget)
-        self.photo.setGeometry(QtCore.QRect(150, 150, 600, 450))
-        self.photo.setText("")
-        self.photo.setPixmap(QtGui.QPixmap("../Figures/cat.png"))
-        self.photo.setScaledContents(True)
-        self.photo.setObjectName("photo")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -56,6 +61,10 @@ class Ui_MainWindow(object):
         self.save.setText(_translate("MainWindow", "Save"))
         self.return_2.setText(_translate("MainWindow", "Return"))
         self.reselect.setText(_translate("MainWindow", "Reselect"))
+        self.label_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">fitting function</p><p align=\"center\">options</p></body></html>"))
+        self.linear.setText(_translate("MainWindow", "Linear"))
+        self.asymptotic.setText(_translate("MainWindow", "Asymptotic"))
+        self.current_fit_func.setText(_translate("MainWindow", "Current fitting function:"))
 
 
 if __name__ == "__main__":
