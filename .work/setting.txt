@@ -1,0 +1,17 @@
+numParameters
+5
+
+Ar 40/36
+298.56
+
+Ar 38/36
+0.18850
+
+numCycle
+8
+
+baseline
+2.5
+
+maxfev
+1000
