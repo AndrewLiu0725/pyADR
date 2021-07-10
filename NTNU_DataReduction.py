@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
-from scipy.optimize.zeros import results_c
-
 # import UI
 import UI.HomePage
 import UI.LinearRegression
@@ -13,6 +11,7 @@ import UI.T0Statistics
 import UI.MassRatio
 import UI.AirRatioStatistics
 import UI.ReselectDialog
+import UI.ParameterSetting
 
 # import utilities
 import Utilities
@@ -51,6 +50,11 @@ class ReselectTable(QtWidgets.QDialog, UI.ReselectDialog.Ui_Dialog):
         QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
 
+class ParameterSetting(QtWidgets.QMainWindow, UI.ParameterSetting.Ui_MainWindow):
+    def __init__(self, parent=None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+
 # main app
 # ===============================================================================
 class App():
@@ -67,12 +71,14 @@ class App():
         self.AirRatioStatisticsPage = AirRatioStatistics()
         self.insertPhoto(self.AirRatioStatisticsPage, [200, 75, 350, 275])
         self.ReselectDialog = ReselectTable()
+        self.ParameterSettingPage = ParameterSetting()
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
         self.widget.addWidget(self.T0CalculationPage)
         self.widget.addWidget(self.T0StatisticsPage)
         self.widget.addWidget(self.MassRatioPage)
         self.widget.addWidget(self.AirRatioStatisticsPage)
+        self.widget.addWidget(self.ParameterSettingPage)
         self.widget.setFixedHeight(600)
         self.widget.setFixedWidth(800)
 
@@ -89,12 +95,16 @@ class App():
         page.photo.setObjectName("photo")
 
     def run(self):
+        # load parameters
+        self.loadParameterSeting()
+
         # deal with click or keyin events
         # click button on Homepage
         self.HomePage.LRP.clicked.connect(self.toLRP)
         self.HomePage.T0S.clicked.connect(self.toT0S)
         self.HomePage.MR.clicked.connect(self.toMR)
         self.HomePage.ARS.clicked.connect(self.toARS)
+        self.HomePage.actionParameter_Setting.triggered.connect(self.toPS)
 
         # click button on Linear Regression Page
         self.T0CalculationPage.return_2.clicked.connect(self.toMain)
@@ -115,6 +125,12 @@ class App():
         self.AirRatioStatisticsPage.return_2.clicked.connect(self.toMain)
         self.AirRatioStatisticsPage.save.clicked.connect(self.ARS_save)
 
+        # click button on Parameter Setting page
+        self.ParameterSettingPage.return_2.clicked.connect(self.toMain)
+        self.ParameterSettingPage.change.clicked.connect(self.PS_change)
+        self.ParameterSettingPage.save.clicked.connect(self.PS_save)
+        self.ParameterSettingPage.cancel.clicked.connect(self.PS_cancel)
+
         self.widget.show()
 
         # close program when pressing x(esc)
@@ -126,17 +142,138 @@ class App():
     def toMain(self):
         self.widget.setCurrentIndex(0)
 
+    # warning message box
+    def Popup(self, msg_type, msg_content):
+        msg = QtWidgets.QMessageBox()
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
+        msg.setText(msg_type)
+        msg.setInformativeText(msg_content)
+        msg.setWindowTitle("")
+        msg.exec_()
+
+    # methods for parameters setting page
+    # ===============================================================================
+    def loadParameterSeting(self):
+        with open('.work/setting.txt', 'r') as f:
+            data = f.readlines()
+
+        self.parameters = []
+        self.parameters_name = []
+        self.numParamters = int(data[1].rstrip())
+        for i in range(self.numParamters):
+            self.parameters_name.append(data[3*(i+1)].rstrip())
+            self.parameters.append(data[3*(i+1) + 1].rstrip())
+
+    def toPS(self):
+        # load the parameters from setting file
+        self.loadParameterSeting()
+
+        # fill the table and set the item as disabled
+        for i in range(self.numParamters):
+            item = QtWidgets.QTableWidgetItem(self.parameters[i])
+            item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+            self.ParameterSettingPage.ParameetrTable.setItem(i, 0, item)
+            
+        # show the page
+        self.ParameterSettingPage.change.show()
+        self.ParameterSettingPage.cancel.hide()
+        self.ParameterSettingPage.save.hide()
+        self.widget.setCurrentIndex(5)
+
+    def PS_change(self):
+        # show the save and cancel button, hide the change button
+        self.ParameterSettingPage.cancel.show()
+        self.ParameterSettingPage.save.show()
+        self.ParameterSettingPage.change.hide()
+
+        # enable edit (need better way to implement)
+        for i in range(self.numParamters):
+            item = QtWidgets.QTableWidgetItem(self.parameters[i])
+            self.ParameterSettingPage.ParameetrTable.setItem(i, 0, item) # make cell editable
+
+    def PS_save(self):
+        error_msg = ''
+        changed = 0
+        invalid = 0
+
+        for i in range(self.numParamters):
+            item = self.ParameterSettingPage.ParameetrTable.item(i, 0)
+            content = item.text()
+
+            # value changed
+            if content != self.parameters[i]:
+                error_type = 0
+                # check if valid
+                if i in [2, 4]:
+                    try:
+                        if int(content) <= 0:
+                            error_type = 1
+                    except:
+                        error_type = 1
+                elif i == 3:
+                    try:
+                        if float(content) <= 0:
+                            error_type = 2
+                    except:
+                        error_type = 2
+                
+                # new valid value
+                if error_type == 0:
+                    self.parameters[i] = content.rstrip()
+                    changed = 1 
+
+                # restore the value
+                else:
+                    item.setText(self.parameters[i]) 
+                    invalid = 1
+                    error_msg += '{} should be {}\n'.format(self.parameters_name[i], 
+                    'positive integer' if error_type == 1 else 'positive number')
+
+            item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+
+        self.ParameterSettingPage.change.show()
+        self.ParameterSettingPage.cancel.hide()
+        self.ParameterSettingPage.save.hide()
+
+        # rewite setting.txt with update parameters value if necessary
+        if changed:
+            with open('.work/setting.txt', 'r') as f:
+                data = f.readlines()
+
+            for i in range(self.numParamters):
+                data[3*(i+1)+1] = self.parameters[i]+'\n'
+
+            with open('.work/setting.txt', 'w') as f:
+                f.writelines(data)
+
+        if invalid:
+            self.Popup('Warning!', error_msg)
+        
+
+    def PS_cancel(self):
+        # restore to previous value
+        for i in range(self.numParamters):
+            item = self.ParameterSettingPage.ParameetrTable.item(i, 0)
+            item.setText(self.parameters[i])
+            item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+
+        self.ParameterSettingPage.change.show()
+        self.ParameterSettingPage.cancel.hide()
+        self.ParameterSettingPage.save.hide()
+
+
+
     # methods for Air Ratio Statistics
+    # ===============================================================================
     def toARS(self):
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , "./", "(*.csv)") # select list of files
 
         if len(filelist) > 0:
             # set the cell of the table of the T0 statistics
-            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist)
+            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist, float(self.parameters[0]), float(self.parameters[1]))
             for i in range(2):
                 for j in range(2):
                     item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
-                    #item = QtWidgets.QTableWidgetItem('{}'.format(round(self.AirRatio_statistics_result[i, j],2)))
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     self.AirRatioStatisticsPage.RatioTable.setItem(j, i, item)
 
@@ -166,6 +303,7 @@ class App():
             f.close()
 
     # methods for Mass Ratio
+    # ===============================================================================
     def toMR(self):
         # select mass and preline
         mass, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select mass file (csv)" , "./", "(*.csv)")
@@ -200,6 +338,7 @@ class App():
 
 
     # methods for T0 Statistics
+    # ===============================================================================
     def toT0S(self):
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get T0 statistics" , "./", "(*.csv)") # select list of files
 
@@ -237,12 +376,13 @@ class App():
             f.close()
 
     
-    # methods for Linear Regression Page
+    # methods for T0 Calculation Page
+    # ===============================================================================
     def toLRP(self):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
-            result = Utilities.calculateT0(self.T0_fitting_function, filepath = filename) # make LRP
+            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), filepath = filename) # make LRP
             [self.tmp_T0, self.tmp_T0_SIGMA, self.tmp_v_t] = result[1:]
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
@@ -281,7 +421,7 @@ class App():
                 if item.checkState() == QtCore.Qt.Unchecked:
                     mask[i, j] = 1
 
-        result = Utilities.calculateT0(self.T0_fitting_function, v_t=self.tmp_v_t, mask=mask)
+        result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), v_t=self.tmp_v_t, mask=mask)
         [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
         self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
         self.ReselectDialog.close()
@@ -297,7 +437,7 @@ class App():
         self.LRP_switch_fitting_func(1)
 
     def LRP_switch_fitting_func(self, fit_func_type):
-        result = Utilities.calculateT0(fit_func_type, v_t=self.tmp_v_t) # make LRP
+        result = Utilities.calculateT0(fit_func_type, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), v_t=self.tmp_v_t) # make LRP
         print(result)
 
         if result[0] == 2:
@@ -312,16 +452,6 @@ class App():
             if result[0] == 1:
                 self.Popup("Warning!", "Unable to fit the data with {} fucntion after removing the auto-selected outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
 
-    
-
-    # warning message box
-    def Popup(self, msg_type, msg_content):
-        msg = QtWidgets.QMessageBox()
-        msg.setIcon(QtWidgets.QMessageBox.Warning)
-        msg.setText(msg_type)
-        msg.setInformativeText(msg_content)
-        msg.setWindowTitle("")
-        msg.exec_()
 
 # main program
 # ===============================================================================

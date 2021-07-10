@@ -22,16 +22,18 @@ fit_func_list = [linear, asymptotic]
 
 # functions for button
 # ===============================================================================
-def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
+def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath = None, v_t = None, mask = None):
     """
     Input:
     1. fit_function_type: 0 for linear, 1 for exponential
 
-    2. filepath: needs if is first entry
+    2. numCycle, threshold, and max_iteration are settting parameters
 
-    3. v_t: needs if is reselected or switch fitting function
+    3. filepath: needs if is first entry
 
-    4. mask: needs if is reselected
+    4. v_t: needs if is reselected or switch fitting function
+
+    5. mask: needs if is reselected
 
 
     How to assign the argument:
@@ -57,15 +59,12 @@ def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
     # initialize
     T0 = np.zeros(5)
     T0_SIGMA = np.zeros(5)
-    numCycle = 8
     status = 0
 
     # collect data if is first entry
     if filepath is not None:
-        f = open(filepath)
-        data = f.readlines()
-        f.close()
-        #numCycle = int((data[0].split())[0])
+        with open(filepath, 'r') as f:
+            data = f.readlines()
 
         v_t = np.zeros((5, numCycle, 2))
 
@@ -85,14 +84,14 @@ def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
         mask = np.zeros((5, numCycle))
 
         try:
-            popt, pcov = curve_fit(f, t, v)
+            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
         except:
             # only possible to enter this line when switching fitting function
             # since it's always possible to fit the raw data with default fitting function (linear)
             status = 2
             return [status, None, None, None]
 
-        baseline = 2.5*np.std(np.abs(v - f(t, *popt))) # std of the error
+        baseline = threshold*np.std(np.abs(v - f(t, *popt))) # std of the error
 
         for j in range(numCycle):
             if np.abs(v[j] - f(t[j], *popt)) > baseline:
@@ -106,8 +105,8 @@ def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
         v = v_t[i, :, 0]
         
         try:
-            popt, pcov = curve_fit(f, t, v)
-            print(i+36, popt)
+            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
+
         except:
             # only possible to enter this line when switching fitting function
             # since it's always possible to fit the raw data with default fitting function (linear)
@@ -130,7 +129,7 @@ def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
         v = v_t[i, valid_indices, 0]
 
         try:
-            popt, pcov = curve_fit(f, t, v)
+            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
             T0[i] = f(0, *popt)
             T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
             axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
@@ -154,11 +153,10 @@ def getT0Statistics(filelist):
     result = np.zeros((len(filelist), 5))
 
     for i, filename in enumerate(filelist):
-        f = open(filename, 'r')
-        data = f.readlines()
+        with open(filename, 'r') as f:
+            data = f.readlines()
         for j in range(5):
             result[i, j] = float(data[j+1].split(',')[1])
-        f.close()
 
     # calculate statistics
     statistics = np.zeros((5, 2))
@@ -187,12 +185,11 @@ def calculateMassRatio(mass_filename, background_filename):
     T0 = np.zeros((2, 2, 5))
 
     for i in range(2):
-        f = open(mass_filename if i == 0 else background_filename, 'r')
-        data = f.readlines()
+        with open(mass_filename if i == 0 else background_filename, 'r') as f:
+            data = f.readlines()
         for j in range(5):
             T0[i, 0, j] = float(data[j+1].split(',')[1]) # T0
             T0[i, 1, j] = float(data[j+1].split(',')[2]) # T0_SIGMA
-        f.close()
 
     result = T0[0, 0, :] - T0[1, 0, :] # 36 37 38 39 40
     diff_std = np.sqrt(T0[0, 1, :]**2 + T0[1, 1, :]**2)
@@ -206,15 +203,18 @@ def calculateMassRatio(mass_filename, background_filename):
 
     return [T0[0, 0, :], result, diff_std, ratio]
 
-def getAirRatioStatistics(filelist):
+def getAirRatioStatistics(filelist, background1, background2):
+    '''
+    background1: published Ar 40/36 air background
+    background2: published Ar 38/36 air background
+    '''
     ratios = np.zeros((2, len(filelist))) # [ratio pair, ratio value]
 
     for i, filename in enumerate(filelist):
-        f = open(filename, 'r')
-        data = f.readlines()
-        ratios[0, i] = float(data[1].split(',')[5]) - 298.56 # published Ar 40/36 air background
-        ratios[1, i] = float(data[3].split(',')[5]) - 0.18850 # published Ar 38/36 air background
-        f.close()
+        with open(filename, 'r') as f:
+            data = f.readlines()
+        ratios[0, i] = float(data[1].split(',')[5]) - background1 
+        ratios[1, i] = float(data[3].split(',')[5]) - background2 
 
     # calculate statistics
     statistics = np.zeros((2, 2)) # [ratio pair, mean/std]
