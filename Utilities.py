@@ -1,3 +1,4 @@
+from operator import ge
 import numpy as np 
 import matplotlib.pyplot as plt
 from numpy.lib.function_base import diff
@@ -17,83 +18,124 @@ def quadratic(x, a, b, c):
 def asymptotic(x, a, b, n):
     return a * x ** n  / (x ** n + b)
 
-fit_func_list = [linear, quadratic]
+fit_func_list = [linear, asymptotic]
 
 # functions for button
 # ===============================================================================
-def calculateT0(filepath, action_type, mask, fit_function_type):
+def calculateT0(fit_function_type, filepath = None, v_t = None, mask = None):
     """
-    action_type: 0 for reference (first entry or switch fitting function), 1 for reselect
-    fit_function_type: 0 for linear, 1 for exponential
+    Input:
+    1. fit_function_type: 0 for linear, 1 for exponential
+
+    2. filepath: needs if is first entry
+
+    3. v_t: needs if is reselected or switch fitting function
+
+    4. mask: needs if is reselected
+
+
+    How to assign the argument:
+    1. first entry: filepath
+
+    2. reselected: v_t, mask
+
+    3. switch fitting function: v_t
+
+    Output:
+    return [status, T0, T0_SIGMA, v_t]
+
+    status: 
+
+    0 successful
+
+    1 failed at fitting data from which the outliers are removed
+
+    2 failed at fitting raw data
+    
     """
 
-    # collect data
-    f = open(filepath)
-    data = f.readlines()
-    numCycle = int((data[0].split())[0])
-
-    v_t = np.zeros((5, numCycle, 2))
+    # initialize
     T0 = np.zeros(5)
     T0_SIGMA = np.zeros(5)
+    numCycle = 8
+    status = 0
 
-    for i in range(numCycle):
-        for j in range(5):
-            v_t[j, i, 0] = (data[2 + 6*i + j].split())[2]
-            v_t[j, i, 1] = (data[2 + 6*i + j].split())[3]
+    # collect data if is first entry
+    if filepath is not None:
+        f = open(filepath)
+        data = f.readlines()
+        f.close()
+        #numCycle = int((data[0].split())[0])
+
+        v_t = np.zeros((5, numCycle, 2))
+
+        for i in range(numCycle):
+            for j in range(5):
+                v_t[j, i, 0] = (data[2 + 6*i + j].split())[2]
+                v_t[j, i, 1] = (data[2 + 6*i + j].split())[3]
 
     fig, axs = plt.subplots(2, 3, figsize = (12,8))
 
     f = fit_func_list[fit_function_type]
 
-    # if is reference, recognize the outlier first (use Ar 40)
-    if not action_type:
+    #  recognize the outlier first (use Ar 40)if first entry or switch the fitting function
+    if mask is None:
         t = v_t[4, :, 1]
         v = v_t[4, :, 0]
-        mask = np.zeros(numCycle)
+        mask = np.zeros((5, numCycle))
+
         try:
             popt, pcov = curve_fit(f, t, v)
         except:
-            return None
+            # only possible to enter this line when switching fitting function
+            # since it's always possible to fit the raw data with default fitting function (linear)
+            status = 2
+            return [status, None, None, None]
+
         baseline = 2.5*np.std(np.abs(v - f(t, *popt))) # std of the error
+
         for j in range(numCycle):
             if np.abs(v[j] - f(t[j], *popt)) > baseline:
-                mask[j] = 1 # mark this point as outlier
+                mask[:, j] = 1 # mark this time as outlier
 
     # go over Ar 36 to 40
     for i in range(5):
         # first linear regression 
+        # fit whole data (no outlier is removed)
         t = v_t[i, :, 1]
         v = v_t[i, :, 0]
         
-        popt, pcov = curve_fit(f, t, v)
+        try:
+            popt, pcov = curve_fit(f, t, v)
+            print(i+36, popt)
+        except:
+            # only possible to enter this line when switching fitting function
+            # since it's always possible to fit the raw data with default fitting function (linear)
+            status = 2
+            return [status, None, None, None]
+
         T0[i] = f(0, *popt)
         T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of first fit
  
         axs[i//3, i%3].plot(t, v, marker = 'o', label = "experiment data")
-        # fit whole data (no outlier is removed)
         axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line")
         axs[i//3, i%3].set(xlabel = "t (sec)", ylabel = "mV")
 
-        # remove the outliers
-        if action_type:
-            valid_indices = np.where(mask[i, :] == 0)[0]
-            outlier_indices = np.where(mask[i, :] > 0)[0]
-        else:
-            valid_indices = np.where(mask == 0)[0]
-            outlier_indices = np.where(mask > 0)[0]
-
         # second linear regression 
+        # remove the outliers
+        valid_indices = np.where(mask[i, :] == 0)[0]
+        outlier_indices = np.where(mask[i, :] > 0)[0]
+
         t = v_t[i, valid_indices, 1]
         v = v_t[i, valid_indices, 0]
 
-        if len(valid_indices) > 1: # 1 bucause one line needs at least 2 points
-            try:
-                popt, pcov = curve_fit(f, t, v)
-                T0[i] = f(0, *popt)
-                T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
-                axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
-            except:
-                return None
+        try:
+            popt, pcov = curve_fit(f, t, v)
+            T0[i] = f(0, *popt)
+            T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
+            axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
+        except:
+            status = 1
 
         axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
         axs[i//3, i%3].legend()
@@ -104,7 +146,7 @@ def calculateT0(filepath, action_type, mask, fit_function_type):
     #plt.show()
     plt.savefig(".work/LR.png", dpi = 200)
 
-    return [T0, T0_SIGMA]
+    return [status, T0, T0_SIGMA, None if filepath is None else v_t]
 
 
 
@@ -197,7 +239,8 @@ def getAirRatioStatistics(filelist):
 
 
 if __name__ == "__main__":
+    print(calculateT0(1, filepath='./Data/AS20210429a'))
     #getT0Statistics(["./Data/AS20210429a.csv", "./Data/AS20210429b.csv", "./Data/AS20210429c.csv"])
-    print(getAirRatioStatistics(["./Data/ratio_a.csv", "./Data/ratio_b.csv", "./Data/ratio_c.csv"]))
+    #print(getAirRatioStatistics(["./Data/ratio_a.csv", "./Data/ratio_b.csv", "./Data/ratio_c.csv"]))
     #print(calculateMassRatio("./Data/AS20210429a", "./Data/pb20210429a"))
     #print("test")

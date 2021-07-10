@@ -242,9 +242,13 @@ class App():
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
-            [self.tmp_T0, self.tmp_T0_SIGMA] = Utilities.calculateT0(filename, 0, None, self.T0_fitting_function) # make LRP
+            result = Utilities.calculateT0(self.T0_fitting_function, filepath = filename) # make LRP
+            [self.tmp_T0, self.tmp_T0_SIGMA, self.tmp_v_t] = result[1:]
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
+
+            if result[0] == 1:
+                self.Popup("Warning!", "Unable to fit the data with {} fucntion after removing the auto-selected outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
 
             # show the page
             self.widget.setCurrentIndex(1)
@@ -277,15 +281,14 @@ class App():
                 if item.checkState() == QtCore.Qt.Unchecked:
                     mask[i, j] = 1
 
-        result = Utilities.calculateT0(self.filename, 1, mask, self.T0_fitting_function)
+        result = Utilities.calculateT0(self.T0_fitting_function, v_t=self.tmp_v_t, mask=mask)
+        [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
+        self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+        self.ReselectDialog.close()
 
-        if result is None:
-            self.ReselectDialog.close()
+        if result[0] == 1:
             self.Popup("Warning!", "Unable to fit the selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
-        else:
-            [self.tmp_T0, self.tmp_T0_SIGMA] = result
-            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
-            self.ReselectDialog.close()
+
 
     def LRP_useLinear(self):
         self.LRP_switch_fitting_func(0)
@@ -294,16 +297,20 @@ class App():
         self.LRP_switch_fitting_func(1)
 
     def LRP_switch_fitting_func(self, fit_func_type):
-        result = Utilities.calculateT0(self.filename, 0, None, fit_func_type) # make LRP
-        if result is None:
+        result = Utilities.calculateT0(fit_func_type, v_t=self.tmp_v_t) # make LRP
+        print(result)
+
+        if result[0] == 2:
             self.Popup("Warning!", "Unable to fit the raw data with {} fucntion!".format(self.fitting_function_list[fit_func_type]))
         
         else:
-            [self.tmp_T0, self.tmp_T0_SIGMA] = result
+            [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
             self.T0_fitting_function = fit_func_type
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
+            if result[0] == 1:
+                self.Popup("Warning!", "Unable to fit the data with {} fucntion after removing the auto-selected outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
 
     
 
