@@ -38,10 +38,16 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
         self.menubar.setObjectName("menubar")
+        self.menuMenu = QtWidgets.QMenu(self.menubar)
+        self.menuMenu.setObjectName("menuMenu")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.actionParameter_Setting = QtWidgets.QAction(MainWindow)
+        self.actionParameter_Setting.setObjectName("actionParameter_Setting")
+        self.menuMenu.addAction(self.actionParameter_Setting)
+        self.menubar.addAction(self.menuMenu.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -62,6 +68,8 @@ class Ui_MainWindow(object):
         self.ARS.setToolTip(_translate("MainWindow", "<html><head/><body><p>test</p></body></html>"))
         self.ARS.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>what is this</p></body></html>"))
         self.ARS.setText(_translate("MainWindow", "Air Ratio Statistics"))
+        self.menuMenu.setTitle(_translate("MainWindow", "Menu"))
+        self.actionParameter_Setting.setText(_translate("MainWindow", "Parameter Setting"))
 
 
 if __name__ == "__main__":

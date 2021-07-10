@@ -131,8 +131,20 @@
      <height>24</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <addaction name="actionParameter_Setting"/>
+   </widget>
+   <addaction name="menuMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionParameter_Setting">
+   <property name="text">
+    <string>Parameter Setting</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
