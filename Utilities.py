@@ -8,16 +8,18 @@ from scipy.sparse import base
 
 DEBUG = 1
 
+# Utilities function
+def ratioSigma(mu_y, sigma_y, mu_x, sigma_x):
+    return np.sqrt((sigma_y/mu_x)**2 + (sigma_x*mu_y/(mu_x**2))**2)
+
 # T0 regression fitting functions
 # ===============================================================================
 def linear(x, a, b):
     return a*x + b
 
-def quadratic(x, a, b, c):
-    return a*x**2 + b*x + c
 
-def asymptotic(x, a, b, n):
-    return a * x ** n  / (x ** n + b)
+def asymptotic(x, a, b, c, n):
+    return a * x ** n  / (x ** n + b) + c
 
 fit_func_list = [linear, asymptotic]
 
@@ -207,7 +209,7 @@ def calculateMassRatio(mass_filename, background_filename):
     for i in range(5):
         y, x = pair_indices[i][0], pair_indices[i][1]
         ratio[i] = measurement[y]/measurement[x]
-        ratio_std[i] = np.sqrt((measurement_std[y]/measurement[x])**2 + (measurement_std[x]*measurement[y]/(measurement[x]**2))**2)
+        ratio_std[i] = ratioSigma(measurement[y], measurement_std[y], measurement[x], measurement_std[x])
 
     return [raw[:, 0], measurement, measurement_std, ratio, ratio_std]
 
@@ -247,8 +249,48 @@ def getAirRatioStatistics(filelist, background1, background2):
 
     return statistics
 
-def calcAge(ratio_filename, J, sigma_J):
-    pass
+def calcAge(measurement_filename, J, sigma_J, constants):
+    constants = [
+        0.00071,
+        0.00027,
+        0.00165,
+        0.01211,
+        262.80000,
+        298.56000,
+        0.18850
+    ]
+    # collect data
+    data = np.zeros((5, 2))
+
+    with open(measurement_filename, 'r') as f:
+        tmp_data = f.readlines()
+
+    for i in range(5):
+        data[i, 0] = float(tmp_data[i+1].split(',')[2])
+        data[i, 1] = float(tmp_data[i+1].split(',')[3])
+
+    # Ar component calculation
+    Ar_37_Ca = data[1, 0]
+
+    Ar_36_Ca = Ar_37_Ca * constants[1]
+    Ar_36_Air = data[0, 0] - Ar_36_Ca
+
+    Ar_39_Ca = Ar_37_Ca * constants[0]
+    Ar_39_K = data[3, 0] - Ar_39_Ca
+
+    Ar_38_K = Ar_39_K * constants[3]
+    Ar_38_Air = data[2, 0] - Ar_38_K
+
+    Ar_40_air = Ar_36_Air * constants[5]
+    Ar_40_K = Ar_39_K * constants[2]
+    Ar_40_rarioactive = data[4, 0] - Ar_40_air - Ar_40_K
+
+    Ar_40_39_ratio = Ar_40_rarioactive / Ar_39_K
+
+    # Age calculation
+    # 
+
+    
 
 
 if __name__ == "__main__":

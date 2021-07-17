@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+import csv
 
 # import UI
 import UI.HomePage
@@ -158,15 +159,16 @@ class App():
     # methods for parameters setting page
     # ===============================================================================
     def loadParameterSeting(self):
-        with open('.work/setting.txt', 'r') as f:
+        with open('.work/setting.csv', 'r') as f:
             data = f.readlines()
 
+        self.numParamters = int(data[1].split(',')[1])
         self.parameters = []
         self.parameters_name = []
-        self.numParamters = int(data[1].rstrip())
         for i in range(self.numParamters):
-            self.parameters_name.append(data[3*(i+1)].rstrip())
-            self.parameters.append(data[3*(i+1) + 1].rstrip())
+            self.parameters_name.append(data[i+2].split(',')[0].rstrip())
+            self.parameters.append(data[i+2].split(',')[1].rstrip())
+
 
     def toPS(self):
         # load the parameters from setting file
@@ -208,13 +210,13 @@ class App():
             if content != self.parameters[i]:
                 error_type = 0
                 # check if valid
-                if i in [2, 4]:
+                if i > 9:
                     try:
                         if int(content) <= 0:
                             error_type = 1
                     except:
                         error_type = 1
-                elif i == 3:
+                else:
                     try:
                         if float(content) <= 0:
                             error_type = 2
@@ -223,14 +225,14 @@ class App():
                 
                 # new valid value
                 if error_type == 0:
-                    self.parameters[i] = content.rstrip()
-                    changed = 1 
+                    self.parameters[i] = content.rstrip() # update the parameter
+                    changed = 1 # need rewrite setting.csv
 
                 # restore the value
                 else:
                     item.setText(self.parameters[i]) 
                     invalid = 1
-                    error_msg += '{} should be {}\n'.format(self.parameters_name[i], 
+                    error_msg += '{} should be {}\n\n'.format(self.parameters_name[i], 
                     'positive integer' if error_type == 1 else 'positive number')
 
             item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
@@ -239,16 +241,14 @@ class App():
         self.ParameterSettingPage.cancel.hide()
         self.ParameterSettingPage.save.hide()
 
-        # rewite setting.txt with update parameters value if necessary
+        # rewite setting.csv with update parameters value if necessary
         if changed:
-            with open('.work/setting.txt', 'r') as f:
-                data = f.readlines()
-
+            new_ps = ['parameter,value\n', 'numParameters,{}\n'.format(self.numParamters)]
             for i in range(self.numParamters):
-                data[3*(i+1)+1] = self.parameters[i]+'\n'
+                new_ps.append('{},{}\n'.format(self.parameters_name[i], self.parameters[i]))
 
-            with open('.work/setting.txt', 'w') as f:
-                f.writelines(data)
+            with open('.work/setting.csv', 'w') as f:
+                f.writelines(new_ps)
 
         if invalid:
             self.Popup('Warning!', error_msg)
@@ -280,7 +280,7 @@ class App():
 
         if len(filelist) > 0:
             # set the cell of the table of the T0 statistics
-            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist, float(self.parameters[0]), float(self.parameters[1]))
+            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist, float(self.parameters[5]), float(self.parameters[6]))
             for i in range(2):
                 for j in range(2):
                     item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
@@ -398,7 +398,7 @@ class App():
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , self.data_folder, "") # select file
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
-            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), filepath = filename) # make LRP
+            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[11]), float(self.parameters[9]), int(self.parameters[10]), filepath = filename) # make LRP
             [self.tmp_T0, self.tmp_T0_SIGMA, self.tmp_v_t] = result[1:]
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
