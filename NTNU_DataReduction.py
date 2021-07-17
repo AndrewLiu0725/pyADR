@@ -97,6 +97,7 @@ class App():
         page.photo.setScaledContents(True)
         page.photo.setObjectName("photo")
 
+    # ===============================================================================
     def run(self):
         # load parameters
         self.loadParameterSeting()
@@ -265,6 +266,12 @@ class App():
         self.ParameterSettingPage.save.hide()
 
 
+    # methods for age calculation page
+    # ===============================================================================
+    # select ratio
+    # key in J, and sigma J
+    # calc
+
 
     # methods for Air Ratio Statistics
     # ===============================================================================
@@ -315,7 +322,7 @@ class App():
         if len(mass) > 0 and len(bg) > 0:
             self.ratio_result = Utilities.calculateMassRatio(mass, bg)
 
-            for i in range(4):
+            for i in range(5):
                 for j in range(5):
                     #item = QtWidgets.QTableWidgetItem(str(self.ratio_result[i][j])[:11])
                     item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.ratio_result[i][j]))
@@ -324,7 +331,7 @@ class App():
                     if i < 3:
                         self.MassRatioPage.ValueTable.setItem(j, i, item)
                     else:
-                        self.MassRatioPage.RatioTable.setItem(j, 0, item)
+                        self.MassRatioPage.RatioTable.setItem(j, i-3, item)
 
             self.widget.setCurrentIndex(3)
         else:
@@ -341,8 +348,8 @@ class App():
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement Ratio" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
-            f.write("Ratio,Value\n")
-            f.writelines(["{},{}\n".format(self.mass_pair[i], self.ratio_result[3][i]) for i in range(5)])
+            f.write("Ratio,Value,Ratio's Sigma\n")
+            f.writelines(["{},{},{}\n".format(self.mass_pair[i], self.ratio_result[3][i], self.ratio_result[4][i]) for i in range(5)])
             f.close()
 
 

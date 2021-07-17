@@ -32,7 +32,7 @@
      <rect>
       <x>460</x>
       <y>210</y>
-      <width>291</width>
+      <width>321</width>
       <height>241</height>
      </rect>
     </property>
@@ -96,7 +96,20 @@
       </font>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Sigma</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+    </column>
     <item row="0" column="0">
+     <property name="text">
+      <string/>
+     </property>
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -104,6 +117,9 @@
      </property>
     </item>
     <item row="1" column="0">
+     <property name="text">
+      <string/>
+     </property>
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -111,6 +127,9 @@
      </property>
     </item>
     <item row="2" column="0">
+     <property name="text">
+      <string/>
+     </property>
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -118,6 +137,9 @@
      </property>
     </item>
     <item row="3" column="0">
+     <property name="text">
+      <string/>
+     </property>
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -125,6 +147,9 @@
      </property>
     </item>
     <item row="4" column="0">
+     <property name="text">
+      <string/>
+     </property>
      <property name="font">
       <font>
        <pointsize>20</pointsize>

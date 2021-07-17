@@ -2,6 +2,7 @@ from operator import ge
 import numpy as np 
 import matplotlib.pyplot as plt
 from numpy.lib.function_base import diff
+from numpy.testing._private.utils import measure
 from scipy.optimize import curve_fit
 from scipy.sparse import base
 
@@ -180,28 +181,37 @@ def getT0Statistics(filelist):
     return statistics
 
 
-
+pair_indices = [[4, 0], [1, 3], [2, 0], [4, 2], [4, 3]]
+#               40/36    37/39   38/36   40/38   40/39
 def calculateMassRatio(mass_filename, background_filename):
-    T0 = np.zeros((2, 2, 5))
+    raw = np.zeros((5, 2))
+    preline = np.zeros((5,2))
 
-    for i in range(2):
-        with open(mass_filename if i == 0 else background_filename, 'r') as f:
-            data = f.readlines()
-        for j in range(5):
-            T0[i, 0, j] = float(data[j+1].split(',')[1]) # T0
-            T0[i, 1, j] = float(data[j+1].split(',')[2]) # T0_SIGMA
+    with open(mass_filename, 'r') as f:
+        data = f.readlines()
+    for i in range(5):
+        raw[i, 0] = float(data[i+1].split(',')[1]) # T0
+        raw[i, 1] = float(data[i+1].split(',')[2]) # T0_SIGMA
 
-    result = T0[0, 0, :] - T0[1, 0, :] # 36 37 38 39 40 (Measurement)
-    diff_std = np.sqrt(T0[0, 1, :]**2 + T0[1, 1, :]**2)
+    with open(background_filename, 'r') as f:
+        data = f.readlines()
+    for i in range(5):
+        preline[i, 0] = float(data[i+1].split(',')[1]) # T0
+        preline[i, 1] = float(data[i+1].split(',')[2]) # T0_SIGMA
+
+    measurement = raw[:, 0] - preline[:, 0] # 36 37 38 39 40 (Measurement)
+    measurement_std = np.sqrt(raw[:, 1]**2 + preline[:, 1]**2)
 
     ratio = np.zeros(5)
-    ratio[0] = result[4]/result[0] # 40/36
-    ratio[1] = result[1]/result[3] # 37/39
-    ratio[2] = result[2]/result[0] # 38/36
-    ratio[3] = result[4]/result[2] # 40/38
-    ratio[4] = result[4]/result[3] # 40/39
+    ratio_std = np.zeros(5)
+    for i in range(5):
+        y, x = pair_indices[i][0], pair_indices[i][1]
+        ratio[i] = measurement[y]/measurement[x]
+        ratio_std[i] = np.sqrt((measurement_std[y]/measurement[x])**2 + (measurement_std[x]*measurement[y]/(measurement[x]**2))**2)
 
-    return [T0[0, 0, :], result, diff_std, ratio]
+    return [raw[:, 0], measurement, measurement_std, ratio, ratio_std]
+
+
 
 def getAirRatioStatistics(filelist, background1, background2):
     '''
@@ -236,6 +246,9 @@ def getAirRatioStatistics(filelist, background1, background2):
     plt.savefig(".work/ARS.png", dpi = 200)
 
     return statistics
+
+def calcAge(ratio_filename, J, sigma_J):
+    pass
 
 
 if __name__ == "__main__":
