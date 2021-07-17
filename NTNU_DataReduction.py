@@ -84,6 +84,9 @@ class App():
 
         # others
         self.fitting_function_list = ["Linear", "Asymptotic"]
+        self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
+        self.data_folder = 'Data/'
+        self.screenshot_folder = 'Figures'
 
     def insertPhoto(self, page, coordinate):
         # coordinate = [x, y, w, h]
@@ -266,7 +269,7 @@ class App():
     # methods for Air Ratio Statistics
     # ===============================================================================
     def toARS(self):
-        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , "./", "(*.csv)") # select list of files
+        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
             # set the cell of the table of the T0 statistics
@@ -289,12 +292,12 @@ class App():
 
     def ARS_save(self):
         # save screenshot
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , self.screenshot_folder, "Images (*.png *.jpg *.jpeg)")
         if len(filename) > 0:
             self.widget.grab().save(filename)
 
         # save statistics
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Air Ratio Statistics" , "./", "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Air Ratio Statistics" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Air Ratio,Mean,STD\n")
@@ -306,8 +309,8 @@ class App():
     # ===============================================================================
     def toMR(self):
         # select mass and preline
-        mass, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select mass file (csv)" , "./", "(*.csv)")
-        bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select preline file (csv)" , "./", "(*.csv)")
+        mass, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select mass file (csv)" , self.data_folder, "(*.csv)")
+        bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select preline file (csv)" , self.data_folder, "(*.csv)")
 
         if len(mass) > 0 and len(bg) > 0:
             self.ratio_result = Utilities.calculateMassRatio(mass, bg)
@@ -328,19 +331,25 @@ class App():
             self.Popup("Warning!", "Please select one mass file and one preline file")
 
     def MR_save(self):
-        mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Mass Ratio" , "./", "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement T0" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
-            f.write("Mass,Raw,Measurment,Sigma,Mass Pair,Ratio\n")
-            f.writelines(["Ar{},{},{},{},{},{}\n".format(i+36, self.ratio_result[0][i], self.ratio_result[1][i], self.ratio_result[2][i], mass_pair[i], self.ratio_result[3][i]) for i in range(5)])
+            f.write("Mass,Raw,Measurment,Measurement's Sigma\n")
+            f.writelines(["Ar{},{},{},{}\n".format(i+36, self.ratio_result[0][i], self.ratio_result[1][i], self.ratio_result[2][i]) for i in range(5)])
+            f.close()
+
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement Ratio" , self.data_folder, "(*.csv)")
+        if len(filename) > 0:
+            f = open(filename, 'w')
+            f.write("Ratio,Value\n")
+            f.writelines(["{},{}\n".format(self.mass_pair[i], self.ratio_result[3][i]) for i in range(5)])
             f.close()
 
 
     # methods for T0 Statistics
     # ===============================================================================
     def toT0S(self):
-        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get T0 statistics" , "./", "(*.csv)") # select list of files
+        filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get T0 statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
             # set the cell of the table of the T0 statistics
@@ -363,12 +372,12 @@ class App():
 
     def T0S_save(self):
         # save screenshot
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , self.screenshot_folder, "Images (*.png *.jpg *.jpeg)")
         if len(filename) > 0:
             self.widget.grab().save(filename)
 
         # save statistics
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Statistics" , "./", "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Statistics" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,Mean,STD\n")
@@ -379,7 +388,7 @@ class App():
     # methods for T0 Calculation Page
     # ===============================================================================
     def toLRP(self):
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , "./", "") # select file
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , self.data_folder, "") # select file
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
             result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), filepath = filename) # make LRP
@@ -397,12 +406,12 @@ class App():
 
     def LRP_save(self):
         # save screenshot
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , "./", "Images (*.png *.jpg *.jpeg)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , self.screenshot_folder, "Images (*.png *.jpg *.jpeg)")
         if len(filename) > 0:
             self.widget.grab().save(filename)
 
         # save T0
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0" , "./", "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,T0,T0_SIGMA\n")

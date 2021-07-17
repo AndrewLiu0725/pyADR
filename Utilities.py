@@ -191,7 +191,7 @@ def calculateMassRatio(mass_filename, background_filename):
             T0[i, 0, j] = float(data[j+1].split(',')[1]) # T0
             T0[i, 1, j] = float(data[j+1].split(',')[2]) # T0_SIGMA
 
-    result = T0[0, 0, :] - T0[1, 0, :] # 36 37 38 39 40
+    result = T0[0, 0, :] - T0[1, 0, :] # 36 37 38 39 40 (Measurement)
     diff_std = np.sqrt(T0[0, 1, :]**2 + T0[1, 1, :]**2)
 
     ratio = np.zeros(5)
@@ -213,8 +213,8 @@ def getAirRatioStatistics(filelist, background1, background2):
     for i, filename in enumerate(filelist):
         with open(filename, 'r') as f:
             data = f.readlines()
-        ratios[0, i] = float(data[1].split(',')[5]) - background1 
-        ratios[1, i] = float(data[3].split(',')[5]) - background2 
+        ratios[0, i] = float(data[1].split(',')[1]) - background1 
+        ratios[1, i] = float(data[3].split(',')[1]) - background2 
 
     # calculate statistics
     statistics = np.zeros((2, 2)) # [ratio pair, mean/std]
