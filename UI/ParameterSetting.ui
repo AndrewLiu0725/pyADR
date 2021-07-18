@@ -18,24 +18,49 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>90</y>
-      <width>281</width>
-      <height>191</height>
+      <y>80</y>
+      <width>361</width>
+      <height>371</height>
      </rect>
     </property>
     <row>
      <property name="text">
-      <string>Background Ar 40/36</string>
+      <string>Production Ratio 39Ar/37Ar(ca)</string>
      </property>
     </row>
     <row>
      <property name="text">
-      <string>Background Ar 38/36</string>
+      <string>Production Ratio 36Ar/37Ar(ca)</string>
      </property>
     </row>
     <row>
      <property name="text">
-      <string>numCycle</string>
+      <string>Production Ratio 40Ar/39Ar(k) </string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Production Ratio 38Ar/39Ar(k)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Production Ratio 36Ar/38Ar(cl)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Atmospheric Ratio 40/36(a)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Atmospheric Ratio 38/36(a)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>λ for age calculation</string>
      </property>
     </row>
     <row>
@@ -46,6 +71,11 @@
     <row>
      <property name="text">
       <string>maxfev (curve_fit)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>numCycle</string>
      </property>
     </row>
     <column>

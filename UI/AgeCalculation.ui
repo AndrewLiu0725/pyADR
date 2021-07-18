@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="save">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>130</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="return_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>80</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Return</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>791</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt;&quot;&gt;Age Calculation&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>80</y>
+      <width>501</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string>Ar_36_m</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_36_air</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_36_Ca</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_37_m</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_37_ca</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_38_m</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_38_Air</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Air_38_K</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_39_m</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_39_K</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_39_Ca</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_40_m</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_40_r</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_40_air</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_40_K</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_39_K_40_r</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_36_air_40_r</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_39_K_36_Air</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>F(Ar_40_r/Ar_39_K)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>G(Ar_40_m/Ar_39_m)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>B(Ar_36_m/Ar_39_M)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>D(Ar_37_m/Ar_39_m)</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>T</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar_40_r_ratio</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>C1</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>C2</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>C3</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>C4</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Value</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Sigma</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

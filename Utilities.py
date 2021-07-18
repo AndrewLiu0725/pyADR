@@ -12,6 +12,9 @@ DEBUG = 1
 def ratioSigma(mu_y, sigma_y, mu_x, sigma_x):
     return np.sqrt((sigma_y/mu_x)**2 + (sigma_x*mu_y/(mu_x**2))**2)
 
+def minusSigma(sigma_x, sigma_y):
+    return np.sqrt(sigma_x**2 + sigma_y**2)
+
 # T0 regression fitting functions
 # ===============================================================================
 def linear(x, a, b):
@@ -202,7 +205,7 @@ def calculateMassRatio(mass_filename, background_filename):
         preline[i, 1] = float(data[i+1].split(',')[2]) # T0_SIGMA
 
     measurement = raw[:, 0] - preline[:, 0] # 36 37 38 39 40 (Measurement)
-    measurement_std = np.sqrt(raw[:, 1]**2 + preline[:, 1]**2)
+    measurement_std = minusSigma(raw[:, 1], preline[:, 1])
 
     ratio = np.zeros(5)
     ratio_std = np.zeros(5)
@@ -249,7 +252,7 @@ def getAirRatioStatistics(filelist, background1, background2):
 
     return statistics
 
-def calcAge(measurement_filename, J, sigma_J, constants):
+def calcAge(measurement_filename, J, J_std, constants):
     constants = [
         0.00071,
         0.00027,
@@ -257,7 +260,8 @@ def calcAge(measurement_filename, J, sigma_J, constants):
         0.01211,
         262.80000,
         298.56000,
-        0.18850
+        0.18850,
+        0.00000000055492
     ]
     # collect data
     data = np.zeros((5, 2))
@@ -270,26 +274,76 @@ def calcAge(measurement_filename, J, sigma_J, constants):
         data[i, 1] = float(tmp_data[i+1].split(',')[3])
 
     # Ar component calculation
-    Ar_37_Ca = data[1, 0]
+    Ar_37_m = data[1, 0]
+    Ar_37_m_std = data[1, 1]
+    Ar_37_Ca = Ar_37_m
+    Ar_37_Ca_std = Ar_37_m_std
 
+    Ar_36_m = data[0, 0]
+    Ar_36_m_std = data[0, 1]
     Ar_36_Ca = Ar_37_Ca * constants[1]
-    Ar_36_Air = data[0, 0] - Ar_36_Ca
+    Ar_36_Ca_std = Ar_37_Ca_std * constants[1]
+    Ar_36_Air = Ar_36_m - Ar_36_Ca
+    Ar_36_Air_std = minusSigma(Ar_36_m_std, Ar_36_Ca_std)
 
+    Ar_39_m = data[3, 0]
+    Ar_39_m_std = data[3, 1]
     Ar_39_Ca = Ar_37_Ca * constants[0]
-    Ar_39_K = data[3, 0] - Ar_39_Ca
+    Ar_39_Ca_std = Ar_37_Ca_std * constants[0]
+    Ar_39_K = Ar_39_m - Ar_39_Ca
+    Ar_39_K_std = minusSigma(Ar_39_m_std, Ar_39_Ca_std)
 
+    Ar_38_m = data[2, 0]
+    Ar_38_m_std = data[2, 1]
     Ar_38_K = Ar_39_K * constants[3]
-    Ar_38_Air = data[2, 0] - Ar_38_K
+    Ar_38_K_std = Ar_39_K_std * constants[3]
+    Ar_38_Air = Ar_38_m - Ar_38_K
+    Ar_38_Air_std = minusSigma(Ar_38_m_std, Ar_38_K_std)
 
+    Ar_40_m = data[4, 0]
+    Ar_40_m_std = data[4, 1]
     Ar_40_air = Ar_36_Air * constants[5]
+    Ar_40_air_std = Ar_36_Air_std * constants[5]
     Ar_40_K = Ar_39_K * constants[2]
-    Ar_40_rarioactive = data[4, 0] - Ar_40_air - Ar_40_K
+    Ar_40_K_std = Ar_39_K_std * constants[2]
+    Ar_40_radioactive = Ar_40_m - Ar_40_air - Ar_40_K
+    Ar_40_radioactive_std = np.sqrt(Ar_40_m_std**2 + Ar_40_air_std**2 + Ar_40_K_std**2)
+    Ar_40_radioactive_ratio = Ar_40_radioactive / data[4, 0]
 
-    Ar_40_39_ratio = Ar_40_rarioactive / Ar_39_K
+
+    # ratio calculation
+    Ar_39_K_40_r_ratio =  Ar_39_K / Ar_40_radioactive
+    Ar_39_K_40_r_ratio_std = ratioSigma(Ar_39_K, Ar_39_K_std, Ar_40_radioactive, Ar_40_radioactive_std)
+    Ar_36_Air_40_r_ratio = Ar_36_Air / Ar_40_radioactive
+    Ar_36_Air_40_r_ratio_std = ratioSigma(Ar_36_Air, Ar_36_Air_std, Ar_40_radioactive, Ar_40_radioactive_std)
+    Ar_39_K_36_Air = Ar_39_K / Ar_36_Air
+    Ar_39_K_36_Air_std = ratioSigma(Ar_39_K, Ar_39_K_std, Ar_36_Air, Ar_36_Air_std)
 
     # Age calculation
-    # 
+    C1, C2, C3, C4 = constants[5], constants[1], constants[2], constants[0]
+    F = Ar_40_radioactive / Ar_39_K
+    F_std = ratioSigma(Ar_40_radioactive, Ar_40_radioactive_std, Ar_39_K, Ar_39_K_std)
+    G = Ar_40_m / Ar_39_m
+    G_std = ratioSigma(Ar_40_m, Ar_40_m_std, Ar_39_m, Ar_39_m_std)
+    B = Ar_36_m / Ar_39_m
+    B_std = ratioSigma(Ar_36_m, Ar_36_m_std, Ar_39_m, Ar_39_m_std)
+    D = Ar_37_m / Ar_39_m
+    D_std = ratioSigma(Ar_37_m, Ar_37_m_std, Ar_39_m, Ar_39_m_std)
 
+    T = np.log(1 + J*F) / constants[7]
+    T_std = np.sqrt((J**2 * F_std**2 + F**2 * J_std**2)/ ((constants[7]*(1+F*J))**2))
+
+    return [Ar_36_m, Ar_36_m_std, Ar_36_Air, Ar_36_Air_std, Ar_36_Ca, Ar_36_Ca_std,
+            Ar_37_m, Ar_37_m_std, Ar_37_Ca, Ar_37_Ca_std,
+            Ar_38_m, Ar_38_m_std, Ar_38_Air, Ar_38_Air_std, Ar_38_K, Ar_38_K_std,
+            Ar_39_m, Ar_39_m_std, Ar_39_K, Ar_39_K_std, Ar_39_Ca, Ar_39_Ca_std,
+            Ar_40_m, Ar_40_m_std, Ar_40_radioactive, Ar_40_radioactive_std, Ar_40_air, Ar_40_air_std, Ar_40_K, Ar_40_K_std,
+            Ar_39_K_40_r_ratio, Ar_39_K_40_r_ratio_std, Ar_36_Air_40_r_ratio, Ar_36_Air_40_r_ratio_std, Ar_39_K_36_Air, Ar_39_K_36_Air_std,
+            F, F_std, G, G_std, B, B_std, D, D_std,
+            J, J_std,
+            T, T_std,
+            Ar_40_radioactive_ratio, C1, C2, C3, C4
+            ]
     
 
 

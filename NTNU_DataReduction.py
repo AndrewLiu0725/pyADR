@@ -1,9 +1,12 @@
 # import python module
+from operator import le
 import numpy as np 
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import csv
+
+from numpy.testing._private.utils import measure
 
 # import UI
 import UI.HomePage
@@ -13,6 +16,7 @@ import UI.MassRatio
 import UI.AirRatioStatistics
 import UI.ReselectDialog
 import UI.ParameterSetting
+import UI.AgeCalculation
 
 # import utilities
 import Utilities
@@ -56,6 +60,11 @@ class ParameterSetting(QtWidgets.QMainWindow, UI.ParameterSetting.Ui_MainWindow)
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
+class AgeCalculation(QtWidgets.QMainWindow, UI.AgeCalculation.Ui_MainWindow):
+    def __init__(self, parent=None):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.setupUi(self)
+
 # main app
 # ===============================================================================
 class App():
@@ -73,6 +82,7 @@ class App():
         self.insertPhoto(self.AirRatioStatisticsPage, [200, 75, 350, 275])
         self.ReselectDialog = ReselectTable()
         self.ParameterSettingPage = ParameterSetting()
+        self.AgeCalculationPage = AgeCalculation()
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
         self.widget.addWidget(self.T0CalculationPage)
@@ -80,6 +90,7 @@ class App():
         self.widget.addWidget(self.MassRatioPage)
         self.widget.addWidget(self.AirRatioStatisticsPage)
         self.widget.addWidget(self.ParameterSettingPage)
+        self.widget.addWidget(self.AgeCalculationPage)
         self.widget.setFixedHeight(600)
         self.widget.setFixedWidth(800)
 
@@ -109,6 +120,7 @@ class App():
         self.HomePage.T0S.clicked.connect(self.toT0S)
         self.HomePage.MR.clicked.connect(self.toMR)
         self.HomePage.ARS.clicked.connect(self.toARS)
+        self.HomePage.AC.clicked.connect(self.toAC)
         self.HomePage.actionParameter_Setting.triggered.connect(self.toPS)
 
         # click button on Linear Regression Page
@@ -135,6 +147,10 @@ class App():
         self.ParameterSettingPage.change.clicked.connect(self.PS_change)
         self.ParameterSettingPage.save.clicked.connect(self.PS_save)
         self.ParameterSettingPage.cancel.clicked.connect(self.PS_cancel)
+
+        # click button on Age Calculation page
+        self.AgeCalculationPage.return_2.clicked.connect(self.toMain)
+        self.AgeCalculationPage.save.clicked.connect(self.AC_save)
 
         self.widget.show()
 
@@ -268,9 +284,59 @@ class App():
 
     # methods for age calculation page
     # ===============================================================================
-    # select ratio
-    # key in J, and sigma J
-    # calc
+    def toAC(self):
+        measurement, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select measurement file (csv)" , self.data_folder, "(*.csv)")
+        if len(measurement) > 0:
+            # ask J and J_std
+            text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set j value', 'please key in J value')
+            if ok:
+                try:
+                    if float(text) < 0:
+                        self.Popup('Warning!', "please key in non-negative number!")
+                        return
+                    else:
+                        J = float(text)
+                except:
+                    self.Popup('Warning!', "please key in non-negative number!")
+                    return
+            else:
+                return
+
+            text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set sigma J', 'please key in sigma j value')
+            if ok:
+                try:
+                    if float(text) < 0:
+                        self.Popup('Warning!', "please key in non-negative number!")
+                        return
+                    else:
+                        J_std = float(text)
+                except:
+                    self.Popup('Warning!', "please key in non-negative number!")
+                    return
+            else:
+                return
+
+            self.AgeCalculation_result = Utilities.calcAge(measurement, J, J_std, [float(x) for x in self.parameters[:8]])
+        
+            # fill the table
+            for i in range(53):
+                item = QtWidgets.QTableWidgetItem(str(self.AgeCalculation_result[i]))
+                item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                self.AgeCalculationPage.tableWidget.setItem(i//2 if i < 48 else i-24, i%2 if i < 48 else 0, item)
+
+            self.widget.setCurrentIndex(6)
+
+    def AC_save(self):
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Age Calculation Date" , self.data_folder, "(*.csv)")
+        if len(filename) > 0:
+            f = open(filename, 'w')
+            f.write("Variable,Value,Sigma\n")
+            for i in range(self.AgeCalculationPage.tableWidget.rowCount()):
+                f.write('{},{},{}\n'.format(self.AgeCalculationPage.tableWidget.verticalHeaderItem(i).text(),
+                self.AgeCalculation_result[2*i] if i < 24 else self.AgeCalculation_result[i + 24],
+                self.AgeCalculation_result[2*i+1] if i < 24 else 'N/A'))
+            f.close()
+
 
 
     # methods for Air Ratio Statistics
