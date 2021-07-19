@@ -76,8 +76,8 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
 
         for i in range(numCycle):
             for j in range(5):
-                v_t[j, i, 0] = (data[2 + 6*i + j].split())[2]
-                v_t[j, i, 1] = (data[2 + 6*i + j].split())[3]
+                v_t[j, i, 0] = (data[26 + 6*i + j].split())[2]
+                v_t[j, i, 1] = (data[26 + 6*i + j].split())[3]
 
     fig, axs = plt.subplots(2, 3, figsize = (12,8))
 
@@ -321,14 +321,14 @@ def calcAge(measurement_filename, J, J_std, constants):
 
     # Age calculation
     C1, C2, C3, C4 = constants[5], constants[1], constants[2], constants[0]
-    F = Ar_40_radioactive / Ar_39_K
-    F_std = ratioSigma(Ar_40_radioactive, Ar_40_radioactive_std, Ar_39_K, Ar_39_K_std)
     G = Ar_40_m / Ar_39_m
     G_std = ratioSigma(Ar_40_m, Ar_40_m_std, Ar_39_m, Ar_39_m_std)
     B = Ar_36_m / Ar_39_m
     B_std = ratioSigma(Ar_36_m, Ar_36_m_std, Ar_39_m, Ar_39_m_std)
     D = Ar_37_m / Ar_39_m
     D_std = ratioSigma(Ar_37_m, Ar_37_m_std, Ar_39_m, Ar_39_m_std)
+    F = Ar_40_radioactive / Ar_39_K
+    F_std = np.sqrt(G_std**2 + (C1*B_std)**2 + ((C4*G - C1*C4*B + C1*C2)*D_std)**2)
 
     T = np.log(1 + J*F) / constants[7]
     T_std = np.sqrt((J**2 * F_std**2 + F**2 * J_std**2)/ ((constants[7]*(1+F*J))**2))
