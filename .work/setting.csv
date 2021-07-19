@@ -1,0 +1,13 @@
+parameter,value
+numParameters,11
+Production Ratio 39Ar/37Ar(ca),0.00071
+Production Ratio 36Ar/37Ar(ca),0.00027
+Production Ratio 40Ar/39Ar(k),0.00165
+Production Ratio 38Ar/39Ar(k),0.01211
+Production Ratio 36Ar/38Ar(cl),262.80000
+Atmospheric Ratio 40/36(a),298.56000
+Atmospheric Ratio 38/36(a),0.18850
+λ,0.00000000055492
+baseline,2.5
+maxfev,1000
+numCycle,8
