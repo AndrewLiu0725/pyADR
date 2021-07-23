@@ -30,6 +30,7 @@ cd /path to folder you get in the previous step/
 python install.py
 ```
 A batch file (on Windows) or bash file (on Mac) will be created.
+
 3. Click the icon and then the application will be launched.
 
 ### Change the parameters
