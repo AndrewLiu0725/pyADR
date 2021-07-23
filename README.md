@@ -1,6 +1,6 @@
-# Name of the App
+# pyADR
 ## Introduction
-This application created by An-Jun (Andrew) Liu is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
+pyADR is created by An-Jun (Andrew) Liu and is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
 The following functions are provided:
 1. T0 calculation
 2. T0 statistics
@@ -9,14 +9,16 @@ The following functions are provided:
 5. Age calculation
 
 ## Prerequisites
-1. Python3 (recommend installed in Anaconda3)
-2. python related modules (usually already installed when you installed your python3):
+1. Anaconda3
+The followings are usually already installed when you install Anaconda3
+2. Python3
+3. python related modules:
 * numpy
 * PyQt5
 * sys
 * matplotlib
 * scipy
-3. Additional python related modules for installation:
+4. Additional python related modules for installation:
 * platform
 * subprocess
 * os
@@ -24,14 +26,14 @@ The following functions are provided:
 ## User Guide
 ### Installation
 1. Download or clone this repo
-2. Open the terminal (on Windows, recommend use Anaconda's prompt shell) and type the following commands
+2. Open the terminal (on Windows, recommend using Anaconda's prompt shell) and type the following commands
 ```
 cd /path to folder you get in the previous step/
 python install.py
 ```
 A batch file (on Windows) or bash file (on Mac) will be created.
 
-3. Click the created file and then the application will be launched.
+3. Click the file named pyADR and then the application will be launched.
 
 ### Change the parameters
 1. In the menubar, click "Parameter Setting", the the parameter setting page will show up. 

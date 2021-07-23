@@ -11,7 +11,7 @@ import os
 IS_MAC = platform.system() == 'Darwin'
 IS_WINDOWS = platform.system() == 'Windows'
 
-appName = 'NTNU_DataReduction'
+appName = 'pyADR'
 filename = appName+'.bat' if IS_WINDOWS else appName+'.sh'
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
