@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>8</x>
-      <y>32</y>
+      <y>132</y>
       <width>791</width>
       <height>61</height>
      </rect>
@@ -37,13 +37,13 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>150</y>
+      <y>250</y>
       <width>421</width>
       <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -59,13 +59,13 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>220</y>
+      <y>320</y>
       <width>421</width>
       <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -81,13 +81,13 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>290</y>
+      <y>390</y>
       <width>421</width>
       <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -103,13 +103,13 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>360</y>
+      <y>460</y>
       <width>421</width>
       <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -125,13 +125,13 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>430</y>
+      <y>530</y>
       <width>421</width>
       <height>51</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QTableWidget" name="ParameetrTable">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>80</y>
+      <x>210</x>
+      <y>200</y>
       <width>361</width>
       <height>371</height>
      </rect>
@@ -87,8 +87,8 @@
    <widget class="QPushButton" name="change">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>130</y>
+      <x>50</x>
+      <y>250</y>
       <width>91</width>
       <height>51</height>
      </rect>
@@ -100,8 +100,8 @@
    <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>180</y>
+      <x>50</x>
+      <y>300</y>
       <width>91</width>
       <height>51</height>
      </rect>
@@ -113,8 +113,8 @@
    <widget class="QPushButton" name="return_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>80</y>
+      <x>50</x>
+      <y>200</y>
       <width>91</width>
       <height>51</height>
      </rect>
@@ -126,8 +126,8 @@
    <widget class="QPushButton" name="cancel">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>230</y>
+      <x>50</x>
+      <y>350</y>
       <width>91</width>
       <height>51</height>
      </rect>
@@ -139,14 +139,14 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>10</x>
+      <y>120</y>
       <width>791</width>
       <height>71</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt;&quot;&gt;Parameter Setting&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt; font-weight:600;&quot;&gt;Parameter Setting&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>

@@ -73,16 +73,23 @@ class App():
         QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
+        self.insertLogo(self.HomePage)
         self.T0CalculationPage = LinearRegressionPage()
-        self.insertPhoto(self.T0CalculationPage, [150, 150, 600, 450])
+        self.insertPhoto(self.T0CalculationPage, [150, 250, 600, 450])
+        self.insertLogo(self.T0CalculationPage)
         self.T0StatisticsPage = T0Statistics()
-        self.insertPhoto(self.T0StatisticsPage, [150, 75, 600, 250])
+        self.insertPhoto(self.T0StatisticsPage, [150, 175, 600, 250])
+        self.insertLogo(self.T0StatisticsPage)
         self.MassRatioPage = MassRatio()
+        self.insertLogo(self.MassRatioPage)
         self.AirRatioStatisticsPage = AirRatioStatistics()
-        self.insertPhoto(self.AirRatioStatisticsPage, [200, 75, 350, 275])
+        self.insertPhoto(self.AirRatioStatisticsPage, [200, 200, 350, 275])
+        self.insertLogo(self.AirRatioStatisticsPage)
         self.ReselectDialog = ReselectTable()
         self.ParameterSettingPage = ParameterSetting()
+        self.insertLogo(self.ParameterSettingPage)
         self.AgeCalculationPage = AgeCalculation()
+        self.insertLogo(self.AgeCalculationPage)
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
         self.widget.addWidget(self.T0CalculationPage)
@@ -91,7 +98,7 @@ class App():
         self.widget.addWidget(self.AirRatioStatisticsPage)
         self.widget.addWidget(self.ParameterSettingPage)
         self.widget.addWidget(self.AgeCalculationPage)
-        self.widget.setFixedHeight(600)
+        self.widget.setFixedHeight(700)
         self.widget.setFixedWidth(800)
 
         # others
@@ -108,6 +115,15 @@ class App():
         page.photo.setPixmap(QtGui.QPixmap(".work/cat.png"))
         page.photo.setScaledContents(True)
         page.photo.setObjectName("photo")
+
+    def insertLogo(self, page):
+        # coordinate = [x, y, w, h]
+        page.logo = QtWidgets.QLabel(page.centralwidget)
+        page.logo.setGeometry(QtCore.QRect(50, 25, 700, 75))
+        page.logo.setText("")
+        page.logo.setPixmap(QtGui.QPixmap(".work/logo.png"))
+        page.logo.setScaledContents(True)
+        page.logo.setObjectName("logo")
 
     # ===============================================================================
     def run(self):

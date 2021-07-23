@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'MassRatio.ui'
+# Form implementation generated from reading ui file 'UI/MassRatio.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -11,14 +11,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(20, 70, 113, 51))
+        self.return_2.setGeometry(QtCore.QRect(20, 190, 113, 51))
         self.return_2.setObjectName("return_2")
         self.RatioTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.RatioTable.setGeometry(QtCore.QRect(460, 210, 321, 241))
+        self.RatioTable.setGeometry(QtCore.QRect(200, 420, 311, 201))
         self.RatioTable.setObjectName("RatioTable")
         self.RatioTable.setColumnCount(2)
         self.RatioTable.setRowCount(5)
@@ -83,13 +83,13 @@ class Ui_MainWindow(object):
         item.setFont(font)
         self.RatioTable.setItem(4, 0, item)
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(4, 6, 791, 71))
+        self.label.setGeometry(QtCore.QRect(4, 126, 791, 71))
         self.label.setObjectName("label")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(20, 120, 113, 51))
+        self.save.setGeometry(QtCore.QRect(20, 240, 113, 51))
         self.save.setObjectName("save")
         self.ValueTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.ValueTable.setGeometry(QtCore.QRect(30, 210, 421, 241))
+        self.ValueTable.setGeometry(QtCore.QRect(200, 200, 481, 201))
         self.ValueTable.setObjectName("ValueTable")
         self.ValueTable.setColumnCount(3)
         self.ValueTable.setRowCount(5)
@@ -241,7 +241,7 @@ class Ui_MainWindow(object):
         __sortingEnabled = self.RatioTable.isSortingEnabled()
         self.RatioTable.setSortingEnabled(False)
         self.RatioTable.setSortingEnabled(__sortingEnabled)
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:48pt;\">Mass Ratio</span></p></body></html>"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:48pt; font-weight:600;\">Mass Ratio</span></p></body></html>"))
         self.save.setText(_translate("MainWindow", "Save"))
         item = self.ValueTable.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "Ar 36"))

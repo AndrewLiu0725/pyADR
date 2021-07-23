@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'LinearRegression.ui'
+# Form implementation generated from reading ui file 'UI/LinearRegression.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -11,35 +11,35 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.text = QtWidgets.QTextEdit(self.centralwidget)
-        self.text.setGeometry(QtCore.QRect(180, 40, 511, 79))
+        self.text.setGeometry(QtCore.QRect(190, 140, 511, 79))
         self.text.setObjectName("text")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(180, 20, 70, 16))
+        self.label.setGeometry(QtCore.QRect(190, 120, 70, 16))
         self.label.setObjectName("label")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(30, 70, 91, 51))
+        self.save.setGeometry(QtCore.QRect(40, 170, 91, 51))
         self.save.setObjectName("save")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(30, 20, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(40, 120, 91, 51))
         self.return_2.setObjectName("return_2")
         self.reselect = QtWidgets.QPushButton(self.centralwidget)
-        self.reselect.setGeometry(QtCore.QRect(30, 120, 91, 51))
+        self.reselect.setGeometry(QtCore.QRect(40, 220, 91, 51))
         self.reselect.setObjectName("reselect")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(30, 240, 101, 51))
+        self.label_2.setGeometry(QtCore.QRect(40, 340, 101, 51))
         self.label_2.setObjectName("label_2")
         self.linear = QtWidgets.QPushButton(self.centralwidget)
-        self.linear.setGeometry(QtCore.QRect(30, 290, 101, 51))
+        self.linear.setGeometry(QtCore.QRect(40, 390, 101, 51))
         self.linear.setObjectName("linear")
         self.asymptotic = QtWidgets.QPushButton(self.centralwidget)
-        self.asymptotic.setGeometry(QtCore.QRect(30, 350, 101, 51))
+        self.asymptotic.setGeometry(QtCore.QRect(40, 450, 101, 51))
         self.asymptotic.setObjectName("asymptotic")
         self.current_fit_func = QtWidgets.QLabel(self.centralwidget)
-        self.current_fit_func.setGeometry(QtCore.QRect(180, 130, 511, 16))
+        self.current_fit_func.setGeometry(QtCore.QRect(190, 230, 511, 16))
         self.current_fit_func.setObjectName("current_fit_func")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -49,7 +49,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

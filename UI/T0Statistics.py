@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'T0Statistics.ui'
+# Form implementation generated from reading ui file 'UI/T0Statistics.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -11,20 +11,20 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(10, 70, 113, 51))
+        self.return_2.setGeometry(QtCore.QRect(10, 160, 113, 51))
         self.return_2.setObjectName("return_2")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(5, 12, 791, 61))
+        self.label.setGeometry(QtCore.QRect(5, 102, 791, 61))
         self.label.setObjectName("label")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(10, 120, 113, 51))
+        self.save.setGeometry(QtCore.QRect(10, 210, 113, 51))
         self.save.setObjectName("save")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(150, 350, 591, 121))
+        self.tableWidget.setGeometry(QtCore.QRect(150, 440, 591, 121))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(5)
         self.tableWidget.setRowCount(2)
@@ -114,7 +114,7 @@ class Ui_MainWindow(object):
         item.setFont(font)
         self.tableWidget.setItem(1, 4, item)
         self.numSelectedFiles = QtWidgets.QLabel(self.centralwidget)
-        self.numSelectedFiles.setGeometry(QtCore.QRect(150, 490, 111, 31))
+        self.numSelectedFiles.setGeometry(QtCore.QRect(150, 580, 111, 31))
         self.numSelectedFiles.setObjectName("numSelectedFiles")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
