@@ -1,12 +1,7 @@
 # import python module
-from operator import le
 import numpy as np 
-import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
-import csv
-
-from numpy.testing._private.utils import measure
 
 # import UI
 import UI.HomePage
@@ -21,7 +16,7 @@ import UI.AgeCalculation
 # import utilities
 import Utilities
 
-TEST = 0
+
 
 # load UI
 # ===============================================================================
@@ -181,6 +176,7 @@ class App():
         self.numParamters = int(data[1].split(',')[1])
         self.parameters = []
         self.parameters_name = []
+        # first row is header and second row is # of parameters
         for i in range(self.numParamters):
             self.parameters_name.append(data[i+2].split(',')[0].rstrip())
             self.parameters.append(data[i+2].split(',')[1].rstrip())
@@ -226,18 +222,15 @@ class App():
             if content != self.parameters[i]:
                 error_type = 0
                 # check if valid
-                if i > 9:
-                    try:
+                try:
+                    if i > 9:
                         if int(content) <= 0:
                             error_type = 1
-                    except:
-                        error_type = 1
-                else:
-                    try:
+                    else:
                         if float(content) <= 0:
                             error_type = 2
-                    except:
-                        error_type = 2
+                except:
+                    error_type = 1 if i > 9 else 2
                 
                 # new valid value
                 if error_type == 0:
@@ -288,42 +281,37 @@ class App():
         measurement, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select measurement file (csv)" , self.data_folder, "(*.csv)")
         if len(measurement) > 0:
             # ask J and J_std
-            text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set j value', 'please key in J value')
-            if ok:
-                try:
-                    if float(text) < 0:
+            for i in range(2):
+                text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set j value' if i == 0 else 'Set sigma J', 
+                'please key in J value' if i == 0 else 'please key in sigma J value')
+                if ok:
+                    try:
+                        if float(text) < 0:
+                            self.Popup('Warning!', "please key in non-negative number!")
+                            return
+                        else:
+                            if i == 0:
+                                J = float(text)
+                            else:
+                                J_std = float(text)
+                    except:
                         self.Popup('Warning!', "please key in non-negative number!")
                         return
-                    else:
-                        J = float(text)
-                except:
-                    self.Popup('Warning!', "please key in non-negative number!")
+                else:
                     return
-            else:
-                return
-
-            text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set sigma J', 'please key in sigma j value')
-            if ok:
-                try:
-                    if float(text) < 0:
-                        self.Popup('Warning!', "please key in non-negative number!")
-                        return
-                    else:
-                        J_std = float(text)
-                except:
-                    self.Popup('Warning!', "please key in non-negative number!")
-                    return
-            else:
-                return
 
             self.AgeCalculation_result = Utilities.calcAge(measurement, J, J_std, [float(x) for x in self.parameters[:8]])
         
             # fill the table
             for i in range(53):
-                item = QtWidgets.QTableWidgetItem(str(self.AgeCalculation_result[i]))
+                item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AgeCalculation_result[i]))
                 item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                 self.AgeCalculationPage.tableWidget.setItem(i//2 if i < 48 else i-24, i%2 if i < 48 else 0, item)
 
+            self.AgeCalculationPage.age.setText('Age = {:.5} Ma'.format(self.AgeCalculation_result[46]/10**6))
+            self.AgeCalculationPage.age.setFont(QtGui.QFont('Times', 20))
+
+            # show the page
             self.widget.setCurrentIndex(6)
 
     def AC_save(self):
@@ -390,7 +378,6 @@ class App():
 
             for i in range(5):
                 for j in range(5):
-                    #item = QtWidgets.QTableWidgetItem(str(self.ratio_result[i][j])[:11])
                     item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.ratio_result[i][j]))
                     
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
@@ -429,7 +416,7 @@ class App():
             self.T0_statistics_result = Utilities.getT0Statistics(filelist)
             for i in range(5):
                 for j in range(2):
-                    item = QtWidgets.QTableWidgetItem('{:0.4e}'.format(self.T0_statistics_result[i, j]))
+                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.T0_statistics_result[i, j]))
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     self.T0StatisticsPage.tableWidget.setItem(j, i, item)
 
@@ -464,7 +451,7 @@ class App():
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , self.data_folder, "") # select file
         if len(filename) > 0:
             self.T0_fitting_function = 0 # default fitting function is linear
-            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[11]), float(self.parameters[9]), int(self.parameters[10]), filepath = filename) # make LRP
+            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), filepath = filename) # make LRP
             [self.tmp_T0, self.tmp_T0_SIGMA, self.tmp_v_t] = result[1:]
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
@@ -474,8 +461,6 @@ class App():
 
             # show the page
             self.widget.setCurrentIndex(1)
-
-            self.filename = filename
 
     def LRP_save(self):
         # save screenshot
@@ -503,7 +488,7 @@ class App():
                 if item.checkState() == QtCore.Qt.Unchecked:
                     mask[i, j] = 1
 
-        result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), v_t=self.tmp_v_t, mask=mask)
+        result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), v_t=self.tmp_v_t, mask=mask)
         [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
         self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
         self.ReselectDialog.close()
@@ -519,8 +504,7 @@ class App():
         self.LRP_switch_fitting_func(1)
 
     def LRP_switch_fitting_func(self, fit_func_type):
-        result = Utilities.calculateT0(fit_func_type, int(self.parameters[2]), float(self.parameters[3]), int(self.parameters[4]), v_t=self.tmp_v_t) # make LRP
-        print(result)
+        result = Utilities.calculateT0(fit_func_type, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), v_t=self.tmp_v_t) # make LRP
 
         if result[0] == 2:
             self.Popup("Warning!", "Unable to fit the raw data with {} fucntion!".format(self.fitting_function_list[fit_func_type]))

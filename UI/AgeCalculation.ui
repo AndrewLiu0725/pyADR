@@ -57,9 +57,9 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>80</y>
+      <y>140</y>
       <width>501</width>
-      <height>471</height>
+      <height>411</height>
      </rect>
     </property>
     <row>
@@ -217,6 +217,19 @@
       <string>Sigma</string>
      </property>
     </column>
+   </widget>
+   <widget class="QLabel" name="age">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>80</y>
+      <width>281</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;Age = _Ma&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

@@ -1,1 +1,0 @@
-python NTNU_DataReduction.py

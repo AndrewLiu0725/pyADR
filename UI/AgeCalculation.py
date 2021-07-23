@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(0, 0, 791, 71))
         self.label.setObjectName("label")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(180, 80, 501, 471))
+        self.tableWidget.setGeometry(QtCore.QRect(180, 140, 501, 411))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setRowCount(29)
@@ -90,6 +90,9 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
+        self.age = QtWidgets.QLabel(self.centralwidget)
+        self.age.setGeometry(QtCore.QRect(180, 80, 281, 41))
+        self.age.setObjectName("age")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -170,6 +173,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Value"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Sigma"))
+        self.age.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:24pt;\">Age = _Ma</span></p></body></html>"))
 
 
 if __name__ == "__main__":

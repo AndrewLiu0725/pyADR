@@ -1,4 +1,3 @@
-from operator import ge
 import numpy as np 
 import matplotlib.pyplot as plt
 from numpy.lib.function_base import diff
@@ -72,25 +71,33 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
         with open(filepath, 'r') as f:
             data = f.readlines()
 
+        # find data starting line
+        for i in reversed(range(len(data))):
+            stl = i
+            if len(data[i].split()) == 4:
+                break
+        stl -= 34 # 35 - 1
+
+        # catch the data
         v_t = np.zeros((5, numCycle, 2))
 
         for i in range(numCycle):
             for j in range(5):
-                v_t[j, i, 0] = (data[26 + 6*i + j].split())[2]
-                v_t[j, i, 1] = (data[26 + 6*i + j].split())[3]
+                v_t[j, i, 0] = float((data[stl + 6*i + j].split())[2])
+                v_t[j, i, 1] = float((data[stl + 6*i + j].split())[3])
 
     fig, axs = plt.subplots(2, 3, figsize = (12,8))
 
     f = fit_func_list[fit_function_type]
 
-    #  recognize the outlier first (use Ar 40)if first entry or switch the fitting function
+    #  recognize the outlier first (use Ar 40) if first entry or switch the fitting function
     if mask is None:
         t = v_t[4, :, 1]
         v = v_t[4, :, 0]
         mask = np.zeros((5, numCycle))
 
         try:
-            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
+            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
         except:
             # only possible to enter this line when switching fitting function
             # since it's always possible to fit the raw data with default fitting function (linear)
@@ -99,9 +106,10 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
 
         baseline = threshold*np.std(np.abs(v - f(t, *popt))) # std of the error
 
+        # autoselect the outlier
         for j in range(numCycle):
             if np.abs(v[j] - f(t[j], *popt)) > baseline:
-                mask[:, j] = 1 # mark this time as outlier
+                mask[:, j] = 1 # mark this cycle as outlier
 
     # go over Ar 36 to 40
     for i in range(5):
@@ -111,7 +119,7 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
         v = v_t[i, :, 0]
         
         try:
-            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
+            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
 
         except:
             # only possible to enter this line when switching fitting function
@@ -135,7 +143,7 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
         v = v_t[i, valid_indices, 0]
 
         try:
-            popt, pcov = curve_fit(f, t, v, maxfev = max_iteration)
+            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
             T0[i] = f(0, *popt)
             T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
             axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
@@ -148,7 +156,6 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
     
     axs[1,2].axis('off')
     plt.tight_layout()
-    #plt.show()
     plt.savefig(".work/LR.png", dpi = 200)
 
     return [status, T0, T0_SIGMA, None if filepath is None else v_t]
@@ -253,16 +260,6 @@ def getAirRatioStatistics(filelist, background1, background2):
     return statistics
 
 def calcAge(measurement_filename, J, J_std, constants):
-    constants = [
-        0.00071,
-        0.00027,
-        0.00165,
-        0.01211,
-        262.80000,
-        298.56000,
-        0.18850,
-        0.00000000055492
-    ]
     # collect data
     data = np.zeros((5, 2))
 
