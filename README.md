@@ -1,6 +1,6 @@
 # Name of the App
 ## Introduction
-This application is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
+This application created by An-Jun (Andrew) Liu is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
 The following functions are provided:
 1. T0 calculation
 2. T0 statistics
@@ -11,11 +11,11 @@ The following functions are provided:
 ## Prerequisites
 1. Python3
 2. python related modules (usually already installed when you installed your python3):
-(1). numpy
-(2). PyQt5
-(3). sys
-(4). matplotlib
-(5). scipy
+* numpy
+* PyQt5
+* sys
+* matplotlib
+* scipy
 
 ## User Guide
 ### Installation
@@ -36,9 +36,12 @@ A batch file (on Windows) or (on Mac) will be created.
 ### Main functions
 Please refer to this document for further instructions.
 
+### Note
+The key in parameters and the raw data should be either in regular number or in scientific notation like 1.0e-2.
+
 ## Example:
 ### Age Calculation
 1. Click the Age Calculation button in the homepage
-2. Select file 'TestData_Measurement.csv' in the 'Data/TestDate' folder
+2. Select file 'TestData_Measurement.csv' in the 'Data/TestData' folder
 3. Key in J = 0.026703 and Sigma J = 0.000035
 4. The age should be around 28Ma
