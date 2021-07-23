@@ -20,7 +20,7 @@ with open(filename, 'w') as icon:
     if IS_WINDOWS:
         icon.write('@echo off\n')
         anaconda_folder = sys.executable[:-10]
-        icon.write('call {}Scripts\activate.bat {}\n'.format(anaconda_folder, anaconda_folder))
+        icon.write('call {}Scripts/activate.bat {}\n'.format(anaconda_folder, anaconda_folder))
     icon.write('cd {}\n'.format(dir_path))
     icon.write('{} {}'.format(sys.executable, os.path.abspath('NTNU_DataReduction.py')))
 
