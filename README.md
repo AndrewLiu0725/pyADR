@@ -31,12 +31,29 @@ python install.py
 ```
 A batch file (on Windows) or bash file (on Mac) will be created.
 
-3. Click the icon and then the application will be launched.
+3. Click the created file and then the application will be launched.
 
 ### Change the parameters
 1. In the menubar, click "Parameter Setting", the the parameter setting page will show up. 
 2. Click Change button if you want to change the constants and the parameters this application uses.
 3. Click Save button if you have changed the parameters, or the values you changed won't be saved.
+
+### Raw data format
+The raw data format should be as follow:
+```
+some headers
+
+Cycle Number, Ar36, Current, Time
+Cycle Number, Ar37, Current, Time
+Cycle Number, Ar38, Current, Time
+Cycle Number, Ar39, Current, Time
+Cycle Number, Ar40, Current, Time
+
+data for next cycle
+...
+```
+***Note that there should be a blank line between the data block of each cycle.***
+***Please refer to the sample data in the 'Data/TestData' folder to see the format.***
 
 ### Main functions
 Please refer to this document for further instructions.
@@ -50,3 +67,6 @@ The key in parameters and the raw data should be either in regular number or in 
 2. Select file 'TestData_Measurement.csv' in the 'Data/TestData' folder
 3. Key in J = 0.026703 and Sigma J = 0.000035
 4. The age should be around 28Ma
+
+## Words from the developer
+If you find this application useful, please star this repo.
