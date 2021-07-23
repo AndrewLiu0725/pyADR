@@ -1,3 +1,8 @@
+# ===============================================================================
+# Copyright 2021 An-Jun Liu
+# Last Modified Date: 07/23/2021
+# ===============================================================================
+
 # import python module
 import numpy as np 
 from PyQt5 import QtCore, QtGui, QtWidgets

@@ -1,3 +1,8 @@
+# ===============================================================================
+# Copyright 2021 An-Jun Liu
+# Last Modified Date: 07/23/2021
+# ===============================================================================
+
 import numpy as np 
 import matplotlib.pyplot as plt
 from numpy.lib.function_base import diff
