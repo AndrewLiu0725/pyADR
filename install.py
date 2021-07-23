@@ -18,6 +18,6 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 with open(filename, 'w') as icon:
     icon.write('cd {}\n'.format(dir_path))
     icon.write('{} {}'.format(sys.executable, os.path.abspath('NTNU_DataReduction.py')))
-subprocess.call(['chmod', 'u+x', filename])
+subprocess.call(['chmod', 'u+x', os.path.abspath(filename)])
 
 print('Installation Complete!')
