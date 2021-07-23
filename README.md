@@ -9,23 +9,27 @@ The following functions are provided:
 5. Age calculation
 
 ## Prerequisites
-1. Python3
+1. Python3 (recommend installed in Anaconda3)
 2. python related modules (usually already installed when you installed your python3):
 * numpy
 * PyQt5
 * sys
 * matplotlib
 * scipy
+3. Additional python related modules for installation:
+* platform
+* subprocess
+* os
 
 ## User Guide
 ### Installation
 1. Download or clone this repo
-2. Open the terminal and type the following commands
+2. Open the terminal (on Windows, recommend use Anaconda's prompt shell) and type the following commands
 ```
 cd /path to folder you get in the previous step/
 python install.py
 ```
-A batch file (on Windows) or (on Mac) will be created.
+A batch file (on Windows) or bash file (on Mac) will be created.
 3. Click the icon and then the application will be launched.
 
 ### Change the parameters
