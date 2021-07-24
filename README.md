@@ -1,3 +1,4 @@
+![logo](.work/logo.png)
 # pyADR
 ## Introduction
 pyADR is created by An-Jun (Andrew) Liu and is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
