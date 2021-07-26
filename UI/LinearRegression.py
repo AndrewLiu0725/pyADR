@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI/LinearRegression.ui'
+# Form implementation generated from reading ui file 'LinearRegression.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(800, 702)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.text = QtWidgets.QTextEdit(self.centralwidget)
@@ -30,17 +30,20 @@ class Ui_MainWindow(object):
         self.reselect.setGeometry(QtCore.QRect(40, 220, 91, 51))
         self.reselect.setObjectName("reselect")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(40, 340, 101, 51))
+        self.label_2.setGeometry(QtCore.QRect(40, 380, 101, 51))
         self.label_2.setObjectName("label_2")
         self.linear = QtWidgets.QPushButton(self.centralwidget)
-        self.linear.setGeometry(QtCore.QRect(40, 390, 101, 51))
+        self.linear.setGeometry(QtCore.QRect(40, 430, 101, 51))
         self.linear.setObjectName("linear")
         self.asymptotic = QtWidgets.QPushButton(self.centralwidget)
-        self.asymptotic.setGeometry(QtCore.QRect(40, 450, 101, 51))
+        self.asymptotic.setGeometry(QtCore.QRect(40, 490, 101, 51))
         self.asymptotic.setObjectName("asymptotic")
         self.current_fit_func = QtWidgets.QLabel(self.centralwidget)
         self.current_fit_func.setGeometry(QtCore.QRect(190, 230, 511, 16))
         self.current_fit_func.setObjectName("current_fit_func")
+        self.new_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.new_2.setGeometry(QtCore.QRect(40, 270, 91, 51))
+        self.new_2.setObjectName("new_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -64,6 +67,7 @@ class Ui_MainWindow(object):
         self.linear.setText(_translate("MainWindow", "Linear"))
         self.asymptotic.setText(_translate("MainWindow", "Asymptotic"))
         self.current_fit_func.setText(_translate("MainWindow", "Current fitting function:"))
+        self.new_2.setText(_translate("MainWindow", "New"))
 
 
 if __name__ == "__main__":

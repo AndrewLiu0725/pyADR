@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI/MassRatio.ui'
+# Form implementation generated from reading ui file 'MassRatio.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -11,12 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(800, 697)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(20, 190, 113, 51))
-        self.return_2.setObjectName("return_2")
         self.RatioTable = QtWidgets.QTableWidget(self.centralwidget)
         self.RatioTable.setGeometry(QtCore.QRect(200, 420, 311, 201))
         self.RatioTable.setObjectName("RatioTable")
@@ -85,9 +82,6 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(4, 126, 791, 71))
         self.label.setObjectName("label")
-        self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(20, 240, 113, 51))
-        self.save.setObjectName("save")
         self.ValueTable = QtWidgets.QTableWidget(self.centralwidget)
         self.ValueTable.setGeometry(QtCore.QRect(200, 200, 481, 201))
         self.ValueTable.setObjectName("ValueTable")
@@ -208,6 +202,15 @@ class Ui_MainWindow(object):
         font.setPointSize(20)
         item.setFont(font)
         self.ValueTable.setItem(4, 2, item)
+        self.return_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.return_2.setGeometry(QtCore.QRect(50, 200, 91, 51))
+        self.return_2.setObjectName("return_2")
+        self.save = QtWidgets.QPushButton(self.centralwidget)
+        self.save.setGeometry(QtCore.QRect(50, 250, 91, 51))
+        self.save.setObjectName("save")
+        self.new_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.new_2.setGeometry(QtCore.QRect(50, 300, 91, 51))
+        self.new_2.setObjectName("new_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -223,7 +226,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.return_2.setText(_translate("MainWindow", "Return"))
         item = self.RatioTable.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "Ar 40/36"))
         item = self.RatioTable.verticalHeaderItem(1)
@@ -242,7 +244,6 @@ class Ui_MainWindow(object):
         self.RatioTable.setSortingEnabled(False)
         self.RatioTable.setSortingEnabled(__sortingEnabled)
         self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:48pt; font-weight:600;\">Mass Ratio</span></p></body></html>"))
-        self.save.setText(_translate("MainWindow", "Save"))
         item = self.ValueTable.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "Ar 36"))
         item = self.ValueTable.verticalHeaderItem(1)
@@ -262,6 +263,9 @@ class Ui_MainWindow(object):
         __sortingEnabled = self.ValueTable.isSortingEnabled()
         self.ValueTable.setSortingEnabled(False)
         self.ValueTable.setSortingEnabled(__sortingEnabled)
+        self.return_2.setText(_translate("MainWindow", "Return"))
+        self.save.setText(_translate("MainWindow", "Save"))
+        self.new_2.setText(_translate("MainWindow", "New"))
 
 
 if __name__ == "__main__":

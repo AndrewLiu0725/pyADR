@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(800, 696)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.save = QtWidgets.QPushButton(self.centralwidget)
@@ -93,6 +93,9 @@ class Ui_MainWindow(object):
         self.age = QtWidgets.QLabel(self.centralwidget)
         self.age.setGeometry(QtCore.QRect(180, 170, 281, 41))
         self.age.setObjectName("age")
+        self.new_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.new_2.setGeometry(QtCore.QRect(40, 270, 91, 51))
+        self.new_2.setObjectName("new_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -174,6 +177,7 @@ class Ui_MainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Sigma"))
         self.age.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:24pt;\">Age = _Ma</span></p></body></html>"))
+        self.new_2.setText(_translate("MainWindow", "New"))
 
 
 if __name__ == "__main__":

@@ -145,18 +145,22 @@ class App():
         self.T0CalculationPage.reselect.clicked.connect(self.LRP_reselect)
         self.T0CalculationPage.linear.clicked.connect(self.LRP_useLinear)
         self.T0CalculationPage.asymptotic.clicked.connect(self.LRP_useAsymptotic)
+        self.T0CalculationPage.new_2.clicked.connect(self.toLRP)
 
         # click button on T0 statistics page
         self.T0StatisticsPage.return_2.clicked.connect(self.toMain)
         self.T0StatisticsPage.save.clicked.connect(self.T0S_save)
+        self.T0StatisticsPage.new_2.clicked.connect(self.toT0S)
 
         # click button on Mass Ratio page
         self.MassRatioPage.return_2.clicked.connect(self.toMain)
         self.MassRatioPage.save.clicked.connect(self.MR_save)
+        self.MassRatioPage.new_2.clicked.connect(self.toMR)
 
         # click button on Air Ratio Statistics page
         self.AirRatioStatisticsPage.return_2.clicked.connect(self.toMain)
         self.AirRatioStatisticsPage.save.clicked.connect(self.ARS_save)
+        self.AirRatioStatisticsPage.new_2.clicked.connect(self.toARS)
 
         # click button on Parameter Setting page
         self.ParameterSettingPage.return_2.clicked.connect(self.toMain)
@@ -167,6 +171,7 @@ class App():
         # click button on Age Calculation page
         self.AgeCalculationPage.return_2.clicked.connect(self.toMain)
         self.AgeCalculationPage.save.clicked.connect(self.AC_save)
+        self.AgeCalculationPage.new_2.clicked.connect(self.toAC)
 
         self.widget.show()
 

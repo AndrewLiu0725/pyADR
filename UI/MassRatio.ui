@@ -14,19 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="return_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>190</y>
-      <width>113</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Return</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="RatioTable">
     <property name="geometry">
      <rect>
@@ -168,19 +155,6 @@
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt; font-weight:600;&quot;&gt;Mass Ratio&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="save">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>240</y>
-      <width>113</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Save</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="ValueTable">
@@ -422,6 +396,45 @@
       </font>
      </property>
     </item>
+   </widget>
+   <widget class="QPushButton" name="return_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>200</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Return</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>250</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="new_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>300</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
