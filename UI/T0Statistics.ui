@@ -27,156 +27,6 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;&gt;T&lt;/span&gt;&lt;span style=&quot; font-size:36pt; font-weight:600; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;span style=&quot; font-size:36pt; font-weight:600;&quot;&gt; Statistics&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>440</y>
-      <width>591</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <row>
-     <property name="text">
-      <string>Mean</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>STD</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </row>
-    <column>
-     <property name="text">
-      <string>Ar 36</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Ar 37</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Ar 38</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Ar 39</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Ar 40</string>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </column>
-    <item row="0" column="0">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="0" column="1">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="0" column="2">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="0" column="3">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="0" column="4">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="1" column="0">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="1" column="1">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="1" column="2">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="1" column="3">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-    <item row="1" column="4">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-    </item>
-   </widget>
    <widget class="QLabel" name="numSelectedFiles">
     <property name="geometry">
      <rect>
@@ -228,6 +78,51 @@
     <property name="text">
      <string>New</string>
     </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>470</y>
+      <width>591</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string>mean</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>STD</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Ar 36</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ar 37</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ar 38</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ar 39</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ar 40</string>
+     </property>
+    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

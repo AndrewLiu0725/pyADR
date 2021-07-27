@@ -157,7 +157,7 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
 
         axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
         axs[i//3, i%3].legend()
-        axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', T0[i]))
+        axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', '{:0.5e}'.format(T0[i])))
     
     axs[1,2].axis('off')
     plt.tight_layout()

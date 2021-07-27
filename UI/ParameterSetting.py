@@ -11,11 +11,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(800, 697)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.ParameetrTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.ParameetrTable.setGeometry(QtCore.QRect(210, 200, 361, 371))
+        self.ParameetrTable.setGeometry(QtCore.QRect(210, 200, 391, 371))
         self.ParameetrTable.setObjectName("ParameetrTable")
         self.ParameetrTable.setColumnCount(1)
         self.ParameetrTable.setRowCount(11)

@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.return_2.setGeometry(QtCore.QRect(40, 170, 91, 51))
         self.return_2.setObjectName("return_2")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(0, 90, 791, 71))
+        self.label.setGeometry(QtCore.QRect(0, 80, 791, 81))
         self.label.setObjectName("label")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setGeometry(QtCore.QRect(180, 230, 501, 411))
