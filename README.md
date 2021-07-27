@@ -23,6 +23,7 @@ The followings are usually already installed when you install Anaconda3
 * platform
 * subprocess
 * os
+* shutil
 
 ## User Guide
 ### Installation

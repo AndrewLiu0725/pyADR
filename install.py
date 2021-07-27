@@ -7,6 +7,7 @@ import platform
 import sys
 import subprocess
 import os
+import shutil
 
 IS_MAC = platform.system() == 'Darwin'
 IS_WINDOWS = platform.system() == 'Windows'
@@ -29,5 +30,9 @@ if IS_WINDOWS:
     subprocess.call(['CACLS', os.path.abspath(filename), '/e', '/p', 'Everyone:f'])
 else:
     subprocess.call(['chmod', 'u+x', os.path.abspath(filename)])
+
+# also create icon in the desktop
+HOME = os.path.expanduser('~')
+subprocess.call(['cp', os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename)])
 
 print('Installation Complete!')
