@@ -33,9 +33,12 @@ else:
 
 # also create icon in the desktop
 HOME = os.path.expanduser('~')
+'''
 if IS_WINDOWS:
     subprocess.call(['copy', os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename)])
 else:
     subprocess.call(['cp', os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename)])
+'''
+shutil.copyfile(os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename))
 
 print('Installation Complete!')
