@@ -81,7 +81,7 @@ def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath 
             stl = i
             if len(data[i].split()) == 4:
                 break
-        stl -= 34 # 35 - 1
+        stl -= (6*numCycle-2)
 
         # catch the data
         v_t = np.zeros((5, numCycle, 2))
