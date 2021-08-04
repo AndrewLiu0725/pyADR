@@ -1,6 +1,6 @@
 # ===============================================================================
 # Copyright 2021 An-Jun Liu
-# Last Modified Date: 07/23/2021
+# Last Modified Date: 08/04/2021
 # ===============================================================================
 
 # import python module
@@ -111,8 +111,6 @@ class App():
         # coordinate = [x, y, w, h]
         page.photo = QtWidgets.QLabel(page.centralwidget)
         page.photo.setGeometry(QtCore.QRect(coordinate[0], coordinate[1], coordinate[2], coordinate[3]))
-        page.photo.setText("")
-        page.photo.setPixmap(QtGui.QPixmap(".work/cat.png"))
         page.photo.setScaledContents(True)
         page.photo.setObjectName("photo")
 
