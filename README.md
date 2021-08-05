@@ -27,7 +27,10 @@ The followings are usually already installed when you install Anaconda3
 
 ## User Guide
 ### Installation
-1. Download or clone this repo
+1. Clicked the "Code" button, and then either download and unzip this repo or clone it to your working folder by the following commad.
+```
+git clone https://github.com/AndrewLiu0725/pyADR.git
+```
 2. Open the terminal (on Windows, recommend using Anaconda's prompt shell) and type the following commands
 ```
 cd /path to folder you get in the previous step/
