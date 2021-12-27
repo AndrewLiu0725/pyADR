@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ReselectDialog.ui'
+# Form implementation generated from reading ui file 'UI/ReselectDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #

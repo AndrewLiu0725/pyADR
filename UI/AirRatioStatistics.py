@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'AirRatioStatistics.ui'
+# Form implementation generated from reading ui file 'UI/AirRatioStatistics.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -21,13 +21,13 @@ class Ui_MainWindow(object):
         self.numSelectedFiles.setGeometry(QtCore.QRect(210, 620, 121, 31))
         self.numSelectedFiles.setObjectName("numSelectedFiles")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(30, 200, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(0, 200, 91, 51))
         self.return_2.setObjectName("return_2")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(30, 250, 91, 51))
+        self.save.setGeometry(QtCore.QRect(0, 250, 91, 51))
         self.save.setObjectName("save")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.new_2.setGeometry(QtCore.QRect(30, 300, 91, 51))
+        self.new_2.setGeometry(QtCore.QRect(0, 300, 91, 51))
         self.new_2.setObjectName("new_2")
         self.RatioTable = QtWidgets.QTableWidget(self.centralwidget)
         self.RatioTable.setGeometry(QtCore.QRect(210, 490, 301, 111))

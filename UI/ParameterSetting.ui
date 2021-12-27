@@ -17,10 +17,10 @@
    <widget class="QTableWidget" name="ParameetrTable">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>220</x>
       <y>200</y>
-      <width>391</width>
-      <height>371</height>
+      <width>351</width>
+      <height>391</height>
      </rect>
     </property>
     <row>
@@ -87,7 +87,7 @@
    <widget class="QPushButton" name="change">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>0</x>
       <y>250</y>
       <width>91</width>
       <height>51</height>
@@ -100,7 +100,7 @@
    <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>0</x>
       <y>300</y>
       <width>91</width>
       <height>51</height>
@@ -113,7 +113,7 @@
    <widget class="QPushButton" name="return_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>0</x>
       <y>200</y>
       <width>91</width>
       <height>51</height>
@@ -126,7 +126,7 @@
    <widget class="QPushButton" name="cancel">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>0</x>
       <y>350</y>
       <width>91</width>
       <height>51</height>

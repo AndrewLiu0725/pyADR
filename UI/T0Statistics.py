@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'T0Statistics.ui'
+# Form implementation generated from reading ui file 'UI/T0Statistics.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -21,13 +21,13 @@ class Ui_MainWindow(object):
         self.numSelectedFiles.setGeometry(QtCore.QRect(150, 580, 111, 31))
         self.numSelectedFiles.setObjectName("numSelectedFiles")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(30, 190, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(0, 190, 91, 51))
         self.return_2.setObjectName("return_2")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(30, 240, 91, 51))
+        self.save.setGeometry(QtCore.QRect(0, 240, 91, 51))
         self.save.setObjectName("save")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.new_2.setGeometry(QtCore.QRect(30, 290, 91, 51))
+        self.new_2.setGeometry(QtCore.QRect(0, 290, 91, 51))
         self.new_2.setObjectName("new_2")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setGeometry(QtCore.QRect(150, 470, 591, 101))

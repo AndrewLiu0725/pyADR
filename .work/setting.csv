@@ -8,6 +8,6 @@ Production Ratio 36Ar/38Ar(cl),262.80000
 Atmospheric Ratio 40/36(a),298.56000
 Atmospheric Ratio 38/36(a),0.18850
 λ,0.00000000055492
-baseline,2.5
-maxfev,1000
+J value,0.026703
+J std,3.5e-05
 numCycle,8

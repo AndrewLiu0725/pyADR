@@ -59,7 +59,7 @@ Cycle Number, Ar40, Current, Time
 data for next cycle
 ...
 ```
-***Note that there should be a blank line between the data block of each cycle.***
+***Note that there should be exactly one blank line between the data block of each cycle.***
 ***Please refer to the sample data in the 'Data/TestData' folder to see the format.***
 
 ### Main functions

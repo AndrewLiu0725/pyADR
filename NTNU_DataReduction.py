@@ -1,6 +1,6 @@
 # ===============================================================================
 # Copyright 2021 An-Jun Liu
-# Last Modified Date: 08/04/2021
+# Last Modified Date: 12/27/2021
 # ===============================================================================
 
 # import python module
@@ -73,10 +73,12 @@ class App():
         QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
+        self.HomePage.label.setAlignment(QtCore.Qt.AlignCenter)
         self.insertLogo(self.HomePage)
         self.T0CalculationPage = LinearRegressionPage()
-        self.insertPhoto(self.T0CalculationPage, [150, 250, 600, 450])
+        self.insertPhoto(self.T0CalculationPage, [100, 230, 670, 450])
         self.insertLogo(self.T0CalculationPage)
+        self.ReselectDialog = ReselectTable()
         self.T0StatisticsPage = T0Statistics()
         self.insertPhoto(self.T0StatisticsPage, [150, 175, 600, 250])
         self.insertLogo(self.T0StatisticsPage)
@@ -85,11 +87,11 @@ class App():
         self.AirRatioStatisticsPage = AirRatioStatistics()
         self.insertPhoto(self.AirRatioStatisticsPage, [200, 200, 350, 275])
         self.insertLogo(self.AirRatioStatisticsPage)
-        self.ReselectDialog = ReselectTable()
-        self.ParameterSettingPage = ParameterSetting()
-        self.insertLogo(self.ParameterSettingPage)
         self.AgeCalculationPage = AgeCalculation()
         self.insertLogo(self.AgeCalculationPage)
+        self.ParameterSettingPage = ParameterSetting()
+        self.insertLogo(self.ParameterSettingPage)
+
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
         self.widget.addWidget(self.T0CalculationPage)
@@ -102,7 +104,7 @@ class App():
         self.widget.setFixedWidth(800)
 
         # others
-        self.fitting_function_list = ["Linear", "Asymptotic"]
+        self.fitting_function_list = ["Linear", "Average"]
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
@@ -135,6 +137,7 @@ class App():
         self.HomePage.MR.clicked.connect(self.toMR)
         self.HomePage.ARS.clicked.connect(self.toARS)
         self.HomePage.AC.clicked.connect(self.toAC)
+        self.HomePage.PS_button.clicked.connect(self.toPS)
         self.HomePage.actionParameter_Setting.triggered.connect(self.toPS)
 
         # click button on Linear Regression Page
@@ -142,7 +145,7 @@ class App():
         self.T0CalculationPage.save.clicked.connect(self.LRP_save)
         self.T0CalculationPage.reselect.clicked.connect(self.LRP_reselect)
         self.T0CalculationPage.linear.clicked.connect(self.LRP_useLinear)
-        self.T0CalculationPage.asymptotic.clicked.connect(self.LRP_useAsymptotic)
+        self.T0CalculationPage.average.clicked.connect(self.LRP_useAverage)
         self.T0CalculationPage.new_2.clicked.connect(self.toLRP)
 
         # click button on T0 statistics page
@@ -191,6 +194,16 @@ class App():
         msg.setWindowTitle("")
         msg.exec_()
 
+    # adjust table column and row size
+    def TableAdjust(self, table):
+        header = table.horizontalHeader()
+        for i in range(table.columnCount()):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+        header = table.verticalHeader()
+        for i in range(table.rowCount()):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
     # methods for parameters setting page
     # ===============================================================================
     def loadParameterSeting(self):
@@ -207,9 +220,6 @@ class App():
 
 
     def toPS(self):
-        # load the parameters from setting file
-        self.loadParameterSeting()
-
         # fill the table and set the item as disabled
         for i in range(self.numParamters):
             item = QtWidgets.QTableWidgetItem(self.parameters[i])
@@ -240,33 +250,33 @@ class App():
 
         for i in range(self.numParamters):
             item = self.ParameterSettingPage.ParameetrTable.item(i, 0)
-            content = item.text()
+            content = item.text().rstrip()
 
             # value changed
             if content != self.parameters[i]:
                 error_type = 0
                 # check if valid
                 try:
-                    if i > 9:
+                    if self.ParameterSettingPage.ParameetrTable.verticalHeaderItem(i).text() == 'numCycle':
                         if int(content) <= 0:
                             error_type = 1
                     else:
-                        if float(content) <= 0:
+                        if float(content) < 0:
                             error_type = 2
                 except:
                     error_type = 1 if i > 9 else 2
                 
                 # new valid value
                 if error_type == 0:
-                    self.parameters[i] = content.rstrip() # update the parameter
+                    self.parameters[i] = content # update the parameter
                     changed = 1 # need rewrite setting.csv
 
                 # restore the value
                 else:
                     item.setText(self.parameters[i]) 
                     invalid = 1
-                    error_msg += '{} should be {}\n\n'.format(self.parameters_name[i], 
-                    'positive integer' if error_type == 1 else 'positive number')
+                    error_msg += '{} should be a{}.\n\n'.format(self.parameters_name[i], 
+                    'positive integer' if error_type == 1 else 'non-negative number')
 
             item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
 
@@ -302,28 +312,12 @@ class App():
     # methods for age calculation page
     # ===============================================================================
     def toAC(self):
-        measurement, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select measurement file (csv)" , self.data_folder, "(*.csv)")
-        if len(measurement) > 0:
-            # ask J and J_std
-            for i in range(2):
-                text, ok = QtWidgets.QInputDialog.getText(self.widget, 'Set j value' if i == 0 else 'Set sigma J', 
-                'please key in J value' if i == 0 else 'please key in sigma J value')
-                if ok:
-                    try:
-                        if float(text) < 0:
-                            self.Popup('Warning!', "please key in non-negative number!")
-                            return
-                        else:
-                            if i == 0:
-                                J = float(text)
-                            else:
-                                J_std = float(text)
-                    except:
-                        self.Popup('Warning!', "please key in non-negative number!")
-                        return
-                else:
-                    return
 
+        measurement, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select measurement file (csv)" , self.data_folder, "(*.csv)")
+        
+        if len(measurement) > 0:
+            J = float(self.parameters[self.parameters_name.index('J value')])
+            J_std = float(self.parameters[self.parameters_name.index('J std')])
             self.AgeCalculation_result = Utilities.calcAge(measurement, J, J_std, [float(x) for x in self.parameters[:8]])
         
             # fill the table
@@ -336,10 +330,11 @@ class App():
             self.AgeCalculationPage.age.setFont(QtGui.QFont('Times', 20))
 
             # show the page
+            self.TableAdjust(self.AgeCalculationPage.tableWidget)
             self.widget.setCurrentIndex(6)
 
     def AC_save(self):
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Age Calculation Date" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Age Calculation result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Variable,Value,Sigma\n")
@@ -354,6 +349,7 @@ class App():
     # methods for Air Ratio Statistics
     # ===============================================================================
     def toARS(self):
+
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
@@ -373,6 +369,7 @@ class App():
             self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
 
             # show the page
+            self.TableAdjust(self.AirRatioStatisticsPage.RatioTable)
             self.widget.setCurrentIndex(4)
 
     def ARS_save(self):
@@ -382,7 +379,7 @@ class App():
             self.widget.grab().save(filename)
 
         # save statistics
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Air Ratio Statistics" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Air Ratio Statistics result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Air Ratio,Mean,STD\n")
@@ -410,19 +407,21 @@ class App():
                     else:
                         self.MassRatioPage.RatioTable.setItem(j, i-3, item)
 
+            self.TableAdjust(self.MassRatioPage.ValueTable)
+            self.TableAdjust(self.MassRatioPage.RatioTable)
             self.widget.setCurrentIndex(3)
         else:
             self.Popup("Warning!", "Please select one mass file and one preline file")
 
     def MR_save(self):
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement T0" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement T0 result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,Raw,Measurment,Measurement's Sigma\n")
             f.writelines(["Ar{},{},{},{}\n".format(i+36, self.ratio_result[0][i], self.ratio_result[1][i], self.ratio_result[2][i]) for i in range(5)])
             f.close()
 
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement Ratio" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement Ratio result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Ratio,Value,Ratio's Sigma\n")
@@ -433,6 +432,7 @@ class App():
     # methods for T0 Statistics
     # ===============================================================================
     def toT0S(self):
+
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get T0 statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
@@ -452,6 +452,7 @@ class App():
             self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
 
             # show the page
+            self.TableAdjust(self.T0StatisticsPage.tableWidget)
             self.widget.setCurrentIndex(2) 
 
     def T0S_save(self):
@@ -461,7 +462,7 @@ class App():
             self.widget.grab().save(filename)
 
         # save statistics
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Statistics" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Statistics result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,Mean,STD\n")
@@ -472,11 +473,24 @@ class App():
     # methods for T0 Calculation Page
     # ===============================================================================
     def toLRP(self):
+
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select file to calculate T0" , self.data_folder, "") # select file
+        
         if len(filename) > 0:
+            
+            self.numCycle = int(self.parameters[self.parameters_name.index("numCycle")])
+
+            self.LRP_setReselectTable() # setup the reselect table here
+            
+            # collect the raw data
+            if not self.LRP_loadRawData(filename):
+                return 
+
             self.T0_fitting_function = 0 # default fitting function is linear
-            result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), filepath = filename) # make LRP
-            [self.tmp_T0, self.tmp_T0_SIGMA, self.tmp_v_t] = result[1:]
+            self.mask = np.ones((5, self.numCycle)) # 1 means select this data point
+
+            result = Utilities.calculateT0(self.T0_fitting_function, self.v_t, self.mask) # make LRP
+            [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:]
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
@@ -486,6 +500,31 @@ class App():
             # show the page
             self.widget.setCurrentIndex(1)
 
+    def LRP_loadRawData(self, filename):
+        try:
+            with open(filename, 'r') as f:
+                data = f.readlines()
+
+            # find the starting line of meaningful data
+            for i in reversed(range(len(data))):
+                stl = i
+                if len(data[i].split()) == 4:
+                    break
+            stl -= (6*self.numCycle-2)
+
+            # extract the data
+            self.v_t = np.zeros((5, self.numCycle, 2))
+            for i in range(self.numCycle):
+                for j in range(5):
+                    self.v_t[j, i, 0] = float((data[stl + 6*i + j].split())[2])
+                    self.v_t[j, i, 1] = float((data[stl + 6*i + j].split())[3])
+            return 1
+
+        except:
+            self.Popup("Warning!", "Wrong raw data format or wrong numCyle!")
+            return 0
+
+
     def LRP_save(self):
         # save screenshot
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Screenshot" , self.screenshot_folder, "Images (*.png *.jpg *.jpeg)")
@@ -493,54 +532,75 @@ class App():
             self.widget.grab().save(filename)
 
         # save T0
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0" , self.data_folder, "(*.csv)")
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save T0 Calculation result" , self.data_folder, "(*.csv)")
         if len(filename) > 0:
             f = open(filename, 'w')
             f.write("Mass,T0,T0_SIGMA\n")
             f.writelines(["Ar{},{},{}\n".format(i+36, self.tmp_T0[i], self.tmp_T0_SIGMA[i]) for i in range(5)])
             f.close()
 
+    def LRP_setReselectTable(self):
+        w = self.ReselectDialog.frameGeometry().width()
+        h = self.ReselectDialog.frameGeometry().height()
+        self.ReselectDialog.ReselectTable = QtWidgets.QTableWidget(self.ReselectDialog)
+        self.ReselectDialog.ReselectTable.setGeometry(QtCore.QRect(int(0.1*w), int(0.2*h), int(0.8*w), int(0.5*h)))
+        self.ReselectDialog.ReselectTable.setObjectName("ReselectTable")
+        self.ReselectDialog.ReselectTable.setColumnCount(self.numCycle)
+        self.ReselectDialog.ReselectTable.setRowCount(5)
+        self.ReselectDialog.ReselectTable.setVerticalHeaderLabels(['Ar {}'.format(i) for i in range(36, 41)])
+        self.ReselectDialog.ReselectTable.setHorizontalHeaderLabels(['{}'.format(i) for i in range(1, self.numCycle+1)])
+        
+        header = self.ReselectDialog.ReselectTable.horizontalHeader()
+        for i in range(self.ReselectDialog.ReselectTable.columnCount()):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+        header = self.ReselectDialog.ReselectTable.verticalHeader()
+        for i in range(self.ReselectDialog.ReselectTable.rowCount()):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+        
+        for i in range(self.ReselectDialog.ReselectTable.rowCount()):
+            for j in range(self.ReselectDialog.ReselectTable.columnCount()):
+                item = QtWidgets.QTableWidgetItem()
+                item.setFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
+                item.setCheckState(QtCore.Qt.Checked)
+                self.ReselectDialog.ReselectTable.setItem(i, j, item)
+
     def LRP_reselect(self):
         self.ReselectDialog.show()
         self.ReselectDialog.buttonBox.accepted.connect(self.LRP_checkReselectTable)
 
     def LRP_checkReselectTable(self):
-        mask = np.zeros((5, 8))
-        for i in range(self.ReselectDialog.tableWidget.rowCount()):
-            for j in range(self.ReselectDialog.tableWidget.columnCount()):
-                item = self.ReselectDialog.tableWidget.item(i, j)
+        for i in range(self.ReselectDialog.ReselectTable.rowCount()):
+            for j in range(self.ReselectDialog.ReselectTable.columnCount()):
+                item = self.ReselectDialog.ReselectTable.item(i, j)
                 if item.checkState() == QtCore.Qt.Unchecked:
-                    mask[i, j] = 1
+                    self.mask[i, j] = 0
+                else:
+                    self.mask[i, j] = 1
 
-        result = Utilities.calculateT0(self.T0_fitting_function, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), v_t=self.tmp_v_t, mask=mask)
+        result = Utilities.calculateT0(self.T0_fitting_function, self.v_t, self.mask)
         [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
         self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
         self.ReselectDialog.close()
 
         if result[0] == 1:
-            self.Popup("Warning!", "Unable to fit the selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
-
+            self.Popup("Warning!", "Unable to fit the manually selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
 
     def LRP_useLinear(self):
         self.LRP_switch_fitting_func(0)
     
-    def LRP_useAsymptotic(self):
+    def LRP_useAverage(self):
         self.LRP_switch_fitting_func(1)
 
     def LRP_switch_fitting_func(self, fit_func_type):
-        result = Utilities.calculateT0(fit_func_type, int(self.parameters[10]), float(self.parameters[8]), int(self.parameters[9]), v_t=self.tmp_v_t) # make LRP
+        self.T0_fitting_function = fit_func_type
+        result = Utilities.calculateT0(self.T0_fitting_function, self.v_t, self.mask) # make LRP
+        [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
+        self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+        self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
-        if result[0] == 2:
-            self.Popup("Warning!", "Unable to fit the raw data with {} fucntion!".format(self.fitting_function_list[fit_func_type]))
-        
-        else:
-            [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:3]
-            self.T0_fitting_function = fit_func_type
-            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
-            self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
-
-            if result[0] == 1:
-                self.Popup("Warning!", "Unable to fit the data with {} fucntion after removing the auto-selected outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
+        if result[0] == 1:
+            self.Popup("Warning!", "Unable to fit the data with {} fucntion after manually removing the outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
 
 
 # main program

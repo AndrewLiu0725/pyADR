@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'HomePage.ui'
+# Form implementation generated from reading ui file 'UI/HomePage.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -15,7 +15,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(8, 132, 791, 91))
+        self.label.setGeometry(QtCore.QRect(8, 132, 781, 91))
         self.label.setMinimumSize(QtCore.QSize(519, 43))
         self.label.setObjectName("label")
         self.LRP = QtWidgets.QPushButton(self.centralwidget)

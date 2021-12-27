@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'MassRatio.ui'
+# Form implementation generated from reading ui file 'UI/MassRatio.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -18,16 +18,16 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(4, 106, 791, 91))
         self.label.setObjectName("label")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(50, 200, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(0, 200, 91, 51))
         self.return_2.setObjectName("return_2")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(50, 250, 91, 51))
+        self.save.setGeometry(QtCore.QRect(0, 250, 91, 51))
         self.save.setObjectName("save")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.new_2.setGeometry(QtCore.QRect(50, 300, 91, 51))
+        self.new_2.setGeometry(QtCore.QRect(0, 300, 91, 51))
         self.new_2.setObjectName("new_2")
         self.ValueTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.ValueTable.setGeometry(QtCore.QRect(200, 200, 471, 192))
+        self.ValueTable.setGeometry(QtCore.QRect(110, 250, 361, 231))
         self.ValueTable.setObjectName("ValueTable")
         self.ValueTable.setColumnCount(3)
         self.ValueTable.setRowCount(5)
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.ValueTable.setHorizontalHeaderItem(2, item)
         self.RatioTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.RatioTable.setGeometry(QtCore.QRect(200, 420, 471, 192))
+        self.RatioTable.setGeometry(QtCore.QRect(470, 250, 311, 231))
         self.RatioTable.setObjectName("RatioTable")
         self.RatioTable.setColumnCount(2)
         self.RatioTable.setRowCount(5)

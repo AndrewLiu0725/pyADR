@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ParameterSetting.ui'
+# Form implementation generated from reading ui file 'UI/ParameterSetting.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -15,7 +15,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.ParameetrTable = QtWidgets.QTableWidget(self.centralwidget)
-        self.ParameetrTable.setGeometry(QtCore.QRect(210, 200, 391, 371))
+        self.ParameetrTable.setGeometry(QtCore.QRect(220, 200, 351, 391))
         self.ParameetrTable.setObjectName("ParameetrTable")
         self.ParameetrTable.setColumnCount(1)
         self.ParameetrTable.setRowCount(11)
@@ -44,16 +44,16 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.ParameetrTable.setHorizontalHeaderItem(0, item)
         self.change = QtWidgets.QPushButton(self.centralwidget)
-        self.change.setGeometry(QtCore.QRect(50, 250, 91, 51))
+        self.change.setGeometry(QtCore.QRect(0, 250, 91, 51))
         self.change.setObjectName("change")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(50, 300, 91, 51))
+        self.save.setGeometry(QtCore.QRect(0, 300, 91, 51))
         self.save.setObjectName("save")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(50, 200, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(0, 200, 91, 51))
         self.return_2.setObjectName("return_2")
         self.cancel = QtWidgets.QPushButton(self.centralwidget)
-        self.cancel.setGeometry(QtCore.QRect(50, 350, 91, 51))
+        self.cancel.setGeometry(QtCore.QRect(0, 350, 91, 51))
         self.cancel.setObjectName("cancel")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 120, 791, 71))

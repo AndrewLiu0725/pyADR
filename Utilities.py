@@ -1,14 +1,11 @@
 # ===============================================================================
 # Copyright 2021 An-Jun Liu
-# Last Modified Date: 07/23/2021
+# Last Modified Date: 12/27/2021
 # ===============================================================================
 
 import numpy as np 
 import matplotlib.pyplot as plt
-from numpy.lib.function_base import diff
-from numpy.testing._private.utils import measure
 from scipy.optimize import curve_fit
-from scipy.sparse import base
 
 DEBUG = 1
 
@@ -24,146 +21,81 @@ def minusSigma(sigma_x, sigma_y):
 def linear(x, a, b):
     return a*x + b
 
+def average(x, a):
+    return 0*x + a
 
-def asymptotic(x, a, b, c, n):
-    return a * x ** n  / (x ** n + b) + c
-
-fit_func_list = [linear, asymptotic]
+fit_func_list = [linear, average]
 
 # functions for button
 # ===============================================================================
-def calculateT0(fit_function_type, numCycle, threshold, max_iteration, filepath = None, v_t = None, mask = None):
+def calculateT0(fit_function_type, v_t, mask):
     """
     Input:
-    1. fit_function_type: 0 for linear, 1 for exponential
+    1. fit_function_type: 0 for linear, 1 for average
 
-    2. numCycle, threshold, and max_iteration are settting parameters
+    2. v_t: raw voltage-time data
 
-    3. filepath: needs if is first entry
-
-    4. v_t: needs if is reselected or switch fitting function
-
-    5. mask: needs if is reselected
-
-
-    How to assign the argument:
-    1. first entry: filepath
-
-    2. reselected: v_t, mask
-
-    3. switch fitting function: v_t
+    3. mask: table of selected points
 
     Output:
-    return [status, T0, T0_SIGMA, v_t]
+    return [status, T0, T0_SIGMA]
 
     status: 
-
-    0 successful
+    0 success
 
     1 failed at fitting data from which the outliers are removed
-
-    2 failed at fitting raw data
     
     """
 
-    # initialize
+    # initialization
     T0 = np.zeros(5)
     T0_SIGMA = np.zeros(5)
     status = 0
-
-    # collect data if is first entry
-    if filepath is not None:
-        with open(filepath, 'r') as f:
-            data = f.readlines()
-
-        # find data starting line
-        for i in reversed(range(len(data))):
-            stl = i
-            if len(data[i].split()) == 4:
-                break
-        stl -= (6*numCycle-2)
-
-        # catch the data
-        v_t = np.zeros((5, numCycle, 2))
-
-        for i in range(numCycle):
-            for j in range(5):
-                v_t[j, i, 0] = float((data[stl + 6*i + j].split())[2])
-                v_t[j, i, 1] = float((data[stl + 6*i + j].split())[3])
-
-    fig, axs = plt.subplots(2, 3, figsize = (12,8))
-
+    fig, axs = plt.subplots(2, 3, figsize = (16,8))
     f = fit_func_list[fit_function_type]
-
-    #  recognize the outlier first (use Ar 40) if first entry or switch the fitting function
-    if mask is None:
-        t = v_t[4, :, 1]
-        v = v_t[4, :, 0]
-        mask = np.zeros((5, numCycle))
-
-        try:
-            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
-        except:
-            # only possible to enter this line when switching fitting function
-            # since it's always possible to fit the raw data with default fitting function (linear)
-            status = 2
-            return [status, None, None, None]
-
-        baseline = threshold*np.std(np.abs(v - f(t, *popt))) # std of the error
-
-        # autoselect the outlier
-        for j in range(numCycle):
-            if np.abs(v[j] - f(t[j], *popt)) > baseline:
-                mask[:, j] = 1 # mark this cycle as outlier
 
     # go over Ar 36 to 40
     for i in range(5):
         # first linear regression 
-        # fit whole data (no outlier is removed)
+        # fit whole raw data (no outlier is removed)
         t = v_t[i, :, 1]
         v = v_t[i, :, 0]
-        
-        try:
-            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
-
-        except:
-            # only possible to enter this line when switching fitting function
-            # since it's always possible to fit the raw data with default fitting function (linear)
-            status = 2
-            return [status, None, None, None]
-
+        popt, _ = curve_fit(f, t, v)
         T0[i] = f(0, *popt)
-        T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of first fit
+        T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error
  
-        axs[i//3, i%3].plot(t, v, marker = 'o', label = "experiment data")
+        axs[i//3, i%3].plot(t, v, marker = 'o', label = "raw data")
         axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line")
         axs[i//3, i%3].set(xlabel = "t (sec)", ylabel = "mV")
 
         # second linear regression 
-        # remove the outliers
-        valid_indices = np.where(mask[i, :] == 0)[0]
-        outlier_indices = np.where(mask[i, :] > 0)[0]
+        # remove the manually selected outliers if necessary
+        if (mask[i, :] == 0).any():
+            selected_indices = np.where(mask[i, :] == 1)[0]
+            removed_indices = np.where(mask[i, :] == 0)[0]
 
-        t = v_t[i, valid_indices, 1]
-        v = v_t[i, valid_indices, 0]
+            t = v_t[i, selected_indices, 1]
+            v = v_t[i, selected_indices, 0]
 
-        try:
-            popt, _ = curve_fit(f, t, v, maxfev = max_iteration)
-            T0[i] = f(0, *popt)
-            T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
-            axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
-        except:
-            status = 1
+            try:
+                popt, _ = curve_fit(f, t, v)
+                T0[i] = f(0, *popt)
+                T0_SIGMA[i] = np.std(np.abs(v - f(t, *popt))) # std of the error of second fit
+                axs[i//3, i%3].plot(t, f(t, *popt), linestyle = '--', label = "fitted line\n(exclude outliers)")
+            except:
+                status = 1
 
-        axs[i//3, i%3].plot(v_t[i, outlier_indices, 1], v_t[i, outlier_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
-        axs[i//3, i%3].legend()
-        axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', '{:0.5e}'.format(T0[i])))
+            axs[i//3, i%3].plot(v_t[i, removed_indices, 1], v_t[i, removed_indices, 0], marker = 'x', markersize = 12, linestyle = 'None', color = 'r')
+            axs[i//3, i%3].ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+        axs[i//3, i%3].legend(bbox_to_anchor=(0.7,1.2), loc='upper left')
+        axs[i//3, i%3].set_title("Ar {}\n{} = {} ".format(i+36, r'$T_{0}$', '{:0.5e}'.format(T0[i])), loc='left')
     
     axs[1,2].axis('off')
     plt.tight_layout()
-    plt.savefig(".work/LR.png", dpi = 200)
+    plt.savefig(".work/LR.png", dpi=200)
 
-    return [status, T0, T0_SIGMA, None if filepath is None else v_t]
+    return [status, T0, T0_SIGMA]
 
 
 

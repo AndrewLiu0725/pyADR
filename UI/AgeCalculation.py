@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'AgeCalculation.ui'
+# Form implementation generated from reading ui file 'UI/AgeCalculation.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -15,16 +15,16 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.save = QtWidgets.QPushButton(self.centralwidget)
-        self.save.setGeometry(QtCore.QRect(40, 220, 91, 51))
+        self.save.setGeometry(QtCore.QRect(0, 220, 91, 51))
         self.save.setObjectName("save")
         self.return_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.return_2.setGeometry(QtCore.QRect(40, 170, 91, 51))
+        self.return_2.setGeometry(QtCore.QRect(0, 170, 91, 51))
         self.return_2.setObjectName("return_2")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(0, 80, 791, 81))
         self.label.setObjectName("label")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(180, 230, 501, 411))
+        self.tableWidget.setGeometry(QtCore.QRect(210, 230, 401, 411))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setRowCount(29)
@@ -91,10 +91,10 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
         self.age = QtWidgets.QLabel(self.centralwidget)
-        self.age.setGeometry(QtCore.QRect(180, 170, 281, 41))
+        self.age.setGeometry(QtCore.QRect(300, 170, 201, 41))
         self.age.setObjectName("age")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.new_2.setGeometry(QtCore.QRect(40, 270, 91, 51))
+        self.new_2.setGeometry(QtCore.QRect(0, 270, 91, 51))
         self.new_2.setObjectName("new_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
