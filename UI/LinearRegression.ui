@@ -102,7 +102,7 @@
      <string>Linear</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="asymptotic">
+   <widget class="QPushButton" name="average">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -112,7 +112,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Asymptotic</string>
+     <string>Average</string>
     </property>
    </widget>
    <widget class="QLabel" name="current_fit_func">

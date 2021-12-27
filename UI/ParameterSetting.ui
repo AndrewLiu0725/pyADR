@@ -65,12 +65,12 @@
     </row>
     <row>
      <property name="text">
-      <string>basline (autoselect outlier)</string>
+      <string>J value</string>
      </property>
     </row>
     <row>
      <property name="text">
-      <string>maxfev (curve_fit)</string>
+      <string>J std</string>
      </property>
     </row>
     <row>
