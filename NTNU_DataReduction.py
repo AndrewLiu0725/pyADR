@@ -1,6 +1,6 @@
 # ===============================================================================
 # Copyright 2021 An-Jun Liu
-# Last Modified Date: 12/27/2021
+# Last Modified Date: 12/28/2021
 # ===============================================================================
 
 # import python module
@@ -74,23 +74,16 @@ class App():
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
         self.HomePage.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.insertLogo(self.HomePage)
         self.T0CalculationPage = LinearRegressionPage()
         self.insertPhoto(self.T0CalculationPage, [100, 230, 670, 450])
-        self.insertLogo(self.T0CalculationPage)
         self.ReselectDialog = ReselectTable()
         self.T0StatisticsPage = T0Statistics()
         self.insertPhoto(self.T0StatisticsPage, [150, 175, 600, 250])
-        self.insertLogo(self.T0StatisticsPage)
         self.MassRatioPage = MassRatio()
-        self.insertLogo(self.MassRatioPage)
         self.AirRatioStatisticsPage = AirRatioStatistics()
         self.insertPhoto(self.AirRatioStatisticsPage, [200, 200, 350, 275])
-        self.insertLogo(self.AirRatioStatisticsPage)
         self.AgeCalculationPage = AgeCalculation()
-        self.insertLogo(self.AgeCalculationPage)
         self.ParameterSettingPage = ParameterSetting()
-        self.insertLogo(self.ParameterSettingPage)
 
         self.widget = QtWidgets.QStackedWidget()
         self.widget.addWidget(self.HomePage)
@@ -108,6 +101,12 @@ class App():
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
+        with open('.version.txt', 'r') as f:
+            self.app_info = f.readlines()
+
+        for i in range(self.widget.count()):
+            self.insertLogo(self.widget.widget(i))
+            self.insertAppInfo(self.widget.widget(i))
 
     def insertPhoto(self, page, coordinate):
         # coordinate = [x, y, w, h]
@@ -124,6 +123,12 @@ class App():
         page.logo.setPixmap(QtGui.QPixmap(".work/logo.png"))
         page.logo.setScaledContents(True)
         page.logo.setObjectName("logo")
+
+    def insertAppInfo(self, page):
+        page.appinfo = QtWidgets.QLabel(page.centralwidget)
+        page.appinfo.setGeometry(QtCore.QRect(int(0.8*self.widget.width()), int(0.85*self.widget.height()), int(0.2*self.widget.width()), int(0.15*self.widget.height())))
+        page.appinfo.setObjectName("appinfo")
+        page.appinfo.setText("".join(self.app_info))
 
     # ===============================================================================
     def run(self):
