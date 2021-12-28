@@ -91,7 +91,7 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
         self.age = QtWidgets.QLabel(self.centralwidget)
-        self.age.setGeometry(QtCore.QRect(0, 170, 801, 41))
+        self.age.setGeometry(QtCore.QRect(300, 170, 491, 41))
         self.age.setObjectName("age")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
         self.new_2.setGeometry(QtCore.QRect(0, 270, 91, 51))

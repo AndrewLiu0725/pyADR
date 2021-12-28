@@ -221,9 +221,9 @@
    <widget class="QLabel" name="age">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>300</x>
       <y>170</y>
-      <width>801</width>
+      <width>491</width>
       <height>41</height>
      </rect>
     </property>

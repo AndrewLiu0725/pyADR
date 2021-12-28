@@ -358,7 +358,7 @@ class App():
                     item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
                     self.AgeCalculationPage.tableWidget.setItem(i//2 if i < 48 else i-24, i%2 if i < 48 else 0, item)
 
-                self.AgeCalculationPage.age.setAlignment(QtCore.Qt.AlignCenter)
+                self.AgeCalculationPage.age.setAlignment(QtCore.Qt.AlignLeft)
                 self.AgeCalculationPage.age.setText('Age = {:.5} Ma'.format(self.AgeCalculation_result[46]/10**6))
                 self.AgeCalculationPage.age.setFont(QtGui.QFont('Times', 20))
 
