@@ -225,7 +225,7 @@ def calcAge(measurement_filename, J, J_std, constants):
         tmp_data = f.readlines()
     
     # check header here
-    if data[0].rstrip() != "Mass,Raw,Measurment,Measurement's Sigma":
+    if tmp_data[0].rstrip() != "Mass,Raw,Measurment,Measurement's Sigma":
         raise Exception("Wrong data format!")
 
     for i in range(5):
