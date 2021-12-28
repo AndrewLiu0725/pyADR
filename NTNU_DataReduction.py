@@ -71,6 +71,8 @@ class AgeCalculation(QtWidgets.QMainWindow, UI.AgeCalculation.Ui_MainWindow):
 # ===============================================================================
 class App():
     def __init__(self):
+        self.work_dir = os.path.dirname(os.path.realpath(__file__))+'/' # get the absolute path of working directory
+
         # initilization for GUI
         QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
@@ -104,9 +106,7 @@ class App():
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
-        self.work_dir = os.path.dirname(os.path.realpath(__file__))
-        print("work folder =", self.work_dir)
-        with open(self.work_dir+'/'+'.work/.app_info.txt', 'r') as f:
+        with open(self.work_dir+'.work/.app_info.txt', 'r') as f:
             self.app_info = f.readlines()
 
     def insertPhoto(self, page, coordinate):
@@ -121,7 +121,7 @@ class App():
         page.logo = QtWidgets.QLabel(page.centralwidget)
         page.logo.setGeometry(QtCore.QRect(50, 25, 700, 75))
         page.logo.setText("")
-        page.logo.setPixmap(QtGui.QPixmap(".work/logo.png"))
+        page.logo.setPixmap(QtGui.QPixmap(self.work_dir+".work/logo.png"))
         page.logo.setScaledContents(True)
         page.logo.setObjectName("logo")
 
@@ -240,7 +240,7 @@ class App():
     # methods for parameters setting page
     # ===============================================================================
     def loadParameterSeting(self):
-        with open('.work/setting.csv', 'r') as f:
+        with open(self.work_dir+'.work/setting.csv', 'r') as f:
             data = f.readlines()
 
         self.numParamters = int(data[1].split(',')[1])
@@ -324,7 +324,7 @@ class App():
             for i in range(self.numParamters):
                 new_ps.append('{},{}\n'.format(self.parameters_name[i], self.parameters[i]))
 
-            with open('.work/setting.csv', 'w') as f:
+            with open(self.work_dir+'.work/setting.csv', 'w') as f:
                 f.writelines(new_ps)
 
         if invalid:
@@ -405,7 +405,7 @@ class App():
                 self.AirRatioStatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
                 # set image
-                self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
+                self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(self.work_dir+".work/ARS.png"))
 
                 # show the page
                 self.TableAdjust(self.AirRatioStatisticsPage.RatioTable)
@@ -494,7 +494,7 @@ class App():
                 self.T0StatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
                 # set image
-                self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
+                self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(self.work_dir+".work/T0S.png"))
 
                 # show the page
                 self.TableAdjust(self.T0StatisticsPage.tableWidget)
@@ -538,7 +538,7 @@ class App():
 
             result = Utilities.calculateT0(self.T0_fitting_function, self.v_t, self.mask) # make LRP
             [self.tmp_T0, self.tmp_T0_SIGMA] = result[1:]
-            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
+            self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(self.work_dir+".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
             # show the page
