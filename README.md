@@ -29,7 +29,7 @@ The following packages usually are already installed when you install Anaconda3.
 ## User Guide
 ### Installation
 1. Click the "Code" button on this github page and then 
-* either download and unzip this repo
+* either download and unzip this repo.
 * or clone it to your working folder by the following commad.
 ```
 git clone https://github.com/AndrewLiu0725/pyADR.git
@@ -63,6 +63,7 @@ data for next cycle
 ...
 ```
 ***Note that there should be exactly one blank line between the data block of each cycle.***
+
 ***Please refer to the sample data in the 'Data/TestData' folder to see the format.***
 
 ### Main functions
@@ -73,10 +74,10 @@ The key in parameters and the raw data could be in standard (e.g. 0.11) and scie
 
 ## Example:
 ### Age Calculation
-1. Click the Age Calculation button in the homepage
-2. Select file 'TestData_Measurement.csv' in the 'Data/TestData' folder
-3. Key in J = 0.026703 and Sigma J = 0.000035
-4. The age should be around 28Ma
+1. Set the J value = 0.026703 and J std = 0.000035 on the Parameter Setting page.
+2. Click the Age Calculation button on the homepage.
+3. Select file 'TestData_Measurement.csv' in the 'Data/TestData' folder.
+4. The resultant age should be around 28Ma.
 
 ## Words from the developer
 If you find this application useful, please star this repo.
