@@ -91,7 +91,7 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
         self.age = QtWidgets.QLabel(self.centralwidget)
-        self.age.setGeometry(QtCore.QRect(300, 170, 201, 41))
+        self.age.setGeometry(QtCore.QRect(0, 170, 801, 41))
         self.age.setObjectName("age")
         self.new_2 = QtWidgets.QPushButton(self.centralwidget)
         self.new_2.setGeometry(QtCore.QRect(0, 270, 91, 51))
@@ -176,7 +176,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Value"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Sigma"))
-        self.age.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:24pt;\">Age = _Ma</span></p></body></html>"))
+        self.age.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:24pt;\">Age = _Ma</span></p></body></html>"))
         self.new_2.setText(_translate("MainWindow", "New"))
 
 
