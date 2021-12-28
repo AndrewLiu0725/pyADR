@@ -29,16 +29,17 @@ with open(filename, 'w') as icon:
 if IS_WINDOWS:
     subprocess.call(['CACLS', os.path.abspath(filename), '/e', '/p', 'Everyone:f'])
 else:
-    subprocess.call(['chmod', 'u+x', os.path.abspath(filename)])
+    subprocess.call(['chmod', '777', os.path.abspath(filename)])
 
 # also create icon in the desktop
 HOME = os.path.expanduser('~')
-'''
+desktop_icon = os.path.join(HOME, 'DESKTOP', filename)
+shutil.copyfile(os.path.abspath(filename), desktop_icon)
+
+# set the permission
 if IS_WINDOWS:
-    subprocess.call(['copy', os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename)])
+    subprocess.call(['CACLS', desktop_icon, '/e', '/p', 'Everyone:f'])
 else:
-    subprocess.call(['cp', os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename)])
-'''
-shutil.copyfile(os.path.abspath(filename), os.path.join(HOME, 'DESKTOP', filename))
+    subprocess.call(['chmod', '777', desktop_icon])
 
 print('Installation Complete!')

@@ -217,7 +217,7 @@ class App():
 
     # check if current app is up to date
     def checkVersion(self):
-        app_info_url = 'https://raw.githubusercontent.com/AndrewLiu0725/pyADR/main/.app_info.txt'
+        app_info_url = 'https://raw.githubusercontent.com/AndrewLiu0725/pyADR/main/.work/.app_info.txt'
         try:
             page = requests.get(app_info_url)
             if page.ok:
