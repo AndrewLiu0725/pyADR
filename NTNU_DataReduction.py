@@ -103,7 +103,7 @@ class App():
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
-        with open('.app_info.txt', 'r') as f:
+        with open('.work/.app_info.txt', 'r') as f:
             self.app_info = f.readlines()
 
     def insertPhoto(self, page, coordinate):
