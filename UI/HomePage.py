@@ -54,6 +54,13 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionParameter_Setting = QtWidgets.QAction(MainWindow)
         self.actionParameter_Setting.setObjectName("actionParameter_Setting")
+        self.actionAbout_pyADR = QtWidgets.QAction(MainWindow)
+        self.actionAbout_pyADR.setObjectName("actionAbout_pyADR")
+        self.actionCheck_Update = QtWidgets.QAction(MainWindow)
+        self.actionCheck_Update.setObjectName("actionCheck_Update")
+        self.menuMenu.addAction(self.actionAbout_pyADR)
+        self.menuMenu.addAction(self.actionCheck_Update)
+        self.menuMenu.addSeparator()
         self.menuMenu.addAction(self.actionParameter_Setting)
         self.menubar.addAction(self.menuMenu.menuAction())
 
@@ -83,7 +90,9 @@ class Ui_MainWindow(object):
         self.PS_button.setWhatsThis(_translate("MainWindow", "<html><head/><body><p>what is this</p></body></html>"))
         self.PS_button.setText(_translate("MainWindow", "Parameter Setting"))
         self.menuMenu.setTitle(_translate("MainWindow", "Menu"))
-        self.actionParameter_Setting.setText(_translate("MainWindow", "Parameter Setting"))
+        self.actionParameter_Setting.setText(_translate("MainWindow", " Parameter Setting"))
+        self.actionAbout_pyADR.setText(_translate("MainWindow", " About pyADR"))
+        self.actionCheck_Update.setText(_translate("MainWindow", " Check Update"))
 
 
 if __name__ == "__main__":

@@ -179,6 +179,9 @@
     <property name="title">
      <string>Menu</string>
     </property>
+    <addaction name="actionAbout_pyADR"/>
+    <addaction name="actionCheck_Update"/>
+    <addaction name="separator"/>
     <addaction name="actionParameter_Setting"/>
    </widget>
    <addaction name="menuMenu"/>
@@ -186,7 +189,17 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionParameter_Setting">
    <property name="text">
-    <string>Parameter Setting</string>
+    <string> Parameter Setting</string>
+   </property>
+  </action>
+  <action name="actionAbout_pyADR">
+   <property name="text">
+    <string> About pyADR</string>
+   </property>
+  </action>
+  <action name="actionCheck_Update">
+   <property name="text">
+    <string> Check Update</string>
    </property>
   </action>
  </widget>

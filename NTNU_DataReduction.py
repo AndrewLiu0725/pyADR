@@ -73,7 +73,6 @@ class App():
         QtWidgets.QApplication.setStyle('Fusion')
         self.app = QtWidgets.QApplication(sys.argv)
         self.HomePage = HomePage()
-        self.HomePage.label.setAlignment(QtCore.Qt.AlignCenter)
         self.T0CalculationPage = LinearRegressionPage()
         self.insertPhoto(self.T0CalculationPage, [100, 230, 670, 450])
         self.ReselectDialog = ReselectTable()
@@ -95,18 +94,16 @@ class App():
         self.widget.addWidget(self.AgeCalculationPage)
         self.widget.setFixedHeight(700)
         self.widget.setFixedWidth(800)
+        for i in range(self.widget.count()):
+            self.insertLogo(self.widget.widget(i))
 
         # others
         self.fitting_function_list = ["Linear", "Average"]
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
-        with open('.version.txt', 'r') as f:
+        with open('.app_info.txt', 'r') as f:
             self.app_info = f.readlines()
-
-        for i in range(self.widget.count()):
-            self.insertLogo(self.widget.widget(i))
-            self.insertAppInfo(self.widget.widget(i))
 
     def insertPhoto(self, page, coordinate):
         # coordinate = [x, y, w, h]
@@ -124,12 +121,6 @@ class App():
         page.logo.setScaledContents(True)
         page.logo.setObjectName("logo")
 
-    def insertAppInfo(self, page):
-        page.appinfo = QtWidgets.QLabel(page.centralwidget)
-        page.appinfo.setGeometry(QtCore.QRect(int(0.8*self.widget.width()), int(0.85*self.widget.height()), int(0.2*self.widget.width()), int(0.15*self.widget.height())))
-        page.appinfo.setObjectName("appinfo")
-        page.appinfo.setText("".join(self.app_info))
-
     # ===============================================================================
     def run(self):
         # load parameters
@@ -144,6 +135,7 @@ class App():
         self.HomePage.AC.clicked.connect(self.toAC)
         self.HomePage.PS_button.clicked.connect(self.toPS)
         self.HomePage.actionParameter_Setting.triggered.connect(self.toPS)
+        self.HomePage.actionAbout_pyADR.triggered.connect(self.systemInfo)
 
         # click button on Linear Regression Page
         self.T0CalculationPage.return_2.clicked.connect(self.toMain)
@@ -190,12 +182,15 @@ class App():
     def toMain(self):
         self.widget.setCurrentIndex(0)
 
-    # warning message box
+    # popup message box
     def Popup(self, msg_type, msg_content):
         msg = QtWidgets.QMessageBox()
-        msg.setIcon(QtWidgets.QMessageBox.Warning)
-        msg.setText(msg_type)
-        msg.setInformativeText(msg_content)
+        if msg_type == "Warning!":
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+        elif msg_type == "System Info":
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setText("<font size = 10> {} </font> ".format(msg_type))
+        msg.setInformativeText("<font size = 5> {} </font> ".format(msg_content.replace('\n', '<br>')))
         msg.setWindowTitle("")
         msg.exec_()
 
@@ -208,6 +203,10 @@ class App():
         header = table.verticalHeader()
         for i in range(table.rowCount()):
             header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+    # display system info
+    def systemInfo(self):
+        self.Popup("System Info", "".join(self.app_info))
 
     # methods for parameters setting page
     # ===============================================================================
@@ -232,6 +231,7 @@ class App():
             self.ParameterSettingPage.ParameetrTable.setItem(i, 0, item)
             
         # show the page
+        self.TableAdjust(self.ParameterSettingPage.ParameetrTable)
         self.ParameterSettingPage.change.show()
         self.ParameterSettingPage.cancel.hide()
         self.ParameterSettingPage.save.hide()
@@ -280,7 +280,7 @@ class App():
                 else:
                     item.setText(self.parameters[i]) 
                     invalid = 1
-                    error_msg += '{} should be a{}.\n\n'.format(self.parameters_name[i], 
+                    error_msg += '{} should be a {}.\n\n'.format(self.parameters_name[i], 
                     'positive integer' if error_type == 1 else 'non-negative number')
 
             item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit

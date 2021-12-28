@@ -1,4 +1,0 @@
-pyADR Version 1.1
-Updated on 12/28/2021
-Developer:
-An-Jun (Andrew) Liu
