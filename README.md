@@ -19,6 +19,7 @@ The followings are usually already installed when you install Anaconda3
 * sys
 * matplotlib
 * scipy
+* requests
 4. Additional python related modules for installation:
 * platform
 * subprocess

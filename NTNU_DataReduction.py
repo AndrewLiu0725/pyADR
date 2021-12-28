@@ -7,6 +7,7 @@
 import numpy as np 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
+import requests
 
 # import UI
 import UI.HomePage
@@ -136,6 +137,7 @@ class App():
         self.HomePage.PS_button.clicked.connect(self.toPS)
         self.HomePage.actionParameter_Setting.triggered.connect(self.toPS)
         self.HomePage.actionAbout_pyADR.triggered.connect(self.systemInfo)
+        self.HomePage.actionCheck_Update.triggered.connect(self.checkVersion)
 
         # click button on Linear Regression Page
         self.T0CalculationPage.return_2.clicked.connect(self.toMain)
@@ -183,13 +185,18 @@ class App():
         self.widget.setCurrentIndex(0)
 
     # popup message box
-    def Popup(self, msg_type, msg_content):
+    def Popup(self, msg_type, msg_title, msg_content):
+        '''
+        msg_type:
+        0 NoIcon
+        1 Information
+        2 Warning
+        3 Critical
+        4 Question
+        '''
         msg = QtWidgets.QMessageBox()
-        if msg_type == "Warning!":
-            msg.setIcon(QtWidgets.QMessageBox.Warning)
-        elif msg_type == "System Info":
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-        msg.setText("<font size = 10> {} </font> ".format(msg_type))
+        msg.setIcon(msg_type)
+        msg.setText("<font size = 10> {} </font> ".format(msg_title))
         msg.setInformativeText("<font size = 5> {} </font> ".format(msg_content.replace('\n', '<br>')))
         msg.setWindowTitle("")
         msg.exec_()
@@ -206,7 +213,26 @@ class App():
 
     # display system info
     def systemInfo(self):
-        self.Popup("System Info", "".join(self.app_info))
+        self.Popup(1, "System Info", "".join(self.app_info))
+
+    # check if current app is up to date
+    def checkVersion(self):
+        app_info_url = 'https://raw.githubusercontent.com/AndrewLiu0725/pyADR/main/.app_info.txt'
+        try:
+            page = requests.get(app_info_url)
+            if page.ok:
+                latest_version = page.text.split('\n')[1].rstrip()
+                current_version = self.app_info[1].rstrip()
+                version_msg = "Installed Version: {}\nLatest Version: {}\n".format(current_version, latest_version)
+                if current_version == latest_version:
+                    self.Popup(1, "No updates available at this time", version_msg)
+                else:
+                    git_repo_url = "https://github.com/AndrewLiu0725/pyADR.git"
+                    self.Popup(1, "There are updates available at this time", version_msg+"Please go to {} to update to the latest version!\n".format(git_repo_url))
+            else:
+                self.Popup(2, "HTTP request failed!", "HTTP status {}".format(page.status_code))
+        except:
+            self.Popup(2, "No internet connection!", "Please check your internet connection!")
 
     # methods for parameters setting page
     # ===============================================================================
@@ -299,7 +325,7 @@ class App():
                 f.writelines(new_ps)
 
         if invalid:
-            self.Popup('Warning!', error_msg)
+            self.Popup(2, 'Invalid Typed Parameters!', error_msg)
         
 
     def PS_cancel(self):
@@ -416,7 +442,7 @@ class App():
             self.TableAdjust(self.MassRatioPage.RatioTable)
             self.widget.setCurrentIndex(3)
         else:
-            self.Popup("Warning!", "Please select one mass file and one preline file")
+            self.Popup(2, "Wrong Usage!", "Please select exactly one mass file first and then eactly one preline file")
 
     def MR_save(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Measurement T0 result" , self.data_folder, "(*.csv)")
@@ -499,9 +525,6 @@ class App():
             self.T0CalculationPage.photo.setPixmap(QtGui.QPixmap(".work/LR.png")) # set image in the page
             self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
-            if result[0] == 1:
-                self.Popup("Warning!", "Unable to fit the data with {} fucntion after removing the auto-selected outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
-
             # show the page
             self.widget.setCurrentIndex(1)
 
@@ -526,7 +549,7 @@ class App():
             return 1
 
         except:
-            self.Popup("Warning!", "Wrong raw data format or wrong numCyle!")
+            self.Popup(2, "Warning!", "Wrong raw data format or wrong numCyle!")
             return 0
 
 
@@ -589,7 +612,7 @@ class App():
         self.ReselectDialog.close()
 
         if result[0] == 1:
-            self.Popup("Warning!", "Unable to fit the manually selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
+            self.Popup(2, "Fitting Error!", "Unable to fit the manually selected data with {} fucntion!".format(self.fitting_function_list[self.T0_fitting_function]))
 
     def LRP_useLinear(self):
         self.LRP_switch_fitting_func(0)
@@ -605,7 +628,7 @@ class App():
         self.T0CalculationPage.current_fit_func.setText("Current fitting function: {}".format(self.fitting_function_list[self.T0_fitting_function]))
 
         if result[0] == 1:
-            self.Popup("Warning!", "Unable to fit the data with {} fucntion after manually removing the outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
+            self.Popup(2, "Fitting Error!", "Unable to fit the data with {} fucntion after manually removing the outliers!".format(self.fitting_function_list[self.T0_fitting_function]))
 
 
 # main program
