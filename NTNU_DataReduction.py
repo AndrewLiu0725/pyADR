@@ -8,6 +8,7 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import requests
+import os
 
 # import UI
 import UI.HomePage
@@ -103,7 +104,9 @@ class App():
         self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
-        with open('.work/.app_info.txt', 'r') as f:
+        self.work_dir = os.path.dirname(os.path.realpath(__file__))
+        print("work folder =", self.work_dir)
+        with open(self.work_dir+'/'+'.work/.app_info.txt', 'r') as f:
             self.app_info = f.readlines()
 
     def insertPhoto(self, page, coordinate):
