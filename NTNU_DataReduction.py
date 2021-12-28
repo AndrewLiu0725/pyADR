@@ -347,22 +347,25 @@ class App():
         measurement, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select measurement file (csv)" , self.data_folder, "(*.csv)")
         
         if len(measurement) > 0:
-            J = float(self.parameters[self.parameters_name.index('J value')])
-            J_std = float(self.parameters[self.parameters_name.index('J std')])
-            self.AgeCalculation_result = Utilities.calcAge(measurement, J, J_std, [float(x) for x in self.parameters[:8]])
-        
-            # fill the table
-            for i in range(53):
-                item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AgeCalculation_result[i]))
-                item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                self.AgeCalculationPage.tableWidget.setItem(i//2 if i < 48 else i-24, i%2 if i < 48 else 0, item)
+            try:
+                J = float(self.parameters[self.parameters_name.index('J value')])
+                J_std = float(self.parameters[self.parameters_name.index('J std')])
+                self.AgeCalculation_result = Utilities.calcAge(measurement, J, J_std, [float(x) for x in self.parameters[:8]])
+            
+                # fill the table
+                for i in range(53):
+                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AgeCalculation_result[i]))
+                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                    self.AgeCalculationPage.tableWidget.setItem(i//2 if i < 48 else i-24, i%2 if i < 48 else 0, item)
 
-            self.AgeCalculationPage.age.setText('Age = {:.5} Ma'.format(self.AgeCalculation_result[46]/10**6))
-            self.AgeCalculationPage.age.setFont(QtGui.QFont('Times', 20))
+                self.AgeCalculationPage.age.setText('Age = {:.5} Ma'.format(self.AgeCalculation_result[46]/10**6))
+                self.AgeCalculationPage.age.setFont(QtGui.QFont('Times', 20))
 
-            # show the page
-            self.TableAdjust(self.AgeCalculationPage.tableWidget)
-            self.widget.setCurrentIndex(6)
+                # show the page
+                self.TableAdjust(self.AgeCalculationPage.tableWidget)
+                self.widget.setCurrentIndex(6)
+            except:
+                self.Popup(2, "Error!", "Please check the selected data format or the parameters!")
 
     def AC_save(self):
         filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget, "Save Age Calculation result" , self.data_folder, "(*.csv)")
@@ -384,24 +387,27 @@ class App():
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get Air Ratio statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
-            # set the cell of the table of the T0 statistics
-            self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist, float(self.parameters[5]), float(self.parameters[6]))
-            for i in range(2):
-                for j in range(2):
-                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
-                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    self.AirRatioStatisticsPage.RatioTable.setItem(j, i, item)
+            try:
+                # set the cell of the table of the T0 statistics
+                self.AirRatio_statistics_result = Utilities.getAirRatioStatistics(filelist, float(self.parameters[5]), float(self.parameters[6]))
+                for i in range(2):
+                    for j in range(2):
+                        item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.AirRatio_statistics_result[i, j]))
+                        item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                        self.AirRatioStatisticsPage.RatioTable.setItem(j, i, item)
 
-            # set # of selected files
-            self.AirRatioStatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
-            self.AirRatioStatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
+                # set # of selected files
+                self.AirRatioStatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
+                self.AirRatioStatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
-            # set image
-            self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
+                # set image
+                self.AirRatioStatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/ARS.png"))
 
-            # show the page
-            self.TableAdjust(self.AirRatioStatisticsPage.RatioTable)
-            self.widget.setCurrentIndex(4)
+                # show the page
+                self.TableAdjust(self.AirRatioStatisticsPage.RatioTable)
+                self.widget.setCurrentIndex(4)
+            except:
+                self.Popup(2, "Error!", "Please check the selected data format!")
 
     def ARS_save(self):
         # save screenshot
@@ -426,21 +432,24 @@ class App():
         bg, _ = QtWidgets.QFileDialog.getOpenFileName(self.widget, "Select preline file (csv)" , self.data_folder, "(*.csv)")
 
         if len(mass) > 0 and len(bg) > 0:
-            self.ratio_result = Utilities.calculateMassRatio(mass, bg)
+            try:
+                self.ratio_result = Utilities.calculateMassRatio(mass, bg)
 
-            for i in range(5):
-                for j in range(5):
-                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.ratio_result[i][j]))
-                    
-                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    if i < 3:
-                        self.MassRatioPage.ValueTable.setItem(j, i, item)
-                    else:
-                        self.MassRatioPage.RatioTable.setItem(j, i-3, item)
+                for i in range(5):
+                    for j in range(5):
+                        item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.ratio_result[i][j]))
+                        
+                        item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                        if i < 3:
+                            self.MassRatioPage.ValueTable.setItem(j, i, item)
+                        else:
+                            self.MassRatioPage.RatioTable.setItem(j, i-3, item)
 
-            self.TableAdjust(self.MassRatioPage.ValueTable)
-            self.TableAdjust(self.MassRatioPage.RatioTable)
-            self.widget.setCurrentIndex(3)
+                self.TableAdjust(self.MassRatioPage.ValueTable)
+                self.TableAdjust(self.MassRatioPage.RatioTable)
+                self.widget.setCurrentIndex(3)
+            except:
+                self.Popup(2, "Error!", "Please check the selected data format!")
         else:
             self.Popup(2, "Wrong Usage!", "Please select exactly one mass file first and then eactly one preline file")
 
@@ -467,24 +476,27 @@ class App():
         filelist, _ = QtWidgets.QFileDialog.getOpenFileNames(self.widget, "Select files (csv) to get T0 statistics" , self.data_folder, "(*.csv)") # select list of files
 
         if len(filelist) > 0:
-            # set the cell of the table of the T0 statistics
-            self.T0_statistics_result = Utilities.getT0Statistics(filelist)
-            for i in range(5):
-                for j in range(2):
-                    item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.T0_statistics_result[i, j]))
-                    item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
-                    self.T0StatisticsPage.tableWidget.setItem(j, i, item)
+            try:
+                # set the cell of the table of the T0 statistics
+                self.T0_statistics_result = Utilities.getT0Statistics(filelist)
+                for i in range(5):
+                    for j in range(2):
+                        item = QtWidgets.QTableWidgetItem('{:0.5e}'.format(self.T0_statistics_result[i, j]))
+                        item.setFlags(QtCore.Qt.ItemIsEnabled) # disable edit
+                        self.T0StatisticsPage.tableWidget.setItem(j, i, item)
 
-            # set # of selected files
-            self.T0StatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
-            self.T0StatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
+                # set # of selected files
+                self.T0StatisticsPage.numSelectedFiles.setText("n = {}".format(len(filelist)))
+                self.T0StatisticsPage.numSelectedFiles.setFont(QtGui.QFont('Times', 20))
 
-            # set image
-            self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
+                # set image
+                self.T0StatisticsPage.photo.setPixmap(QtGui.QPixmap(".work/T0S.png"))
 
-            # show the page
-            self.TableAdjust(self.T0StatisticsPage.tableWidget)
-            self.widget.setCurrentIndex(2) 
+                # show the page
+                self.TableAdjust(self.T0StatisticsPage.tableWidget)
+                self.widget.setCurrentIndex(2)
+            except:
+                self.Popup(2, "Error!", "Please check the selected data format!")
 
     def T0S_save(self):
         # save screenshot
@@ -549,7 +561,7 @@ class App():
             return 1
 
         except:
-            self.Popup(2, "Warning!", "Wrong raw data format or wrong numCyle!")
+            self.Popup(2, "Error!", "Please check the selected data format or the parameter numCycle!")
             return 0
 
 

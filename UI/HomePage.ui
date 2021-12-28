@@ -65,7 +65,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;T0 Statistics:&lt;/p&gt;&lt;p&gt;Please select all the files (calculated by the &lt;span style=&quot; font-style:italic;&quot;&gt;Calculate T0 page&lt;/span&gt;) for which you want to compute the statistics of the T&lt;span style=&quot; vertical-align:sub;&quot;&gt;0&lt;/span&gt; values.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;T0 Statistics:&lt;/p&gt;&lt;p&gt;Please select all the files (the raw files output by the &lt;span style=&quot; font-style:italic;&quot;&gt;Calculate T0 page&lt;/span&gt;) for which you want to compute the statistics of the T&lt;span style=&quot; vertical-align:sub;&quot;&gt;0&lt;/span&gt; values.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -87,7 +87,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mass Ratio Calculation:&lt;/p&gt;&lt;p&gt;Please select one mass file first and then one preline file. Both files have to be calculated by &lt;span style=&quot; font-style:italic;&quot;&gt;Calculate T0 page&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mass Ratio Calculation:&lt;/p&gt;&lt;p&gt;Please select one mass file first and then one preline file. Both files are the raw files output by &lt;span style=&quot; font-style:italic;&quot;&gt;Calculate T0 page&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -109,7 +109,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Air Ratio Statistics:&lt;/p&gt;&lt;p&gt;Please select all the files (calculated by the &lt;span style=&quot; font-style:italic;&quot;&gt;Mass Ratio Page&lt;/span&gt;) for which you want to compute the statistics of the air ratios.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Air Ratio Statistics:&lt;/p&gt;&lt;p&gt;Please select all the files (the ratio files output by the &lt;span style=&quot; font-style:italic;&quot;&gt;Mass Ratio Page&lt;/span&gt;) for which you want to compute the statistics of the air ratios.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -131,7 +131,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Age Calculation:&lt;/p&gt;&lt;p&gt;Please select one file (calculated by the &lt;span style=&quot; font-style:italic;&quot;&gt;Mass Ratio Page&lt;/span&gt;) that you want to calculate the age for.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Age Calculation:&lt;/p&gt;&lt;p&gt;Please select one file (the measurement file output by the &lt;span style=&quot; font-style:italic;&quot;&gt;Mass Ratio Page&lt;/span&gt;) that you want to calculate the age for.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -153,7 +153,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Production Ratio 39Ar/37Ar(ca)&lt;/p&gt;&lt;p&gt;Production Ratio 36Ar/37Ar(ca)&lt;/p&gt;&lt;p&gt;Production Ratio 40Ar/39Ar(k)&lt;/p&gt;&lt;p&gt;Production Ratio 38Ar/39Ar(k)&lt;/p&gt;&lt;p&gt;Production Ratio 36Ar/38Ar(cl)&lt;/p&gt;&lt;p&gt;Atmospheric Ratio 40/36(a)&lt;/p&gt;&lt;p&gt;Atmospheric Ratio 38/36(a)&lt;/p&gt;&lt;p&gt;λ&lt;/p&gt;&lt;p&gt;J value&lt;/p&gt;&lt;p&gt;J std&lt;/p&gt;&lt;p&gt;numCycle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="whatsThis">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;what is this&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

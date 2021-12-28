@@ -3,6 +3,7 @@
 # Last Modified Date: 12/27/2021
 # ===============================================================================
 
+from os import error
 import numpy as np 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -105,6 +106,11 @@ def getT0Statistics(filelist):
     for i, filename in enumerate(filelist):
         with open(filename, 'r') as f:
             data = f.readlines()
+
+        # check header here
+        if data[0].rstrip() != "Mass,T0,T0_SIGMA":
+            raise Exception("Wrong data format!")
+
         for j in range(5):
             result[i, j] = float(data[j+1].split(',')[1])
 
@@ -138,12 +144,22 @@ def calculateMassRatio(mass_filename, background_filename):
 
     with open(mass_filename, 'r') as f:
         data = f.readlines()
+        
+    # check header here
+    if data[0].rstrip() != "Mass,T0,T0_SIGMA":
+        raise Exception("Wrong data format!")
+
     for i in range(5):
         raw[i, 0] = float(data[i+1].split(',')[1]) # T0
         raw[i, 1] = float(data[i+1].split(',')[2]) # T0_SIGMA
 
     with open(background_filename, 'r') as f:
         data = f.readlines()
+
+    # check header here
+    if data[0].rstrip() != "Mass,T0,T0_SIGMA":
+        raise Exception("Wrong data format!")
+
     for i in range(5):
         preline[i, 0] = float(data[i+1].split(',')[1]) # T0
         preline[i, 1] = float(data[i+1].split(',')[2]) # T0_SIGMA
@@ -172,6 +188,11 @@ def getAirRatioStatistics(filelist, background1, background2):
     for i, filename in enumerate(filelist):
         with open(filename, 'r') as f:
             data = f.readlines()
+
+        # check header here
+        if data[0].rstrip() != "Ratio,Value,Ratio's Sigma":
+            raise Exception("Wrong data format!")
+
         ratios[0, i] = float(data[1].split(',')[1]) - background1 
         ratios[1, i] = float(data[3].split(',')[1]) - background2 
 
@@ -202,6 +223,10 @@ def calcAge(measurement_filename, J, J_std, constants):
 
     with open(measurement_filename, 'r') as f:
         tmp_data = f.readlines()
+    
+    # check header here
+    if data[0].rstrip() != "Mass,Raw,Measurment,Measurement's Sigma":
+        raise Exception("Wrong data format!")
 
     for i in range(5):
         data[i, 0] = float(tmp_data[i+1].split(',')[2])
