@@ -1,7 +1,7 @@
 ![logo](.work/logo.png)
 # pyADR
 ## Introduction
-pyADR is created by An-Jun (Andrew) Liu and is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI which provides its own data analysis tool.
+pyADR is created by An-Jun (Andrew) Liu and is to automate Professor Mary Yeh's ArAr experiment data reduction process by providing a GUI that provides its own data analysis tools.
 The following functions are provided:
 1. T0 calculation
 2. T0 statistics
@@ -10,8 +10,8 @@ The following functions are provided:
 5. Age calculation
 
 ## Prerequisites
-1. Anaconda3
-The followings are usually already installed when you install Anaconda3
+1. Anaconda3 (recommeded for Windows users)
+The following packages usually are already installed when you install Anaconda3.
 2. Python3
 3. python related modules:
 * numpy
@@ -28,11 +28,15 @@ The followings are usually already installed when you install Anaconda3
 
 ## User Guide
 ### Installation
-1. Clicked the "Code" button, and then either download and unzip this repo or clone it to your working folder by the following commad.
+1. Click the "Code" button on this github page and then 
+either 
+* download and unzip this repo
+or
+* clone it to your working folder by the following commad.
 ```
 git clone https://github.com/AndrewLiu0725/pyADR.git
 ```
-2. Open the terminal (on Windows, recommend using Anaconda's prompt shell) and type the following commands
+2. Open the terminal (on Windows, recommend using Anaconda's prompt shell unless you already setup the environment variables in your prefered terminal) and type the following commands
 ```
 cd /path to folder you get in the previous step/
 python install.py
@@ -67,7 +71,7 @@ data for next cycle
 Please refer to this document for further instructions.
 
 ### Note
-The key in parameters and the raw data should be either in regular number or in scientific notation like 1.0e-2.
+The key in parameters and the raw data could be in standard (e.g. 0.11) and scientific (e.g. 1.1e-1) notations.
 
 ## Example:
 ### Age Calculation
