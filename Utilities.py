@@ -1,9 +1,8 @@
 # ===============================================================================
 # Copyright 2021 An-Jun Liu
-# Last Modified Date: 12/27/2021
+# Last Modified Date: 12/28/2021
 # ===============================================================================
 
-from os import error
 import numpy as np 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
