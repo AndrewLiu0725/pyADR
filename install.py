@@ -9,6 +9,24 @@ import subprocess
 import os
 import shutil
 
+msg = r'''
+  _______     ___ ____  _____  _____  
+ |  __ \ \   / / / /\ \|  __ \|  __ \ 
+ | |__) \ \_/ / | |  | | |  \ | |__)|
+ |  ___/ \   /  | |__| | |  | |  _  /
+ | |      | |   |  __  | |__| | | \ \
+ |_|      |_|   |_|  |_|_____/|_|  \_\
+
+Developer: An-Jun (Andrew) Liu
+Date: 07-23-2021
+Updated: 12-31-2021
+---*---*---*---*---*---*---*---*---*---*---*---*
+Welcome to the pyADR Installer.
+Press "Enter" to continue!
+---*---*---*---*---*---*---*---*---*---*---*---*'''
+print(msg)
+input()
+
 IS_MAC = platform.system() == 'Darwin'
 IS_WINDOWS = platform.system() == 'Windows'
 
@@ -31,6 +49,8 @@ if IS_WINDOWS:
 else:
     subprocess.call(['chmod', '777', os.path.abspath(filename)])
 
+print("Successfully created the script in the working folder!")
+
 # also create icon in the desktop
 HOME = os.path.expanduser('~')
 desktop_icon = os.path.join(HOME, 'DESKTOP', filename)
@@ -42,4 +62,5 @@ if IS_WINDOWS:
 else:
     subprocess.call(['chmod', '777', desktop_icon])
 
+print("Successfully created the script on the Desktop!")
 print('Installation Complete!')
