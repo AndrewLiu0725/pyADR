@@ -30,7 +30,7 @@ The following functions are provided:
 
 ## User Guide
 ### Installation
-1. Click the "Code" button on this github page and then 
+1. Click the `Code` button on this github page and then 
     * either download and unzip this repo.
     * or clone it to your working folder by the following commad.
     ```
@@ -44,14 +44,14 @@ The following functions are provided:
     A batch file named `pyADR.bat` (on Windows) or bash file named `pyADR.sh` (on Mac) will be created both in your working folder and on the desktop.
 
 3. Click `pyADR.bat` (on Windows) or `pyADR.sh` (on Mac) and then pyADR will be launched.
-
+***
 ### Change the parameters
 1. To enter the parameter setting page,
     * either click `Parameter Setting` in the menubar.
     * or click the Parameter Setting button on the homepage.
 2. Click Change button if you want to change the constants and the parameters pyADR uses.
 3. Click Save button if you have changed the parameters, or the values you changed won't be saved.
-
+***
 ### Raw data format
 The raw data format should be as follow:
 ```
@@ -69,10 +69,10 @@ data for next cycle
 **Note that there should be exactly one blank line between the data block of each cycle.**
 
 **Please refer to the sample data in the 'Data/TestData' folder to see the format.**
-
+***
 ### Main functions
 Please refer to this document for further instructions.
-
+***
 ### Note
 The key in parameters and the raw data could be in standard (e.g. 0.11) and scientific (e.g. 1.1e-1) notations.
 
