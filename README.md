@@ -39,9 +39,9 @@ git clone https://github.com/AndrewLiu0725/pyADR.git
 cd /path to folder you get in the previous step/
 python install.py
 ```
-A batch file (on Windows) or bash file (on Mac) will be created.
+A batch file named pyADR.bat (on Windows) or bash file named pyADR.sh (on Mac) will be created.
 
-3. Click the file named pyADR and then the application will be launched.
+3. Click pyADR.bat (on Windows) or pyADR.sh (on Mac) and then the application will be launched.
 
 ### Change the parameters
 1. In the menubar, click "Parameter Setting", the the parameter setting page will show up. 
