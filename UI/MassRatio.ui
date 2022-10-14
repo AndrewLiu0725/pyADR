@@ -127,27 +127,27 @@
     </property>
     <row>
      <property name="text">
+      <string>Ar 39/40</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar 36/40</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Ar 39/36</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
       <string>Ar 40/36</string>
      </property>
     </row>
     <row>
      <property name="text">
-      <string>Ar 37/39</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Ar 36/38</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Ar 40/38</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>Ar 40/39</string>
+      <string>Ar 38/36</string>
      </property>
     </row>
     <column>

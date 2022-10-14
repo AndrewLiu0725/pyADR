@@ -103,7 +103,7 @@ class App():
 
         # others
         self.fitting_function_list = ["Linear", "Average"]
-        self.mass_pair = ['Ar40/36', 'Ar37/39', 'Ar38/36', 'Ar40/38', 'Ar40/39']
+        self.mass_pair = ['Ar39/40', 'Ar36/40', 'Ar39/36', 'Ar40/36', 'Ar38/36']
         self.data_folder = 'Data/'
         self.screenshot_folder = 'Figures'
         with open(self.work_dir+'.work/.app_info.txt', 'r') as f:

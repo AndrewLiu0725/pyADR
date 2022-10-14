@@ -135,8 +135,8 @@ def getT0Statistics(filelist):
     return statistics
 
 
-pair_indices = [[4, 0], [1, 3], [2, 0], [4, 2], [4, 3]]
-#               40/36    37/39   38/36   40/38   40/39
+pair_indices = [[3, 4], [0, 4], [3, 0], [4, 0], [2, 0]]
+#               39/40    36/40   39/36   40/36   38/36
 def calculateMassRatio(mass_filename, background_filename):
     raw = np.zeros((5, 2))
     preline = np.zeros((5,2))
@@ -192,8 +192,8 @@ def getAirRatioStatistics(filelist, background1, background2):
         if data[0].rstrip() != "Ratio,Value,Ratio's Sigma":
             raise Exception("Wrong data format!")
 
-        ratios[0, i] = float(data[1].split(',')[1]) - background1 
-        ratios[1, i] = float(data[3].split(',')[1]) - background2 
+        ratios[0, i] = float(data[4].split(',')[1]) - background1 
+        ratios[1, i] = float(data[5].split(',')[1]) - background2 
 
     # calculate statistics
     statistics = np.zeros((2, 2)) # [ratio pair, mean/std]
